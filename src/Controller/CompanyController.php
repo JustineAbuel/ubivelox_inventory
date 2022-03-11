@@ -163,7 +163,7 @@ class CompanyController extends AppController
         }
         else {
             //$this->Flash->error(__('The company could not be deleted. Please, try again.'));
-            //$this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__($response->getJson()['Description'])); //get API error
         }
 
         return $this->redirect(['action' => 'index']);
