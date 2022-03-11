@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Test\TestCase\Model\Table;
+
+use App\Model\Table\MenusTable;
+use Cake\TestSuite\TestCase;
+
+/**
+ * App\Model\Table\MenusTable Test Case
+ */
+class MenusTableTest extends TestCase
+{
+    /**
+     * Test subject
+     *
+     * @var \App\Model\Table\MenusTable
+     */
+    protected $Menus;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'app.Menus',
+        'app.UserAccess',
+    ];
+
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $config = $this->getTableLocator()->exists('Menus') ? [] : ['className' => MenusTable::class];
+        $this->Menus = $this->getTableLocator()->get('Menus', $config);
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        unset($this->Menus);
+
+        parent::tearDown();
+    }
+
+    /**
+     * Test validationDefault method
+     *
+     * @return void
+     * @uses \App\Model\Table\MenusTable::validationDefault()
+     */
+    public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+}
