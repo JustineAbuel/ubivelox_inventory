@@ -237,6 +237,6 @@ class TransactionsController extends AppController
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
         }
 
-        
+        return $this->redirect(['action' => 'index']);
     }
 }
