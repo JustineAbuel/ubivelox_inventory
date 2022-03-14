@@ -73,3 +73,6 @@ hr {
 #url-rewriting-warning {
     display: none;
 }
+.error-message {
+    color:red
+}

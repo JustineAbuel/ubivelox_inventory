@@ -116,6 +116,7 @@ class ItemsController extends AppController
             // $item->date_added = 
             // dd($this->Items->behaviors()->loaded());
             $item->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
+            // dd($item);
             if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 
