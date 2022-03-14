@@ -117,7 +117,7 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->request->getData());
 
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_CATEGORIES/'.$id, [     
+            $response = $http->put('UPDATE_CATEGORIES/'.$id, [     
  
                 'id' => $id,
                 'category_name' => $category->category_name ,

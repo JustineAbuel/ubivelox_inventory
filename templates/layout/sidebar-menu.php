@@ -38,6 +38,15 @@
               </p>
             </a>
           </li>   
+          
+          <li class="nav-item">
+            <a href="<?php echo $this->Url->build(('/subcategories'), ['controller' => 'SubcategoriesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'subcategories' ? 'active': '' ?>">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+                Sub Categories 
+              </p>
+            </a>
+          </li>   
 
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/transactions'), ['controller' => 'TransactionsController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'transactions' ? 'active': '' ?>">
@@ -84,7 +93,7 @@
             </a>
           </li>  
           <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UsersController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'user-roles' ? 'active': '' ?>">
+            <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'user-roles' ? 'active': '' ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 User Roles

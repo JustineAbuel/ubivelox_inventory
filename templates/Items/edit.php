@@ -18,8 +18,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <?= $this->Form->create($item) ?>
-                <input type="hidden" name="date_added" value="<?php echo date('Y-m-d'); ?>">
+                <?= $this->Form->create($item) ?> 
                 <div class="row custom-padding">
                    <div class="col-sm-6">
                        <!-- text input -->
@@ -32,10 +31,29 @@
                        <!-- text input -->
                        <div class="form-group"> 
                            
-                           <?= $this->Form->control('item_name', ['class' => 'form-control', 'placeholder' => 'Item name'] ); ?>
+                            <?= $this->Form->control('subcategory_id', ['options' => $subcategories,'class' => 'form-control', 'placeholder' => 'Subategory']); ?> 
                        </div>
                    </div>
                 </div>
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                           
+                            <?= $this->Form->control('item_name', ['class' => 'form-control', 'placeholder' => 'Item name'] ); ?>
+                           
+                       </div>
+                   </div>
+                   
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                           
+                       <?= $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity'] ); ?>
+                             
+                       </div>
+                   </div>
+                </div> 
                 <div class="row custom-padding">
                    <div class="col-sm-6">
                        <!-- text input -->
@@ -48,8 +66,9 @@
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?= $this->Form->control('item_description', ['class' => 'form-control', 'placeholder' => 'Item Description'] ); ?>
-                       </div>
+
+                       <?= $this->Form->control('supplier_id',['options' => $company, 'class'=> 'form-control'] ); ?>
+                        </div>
                    </div>
                 </div> 
                 <div class="row custom-padding">
@@ -65,27 +84,28 @@
                        <!-- text input -->
                        <div class="form-group"> 
 
-                       <?= $this->Form->control('warranty', ['class' => 'form-control', 'empty'=> true] ); ?>                      
+                       <?= $this->Form->control('manufacturer_warranty', ['class' => 'form-control', 'empty'=> true] ); ?>                      
                        </div>
                    </div>
                 </div> 
 
                 <div class="row custom-padding">
-                   <div class="col-sm-6">
+                   
+                <div class="col-sm-6">
                        <!-- text input -->
-                       <div class="form-group">
-                           
-                       <?= $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity'] ); ?>
-                             
+                       <div class="form-group"> 
+                           <?= $this->Form->control('item_description', ['class' => 'form-control', 'placeholder' => 'Item Description'] ); ?>
                        </div>
                    </div>
                    <div class="col-sm-6">
                        <!-- text input -->
-                       <div class="form-group"> 
-
-                       <?= $this->Form->control('supplier_id',['options' => $company, 'class'=> 'form-control'] ); ?>
-                        </div>
+                       <div class="form-group">
+                           
+                       <?= $this->Form->control('remarks', ['class' => 'form-control', 'placeholder' => 'Remarks '] ); ?>
+                             
+                       </div>
                    </div>
+                   
                 </div> 
                 
 
@@ -100,31 +120,22 @@
                    </div>
                    <div class="col-sm-6">
                        <!-- text input -->
-                       <div class="form-group"> 
+                        <label for="quality">quality</label>
+                        <div class="custom-control custom-radio custom-control-inline"> 
+                        <?=  
+                        // $this->Form->setTemplates([
+                        //     'nestingLabel' => '{{hidden}}{{input}}<label{{attrs}}>{{text}}</label>',
+                        //     'formGroup' => '{{input}}{{label}}',
+                        // ]);
+                         $this->Form->radio('quality', $quality ,[ 'type'=>'radio', 'class'=> 'form-check-input mr-5',  ] ); ?>                       ;
 
-                       <?= $this->Form->control('quality',["class"=> 'form-control', ] ); ?>                       
-                    </div>
+
+                        </div>
+                         
                    </div>
                 </div> 
                 
-
-                <div class="row custom-padding">
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                       <div class="form-group">
-                           
-                       <?= $this->Form->control('remarks', ['class' => 'form-control', 'placeholder' => 'Remarks '] ); ?>
-                             
-                       </div>
-                   </div>
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                       <div class="form-group"> 
-
-                       <?= $this->Form->control('part_no',["class"=> 'form-control', ] ); ?>                       
-                    </div>
-                   </div>
-                </div> 
+ 
 
 
                 <div class="row custom-padding">
@@ -171,7 +182,14 @@
                        <?= $this->Form->control('features', ['class' => 'form-control', 'placeholder' => 'Features '] ); ?>
                              
                        </div>
-                   </div> 
+                   </div>    
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group"> 
+
+                        <?= $this->Form->control('part_no',["class"=> 'form-control', ] ); ?>                       
+                        </div>
+                   </div>
                 </div> 
 
 
@@ -179,10 +197,11 @@
                    <div class="col-sm-6">
                        <!-- Select multiple-->
                        <div class="form-group">
-                           <button class="btn btn-primary">Add</button>
+                           <button class="btn btn-primary">Update</button>
                            <a href="<?php echo $this->Url->build(('/items'), array('action' => 'userlist')); ?>" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
                        </div>
                    </div>
+                
                 </div>
                 <?= $this->Form->end() ?>
               </div>

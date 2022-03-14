@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use CodeItNow\BarcodeBundle\Utils\QrCode;
-use Cake\Http\Client;
-
+use Cake\Http\Client; 
+use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 /**
  * Items Controller
  *
@@ -24,6 +25,7 @@ class ItemsController extends AppController
  
         $this->loadModel('Users');
         $this->loadModel('Categories');  
+        $this->loadModel('Categories');  
         $this->loadModel('ItemType');  
         $this->loadModel('Company');  
 
@@ -32,9 +34,7 @@ class ItemsController extends AppController
     }
 
     
-    public function dashboard(){
-        // $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
-        // $this->Authorization->authorize($loggedinuser, 'index');
+    public function dashboard(){ 
         $this->Authorization->skipAuthorization();
 
 		$this->viewBuilder()->setLayout('dashboard');
@@ -57,21 +57,17 @@ class ItemsController extends AppController
 
     public function index()
     {
- 
-        // $this->Authorization->skipAuthorization();
-        // $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
+  
         $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
         $item = $this->Items->newEmptyEntity(); 
         $this->Authorization->authorize($item, 'index');
         
         $this->paginate = [
-            'contain' => ['Categories'],
+            'contain' => ['Categories', 'Company', 'ItemType' ],
             'conditions' => [
                 'trashed IS ' => NULL 
             ]
-        ]; 
-        // $items = $this->paginate($this->Items); 
-        // $this->Authorization->applyScope($query);
+        ];  
         $items = $this->paginate($this->Items);  
         // dd($items);
          
@@ -89,13 +85,10 @@ class ItemsController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
-    {
-        // $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
-        // $this->Authorization->authorize($loggedinuser, 'view');
-
+    { 
         $item = $this->Items->get($id, [
             // 'contain' => ['Categories', 'Suppliers', 'ItemTypes', 'Transactions'],
-            'contain' => ['Categories' ],
+            'contain' => ['Categories', 'Company', 'ItemType' ],
         ]);
 
         $this->Authorization->authorize($item, 'view');
@@ -120,44 +113,23 @@ class ItemsController extends AppController
 
         if ($this->request->is('post')) {
             $item = $this->Items->patchEntity($item, $this->request->getData());
-            $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_ITEMS', [             //pointed at local
-            // $response = $http->post('https://ubpdev.myubplus.com.ph/api/REGISTER_ITEM', [   
-
-                'category_id' => $item->category_id, 
-                'item_name' => $item->item_name, 
-                'serial_no' => $item->serial_no, 
-                'item_description' => $item->item_description, 
-                'issued_date' => $item->issued_date, 
-                'warranty' => $item->warranty, 
-                'quantity' => $item->quantity, 
-                'supplier_id' => 1, 
-                'item_type_id' => 1, 
-                'quality' => $item->quality, 
-                'remarks' => $item->remarks, 
-                'part_no' => $item->part_no, 
-                'operating_system' => $item->operating_system, 
-                'kernel' => $item->kernel, 
-                'header_type' => $item->header_type, 
-                'firmware' => $item->firmware, 
-                'features' => $item->features, 
-                'added_by' =>  $this->request->getAttribute('identity')->getIdentifier()
-
-
-            ]); 
-            if ($response->getJson()['Status'] == 0) {
-            // if ($this->Items->save($item)) {
+            // $item->date_added = 
+            // dd($this->Items->behaviors()->loaded());
+            $item->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
+            if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            // $this->Flash->error(__('The item could not be saved. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The item could not be saved. Please, try again.'));
+            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
         }
+        $quality =  ['BRAND NEW', 'SECOND HAND'];
         $categories = $this->Items->Categories->find('list')->all(); 
+        $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();
         $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all(); 
-        $this->set(compact('item', 'categories', 'company', 'itemTypes'));
+        $this->set(compact('item', 'categories','subcategories', 'company', 'itemTypes', 'quality'));
     }
 
     /**
@@ -173,57 +145,31 @@ class ItemsController extends AppController
         $item = $this->Items->get($id, [
             'contain' => [],
         ]);
-        $this->Authorization->authorize($item, 'edit');
-        
-        // $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
-        // $this->Authorization->authorize($loggedinuser, 'edit');
+        $this->Authorization->authorize($item, 'edit'); 
         
         if ($this->request->is(['patch', 'post', 'put'])) {
             $item = $this->Items->patchEntity($item, $this->request->getData()); 
                 
-            $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_ITEMS/'.$id, [             //pointed at local
-            // $response = $http->post('https://ubpdev.myubplus.com.ph/api/REGISTER_ITEM', [   
-
-                'id' => $id,
-                'category_id' => $item->category_id, 
-                'item_name' => $item->item_name, 
-                'serial_no' => $item->serial_no, 
-                'item_description' => $item->item_description, 
-                'issued_date' => $item->issued_date, 
-                'warranty' => $item->warranty, 
-                'quantity' => $item->quantity, 
-                'supplier_id' => 1, 
-                'item_type_id' => 1, 
-                'quality' => $item->quality, 
-                'remarks' => $item->remarks, 
-                'part_no' => $item->part_no, 
-                'operating_system' => $item->operating_system, 
-                'kernel' => $item->kernel, 
-                'header_type' => $item->header_type, 
-                'firmware' => $item->firmware, 
-                'features' => $item->features, 
-                'updated_by' =>  $this->request->getAttribute('identity')->getIdentifier()
-
-            ]); 
-
-            if ($response->getJson()['Status'] == 0) {
-
-                // if ($this->Items->save($item)) {
+            $item->updated_by = $this->request->getAttribute('identity')->getIdentifier();
+            $this->Items->touch($item, 'Items.updated');
+            // $item->date_added = date('Y-m-d H:i:s');
+                // dd($item);
+            if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            // $this->Flash->error(__('The item could not be saved. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The item could not be saved. Please, try again.')); 
              
         }
         
         
+        $quality =  ['BRAND NEW', 'SECOND HAND'];
         $categories = $this->Items->Categories->find('list')->all(); 
+        $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();
         $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all(); 
-        $this->set(compact('item', 'categories', 'company', 'itemTypes'));
+        $this->set(compact('item', 'categories', 'company', 'itemTypes', 'subcategories', 'quality'));
     }
 
     /**
@@ -234,24 +180,18 @@ class ItemsController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
-    { 
-
-
-        $this->request->allowMethod(['post', 'delete']);
+    {  
+        
+        $this->request->allowMethod(['put', 'post', 'delete']);
         $item = $this->Items->get($id);
-        $this->Authorization->authorize($item, 'add');
-        
-        $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_ITEMS/'.$id);  
-        
-        if ($response->getJson()['Status'] == 0) {
+        $this->Authorization->authorize($item, 'delete');
+         
+        $item->trashed = date('Y-m-d H:i:s'); 
 
-
-        // if ($this->Items->delete($item)) {
+        if ($this->Items->save($item)) {
             $this->Flash->success(__('The item has been deleted.'));
         } else {
-            // $this->Flash->error(__('The item could not be deleted. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The item could not be deleted. Please, try again.')); 
         }
 
         return $this->redirect(['action' => 'index']);

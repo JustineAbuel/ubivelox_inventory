@@ -46,8 +46,23 @@ class ItemsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'date_added' => 'new', 
+                ] ,
+                'Items.updated' => [
+                    'date_updated' => 'always'
+                ]
+            ]
+        ]);
+
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',
+            'joinType' => 'INNER',
+        ]); 
+        $this->belongsTo('Subcategories', [
+            'foreignKey' => 'subcategory_id',
             'joinType' => 'INNER',
         ]);
         $this->belongsTo('Company', [
@@ -61,6 +76,7 @@ class ItemsTable extends Table
         $this->hasMany('Transactions', [
             'foreignKey' => 'item_id',
         ]);
+
     }
 
     /**
@@ -95,9 +111,9 @@ class ItemsTable extends Table
             ->allowEmptyDateTime('issued_date');
 
         $validator
-            ->date('warranty')
-            ->requirePresence('warranty', 'create')
-            ->notEmptyDate('warranty');
+            ->date('manufacturer_warranty')
+            ->requirePresence('manufacturer_warranty', 'create')
+            ->notEmptyDate('manufacturer_warranty');
 
         $validator
             ->integer('quantity')
@@ -146,6 +162,7 @@ class ItemsTable extends Table
         $validator
             ->dateTime('date_added')
             ->allowEmptyDateTime('date_added');
+            
 
         $validator
             ->integer('added_by')
@@ -175,7 +192,8 @@ class ItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']); 
+        $rules->add($rules->existsIn('subcategory_id', 'Subcategories'), ['errorField' => 'subcategory_id']);
         $rules->add($rules->existsIn('supplier_id', 'Company'), ['errorField' => 'supplier_id']);
         $rules->add($rules->existsIn('item_type_id', 'ItemType'), ['errorField' => 'item_type_id']);
 

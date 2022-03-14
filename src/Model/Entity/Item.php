@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $category_id
+ * @property int $subcategory_id
  * @property string $item_name
  * @property string|null $serial_no
  * @property string|null $item_description
@@ -50,11 +51,12 @@ class Item extends Entity
      */
     protected $_accessible = [
         'category_id' => true,
+        'subcategory_id' => true,
         'item_name' => true,
         'serial_no' => true,
         'item_description' => true,
         'issued_date' => true,
-        'warranty' => true,
+        'manufacturer_warranty' => true,
         'quantity' => true,
         'supplier_id' => true,
         'item_type_id' => true,
@@ -72,7 +74,7 @@ class Item extends Entity
         'updated_by' => true,
         'trashed' => true,
         'category' => true,
-        'supplier' => true,
+        'company' => true, //supplier
         'item_type' => true,
         'transactions' => true,
     ];

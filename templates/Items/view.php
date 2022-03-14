@@ -50,34 +50,35 @@
                     <th><?= ucfirst('supplier_id') ?></th>
                     <th><?= ucfirst('item_type_id') ?></th>
                     <th><?= ucfirst('quality') ?></th>
-                    <th><?= ucfirst('part_no') ?></th>
-                    <th><?= ucfirst('operating_system') ?></th>
-                    <th><?= ucfirst('kernel') ?></th>
-                    <th><?= ucfirst('header_type') ?></th>
-                    <th><?= ucfirst('firmware') ?></th>
-                    <th><?= ucfirst('features') ?></th>
+                     
                     <th>QR Code</th>
                     <th class="actions"><?= __('Actions') ?></th>
                   </tr>
                   </thead>
                   <tbody> 
-                <tr>
-                    <td><?= $this->Number->format($item->id) ?></td>
-                    <td><?= $item->has('category') ? $this->Html->link($item->category->category_name, ['controller' => 'Categories', 'action' => 'view', $item->category->id]) : '' ?></td>
+                        <?php 
+                    if(h($item['quantity']) > 0){
+                        $tr_class = "table-primary";
+                        if(h($item['stocks']) <= 1){
+                        $tr_class = "table-warning";
+                      }
+                    }
+                    else{
+                      $tr_class = "table-danger";
+                    }
+                    ?>
+                <tr class="<?php echo $tr_class; ?>">
+                    <td><?= h($item->id) ?></td>
+                    <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
                     <td><?= h($item->item_name) ?></td>
                     <td><?= h($item->serial_no) ?></td>
                     <td><?= h($item->issued_date) ?></td>
-                    <td><?= h($item->warranty) ?></td>
+                    <td><?= h($item->manufacturer_warranty) ?></td>
                     <td><?= $this->Number->format($item->quantity) ?></td>
-                    <td><?= $this->Number->format($item->supplier_id) ?></td>
-                    <td><?= $this->Number->format($item->item_type_id) ?></td>
-                    <td><?= $this->Number->format($item->quality) ?></td>
-                    <td><?= h($item->part_no) ?></td>
-                    <td><?= h($item->operating_system) ?></td>
-                    <td><?= h($item->kernel) ?></td>
-                    <td><?= h($item->header_type) ?></td>
-                    <td><?= h($item->firmware) ?></td>
-                    <td><?= h($item->features) ?></td> 
+                    <td><?= $item->company->company_name ?></td>
+                    <td><?= $item->item_type->type_name ?></td>
+                    <td><?= $item->quality == 1 ? 'Brand New' : 'Second Hand' ?></td>
+                     
                     <td>
                           <?php
                             $this->Common->generateQrInView($item->id)
