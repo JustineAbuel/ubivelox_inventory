@@ -12,8 +12,8 @@ use Cake\Validation\Validator;
  * Transactions Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\ItemsTable&\Cake\ORM\Association\BelongsTo $Items
  * @property \App\Model\Table\TransactionTypesTable&\Cake\ORM\Association\BelongsTo $TransactionTypes
- * @property \App\Model\Table\TransactionItemsTable&\Cake\ORM\Association\HasMany $TransactionItems
  *
  * @method \App\Model\Entity\Transaction newEmptyEntity()
  * @method \App\Model\Entity\Transaction newEntity(array $data, array $options = [])
@@ -47,18 +47,19 @@ class TransactionsTable extends Table
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Items', [
+            'foreignKey' => 'item_id',
+            'joinType' => 'INNER'
         ]);
         $this->belongsTo('TransactionType', [
             'foreignKey' => 'transaction_type_id',
-            'joinType' => 'INNER',
+            'joinType' => 'INNER'
         ]);
         $this->belongsTo('TransactionStatus', [
             'foreignKey' => 'status',
             'joinType' => 'INNER'
-        ]);
-        $this->hasMany('TransactionItems', [
-            'foreignKey' => 'transaction_id',
         ]);
         $this->belongsTo('Company', [
             'foreignKey' => 'company_to',
@@ -79,12 +80,6 @@ class TransactionsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->scalar('transaction_code')
-            ->maxLength('transaction_code', 255)
-            ->requirePresence('transaction_code', 'create')
-            ->notEmptyString('transaction_code');
-
-        $validator
             ->integer('company_from')
             ->requirePresence('company_from', 'create')
             ->notEmptyString('company_from');
@@ -97,7 +92,7 @@ class TransactionsTable extends Table
         $validator
             ->scalar('subject')
             ->maxLength('subject', 255)
-            ->allowEmptyString('subject');
+            ->notEmptyString('subject');
 
         $validator
             ->scalar('received_by')
@@ -110,7 +105,11 @@ class TransactionsTable extends Table
 
         $validator
             ->integer('status')
-            ->allowEmptyString('status');
+            ->notEmptyString('status');
+
+        $validator
+            ->integer('quantity')
+            ->notEmptyString('quantity');
 
         $validator
             ->dateTime('date_added')
@@ -121,12 +120,12 @@ class TransactionsTable extends Table
             ->allowEmptyString('added_by');
 
         $validator
-            ->dateTime('cancelled')
-            ->allowEmptyDateTime('cancelled');
+            ->dateTime('date_updated')
+            ->allowEmptyDateTime('date_updated');
 
         $validator
-            ->integer('cancelled_by')
-            ->allowEmptyString('cancelled_by');
+            ->integer('updated_by')
+            ->allowEmptyString('updated_by');
 
         return $validator;
     }
@@ -141,6 +140,7 @@ class TransactionsTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->existsIn('item_id', 'Items'), ['errorField' => 'item_id']);
         $rules->add($rules->existsIn('transaction_type_id', 'TransactionType'), ['errorField' => 'transaction_type_id']);
 
         return $rules;

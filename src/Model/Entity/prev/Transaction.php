@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $user_id
- * @property string $transaction_code
+ * @property int $item_id
  * @property int $transaction_type_id
  * @property int $company_from
  * @property int $company_to
@@ -20,12 +20,12 @@ use Cake\ORM\Entity;
  * @property int|null $status
  * @property \Cake\I18n\FrozenTime|null $date_added
  * @property int|null $added_by
- * @property \Cake\I18n\FrozenTime|null $cancelled
- * @property int|null $cancelled_by
+ * @property \Cake\I18n\FrozenTime|null $date_updated
+ * @property int|null $updated_by
  *
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Item $item
  * @property \App\Model\Entity\TransactionType $transaction_type
- * @property \App\Model\Entity\TransactionItem[] $transaction_items
  */
 class Transaction extends Entity
 {
@@ -40,7 +40,8 @@ class Transaction extends Entity
      */
     protected $_accessible = [
         'user_id' => true,
-        'transaction_code' => true,
+        'item_id' => true,
+        'quantity' => true,
         'transaction_type_id' => true,
         'company_from' => true,
         'company_to' => true,
@@ -50,11 +51,11 @@ class Transaction extends Entity
         'status' => true,
         'date_added' => true,
         'added_by' => true,
-        'cancelled' => true,
-        'cancelled_by' => true,
+        'date_updated' => true,
+        'updated_by' => true,
         'user' => true,
+        'item' => true,
         'transaction_type' => true,
-        'transaction_items' => true,
         'company' => true,
     ];
 }

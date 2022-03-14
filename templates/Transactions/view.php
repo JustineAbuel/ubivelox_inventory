@@ -1,114 +1,111 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Category $category
+ * @var \App\Model\Entity\Transaction $transaction
  */
-?> 
-  <!-- Content Wrapper. Contains page content -->
-
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-
-            <div class="card">
-              <div class="card-header     "> 
-                    <h3 class="card-title ">Transaction</h3> 
-                    
-    <?= $this->Html->link(__('New Transaction'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
- 
-                
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped table hover">
-                  <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Company From</th>
-                    <th>Company To</th>
-                    <th>Item name</th>
-                    <th>Transaction Type</th> 
-                    <th>Subject</th>
-                    <th>Status</th>
-                    <th>Transaction Date</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead> 
-                  <tbody> 
-                    <tr>
-                        <td><?= $this->Number->format($transaction->id) ?></td>
-                        <td><?= h($transaction->company_from) ?></td>
-                        <td><?= h($transaction->company_to) ?></td>
-                        <td><?= h($transaction->item_id) ?></td>
-                        <td><?= h($transaction->transaction_type_id) ?></td>
-                        <td><?= h($transaction->subject) ?></td>
-                        <td><?= h($transaction->status) ?></td>
-                        <td><?= h($transaction->date_added) ?></td>
-                        <td class="actions   "> 
-                            <?php echo $this->Html->link(
-                            "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
-                            ['Controller' => 'CategoriesController', 'action' => 'view',  $transaction->id ],
-                            [ 'escape' => false ]//'escape' => false - convert plain text to html 
-                            ); 
-                            ?>
-                            <?php echo $this->Html->link(
-                                "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
-                                [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $transaction->id ],
-                                [ 'escape' => false  ]//'escape' => false - convert plain text to html
-                            ); 
-                            ?>
-                            <?php echo $this->Form->postLink(
-                            "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
-                            [ 'Controller' => 'CategoriesController', 'action' => 'delete', $transaction->id ],
-                            [ 'confirm' => __('Are you sure you want to delete # {0}?', $transaction->id), 'escape' => false ] //'escape' => false - convert plain text to html
-                            
-                            ); 
-                            ?> 
-                        </td>
-                    </tr> 
-                  </tbody>
-                  <!--
-                  <tfoot>
-                  <tr>
-                    <th></th>
-                  </tr>
-                  </tfoot>
-                  -->
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
+?>
+<div class="row">
+    <aside class="column">
+        <div class="side-nav">
+            <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Html->link(__('Edit Transaction'), ['action' => 'edit', $transaction->id], ['class' => 'side-nav-item']) ?>
+            <?= $this->Form->postLink(__('Delete Transaction'), ['action' => 'delete', $transaction->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id), 'class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('List Transactions'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('New Transaction'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-
-  </div>
-  <!-- /.content-wrapper -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      "paging":   true,
-      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
+    </aside>
+    <div class="column-responsive column-80">
+        <div class="transactions view content">
+            <h3><?= h($transaction->id) ?></h3>
+            <table>
+                <tr>
+                    <th><?= __('User') ?></th>
+                    <td><?= $transaction->has('user') ? $this->Html->link($transaction->user->id, ['controller' => 'Users', 'action' => 'view', $transaction->user->id]) : '' ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Transaction Code') ?></th>
+                    <td><?= h($transaction->transaction_code) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Subject') ?></th>
+                    <td><?= h($transaction->subject) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Received By') ?></th>
+                    <td><?= h($transaction->received_by) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Id') ?></th>
+                    <td><?= $this->Number->format($transaction->id) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Transaction Type Id') ?></th>
+                    <td><?= $this->Number->format($transaction->transaction_type_id) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Company From') ?></th>
+                    <td><?= $this->Number->format($transaction->company_from) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Company To') ?></th>
+                    <td><?= $this->Number->format($transaction->company_to) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Status') ?></th>
+                    <td><?= $this->Number->format($transaction->status) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Added By') ?></th>
+                    <td><?= $this->Number->format($transaction->added_by) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Cancelled By') ?></th>
+                    <td><?= $this->Number->format($transaction->cancelled_by) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Received Date') ?></th>
+                    <td><?= h($transaction->received_date) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Date Added') ?></th>
+                    <td><?= h($transaction->date_added) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Cancelled') ?></th>
+                    <td><?= h($transaction->cancelled) ?></td>
+                </tr>
+            </table>
+            <div class="related">
+                <h4><?= __('Related Transaction Items') ?></h4>
+                <?php if (!empty($transaction->transaction_items)) : ?>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th><?= __('Id') ?></th>
+                            <th><?= __('Transaction Id') ?></th>
+                            <th><?= __('Item Id') ?></th>
+                            <th><?= __('Quantity') ?></th>
+                            <th><?= __('Internal Warranty') ?></th>
+                            <th class="actions"><?= __('Actions') ?></th>
+                        </tr>
+                        <?php foreach ($transaction->transaction_items as $transactionItems) : ?>
+                        <tr>
+                            <td><?= h($transactionItems->id) ?></td>
+                            <td><?= h($transactionItems->transaction_id) ?></td>
+                            <td><?= h($transactionItems->item_id) ?></td>
+                            <td><?= h($transactionItems->quantity) ?></td>
+                            <td><?= h($transactionItems->internal_warranty) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link(__('View'), ['controller' => 'TransactionItems', 'action' => 'view', $transactionItems->id]) ?>
+                                <?= $this->Html->link(__('Edit'), ['controller' => 'TransactionItems', 'action' => 'edit', $transactionItems->id]) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'TransactionItems', 'action' => 'delete', $transactionItems->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transactionItems->id)]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

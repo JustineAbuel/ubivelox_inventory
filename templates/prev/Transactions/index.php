@@ -1,3 +1,4 @@
+<?php include("inventoryAPI/src/config/db.php"); //important for getting id from company to transactions ?>
 <?php
 /**
  * @var \App\View\AppView $this
@@ -21,15 +22,18 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <strong>Legend:</strong>
-                <button type="button" class="table-primary">Delivered</button>
-                <button type="button" class="table-warning">For Delivery</button>
-                <button type="button" class="table-danger">Cancelled</button>
+                <button type="button" class="table-primary">Success</button>
+                <button type="button" class="table-warning">On-hold</button>
+                <button type="button" class="table-danger">Pending</button>
                 <br><br>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>
-                    <th>Transaction Code</th>
+                    <th>ID</th>
+                    <th>Company From</th>
                     <th>Company To</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
                     <th>Transaction Type</th>
                     <th>Status</th>
                     <th>Transaction Date</th> 
@@ -39,19 +43,50 @@
                   <tbody>
                     <?php foreach ($transactions as $transaction): ?>
                       <?php 
-                      if($transaction->status == 1){ //for-delivery
-                          $tr_class = "table-warning";
-                      }
-                      elseif($transaction->status == 2){ //deliverred
-                          $tr_class = "table-primary";
-                      }
-                      elseif($transaction->status == 3){ //cancelled
+                      if($transaction->status == 1){ //pending
                           $tr_class = "table-danger";
                       }
+                      elseif($transaction->status == 2){ //on-hold
+                          $tr_class = "table-warning";
+                      }
+                      elseif($transaction->status == 3){ //success
+                          $tr_class = "table-primary";
+                      }
                     ?>
+                      <?php 
+                      $db = new db();
+                      $pdo = $db->connect();
+
+                      $sql_from = "SELECT id,company_name FROM company WHERE id=".$transaction->company_from;
+                      $stmt_from = $pdo->query($sql_from);
+                      $row_from = $stmt_from->fetch(PDO::FETCH_ASSOC);
+                      $comp_id_from = $row_from['id'];
+                      $comp_name_from = $row_from['company_name'];
+
+                      $sql_to = "SELECT id,company_name FROM company WHERE id=".$transaction->company_to;
+                      $stmt_to = $pdo->query($sql_to);
+                      $row_to = $stmt_to->fetch(PDO::FETCH_ASSOC);
+                      $comp_id_to = $row_to['id'];
+                      $comp_name_to = $row_to['company_name'];
+                      ?>
                     <tr class="<?php echo $tr_class; ?>">
-                        <td><?= h($transaction->transaction_code) ?></td>
-                        <td><?= h($transaction->company->company_name ) ?></td>
+                        <td><?= $this->Number->format($transaction->id) ?></td>
+                        <td>
+                        <?php 
+                        if($comp_id_from == $transaction->company_from){
+                          echo $comp_name_from;
+                        }
+                        ?>
+                        </td>
+                        <td>
+                        <?php 
+                        if($comp_id_to == $transaction->company_to){
+                          echo $comp_name_to;
+                        }
+                        ?>
+                        </td>
+                        <td><?= h($transaction->item->item_name ) ?></td>
+                        <td><?= h($transaction->quantity ) ?></td>
                         <td><?= h($transaction->transaction_type->transaction_name) ?></td>
                         <td><strong><?= h($transaction->transaction_status->status_name) ?></strong></td>
                         <td><?= h($transaction->date_added) ?></td>
