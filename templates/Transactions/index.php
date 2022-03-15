@@ -12,7 +12,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-
+            <?= $this->Flash->render() ?><!-- Validation Alert Display Here -->
             <div class="card">
               <div class="card-header     "> 
                 <h3 class="card-title "><?= $title ?></h3>                   
@@ -32,6 +32,7 @@
                     <th>Company To</th>
                     <th>Transaction Type</th>
                     <th>Status</th>
+                    <th>QR Code</th>
                     <th>Transaction Date</th> 
                     <th>Action</th>
                   </tr>
@@ -54,6 +55,11 @@
                         <td><?= h($transaction->company->company_name ) ?></td>
                         <td><?= h($transaction->transaction_type->transaction_name) ?></td>
                         <td><strong><?= h($transaction->transaction_status->status_name) ?></strong></td>
+                        <th>
+                          <?php
+                          $this->Common->generateQrInView($transaction->transaction_code)
+                          ?>
+                        </th>
                         <td><?= h($transaction->date_added) ?></td>
                         <td class="actions   "> 
                             <?php echo $this->Html->link(

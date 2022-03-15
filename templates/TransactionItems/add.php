@@ -1,32 +1,69 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\TransactionItem $transactionItem
- * @var \Cake\Collection\CollectionInterface|string[] $transactions
- * @var \Cake\Collection\CollectionInterface|string[] $items
+ * @var \App\Model\Entity\User $user
  */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Transaction Items'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+?> 
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><legend><?= __('Add Transaction Item') ?></legend></h3> 
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <?= $this->Form->create($transactionItem) ?> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Item</label>
+                            <?=  $this->Form->control('item_id', ['options' => $items,'class' => 'form-control', 'placeholder' => 'Item', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Quantity</label>
+                            <?=  $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Internal Warranty Date</label>
+                            <?=  $this->Form->control('internal_warranty', ['class' => 'form-control', 'placeholder' => 'Internal Warranty Date', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                </div> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- Select multiple-->
+                       <div class="form-group"> 
+                            <?= $this->Form->button(__('Add Item'), ['class' => 'btn btn-primary']) ?>
+                           <a href="#" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
+                       </div>
+                   </div>
+                </div>
+
+                <?= $this->Form->end() ?>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="transactionItems form content">
-            <?= $this->Form->create($transactionItem) ?>
-            <fieldset>
-                <legend><?= __('Add Transaction Item') ?></legend>
-                <?php
-                    echo $this->Form->control('transaction_id', ['options' => $transactions]);
-                    echo $this->Form->control('item_id', ['options' => $items]);
-                    echo $this->Form->control('quantity');
-                    echo $this->Form->control('internal_warranty', ['empty' => true]);
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
-</div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->

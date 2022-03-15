@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use CodeItNow\BarcodeBundle\Utils\QrCode;
 
 /**
  * Transactions Controller
@@ -28,7 +29,9 @@ class TransactionsController extends AppController
         ];
         $transactions = $this->paginate($this->Transactions);
 
-        $this->set(compact('transactions'));
+        $qrCode = new QrCode();
+
+        $this->set(compact('transactions','qrCode'));
     }
 
     /**
@@ -41,11 +44,34 @@ class TransactionsController extends AppController
     public function view($id = null)
     {
         $transaction = $this->Transactions->get($id, [
-            'contain' => ['Users', 'TransactionType', 'TransactionItems'],
+            'contain' => ['Users', 'TransactionType', 'TransactionItems','Company'],
         ]);
+
         $this->Authorization->authorize($transaction, 'view');
 
-        $this->set(compact('transaction'));
+        //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
+        $users = $this->Transactions->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'firstname'
+        ]);
+        //$TransactionType = $this->Transactions->TransactionType->find('list', ['limit' => 200])->all();
+        $transactionType = $this->Transactions->TransactionType->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'transaction_name'
+        ]);
+        $transactionStatus = $this->Transactions->TransactionStatus->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'status_name'
+        ]);
+        $company = $this->Transactions->Company->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'company_name'
+        ]);
+
+        $qrCode = new QrCode();
+
+        //$this->set(compact('transaction'));
+        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company','qrCode'));
     }
 
     /**
@@ -56,9 +82,16 @@ class TransactionsController extends AppController
     public function add()
     {
         $transaction = $this->Transactions->newEmptyEntity();
+
         $this->Authorization->authorize($transaction, 'add');
+
         if ($this->request->is('post')) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
+
+            $transaction->transaction_code = $this->Transactions->generate_transcode(); //call function from TransactionsTable Model to generate unique code
+            $transaction->user_id = $this->request->getAttribute('identity')->getIdentifier();
+            $transaction->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
+
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
 
@@ -66,9 +99,26 @@ class TransactionsController extends AppController
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }
-        $users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
-        $TransactionType = $this->Transactions->TransactionType->find('list', ['limit' => 200])->all();
-        $this->set(compact('transaction', 'users', 'TransactionType'));
+        //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
+        $users = $this->Transactions->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'firstname'
+        ]);
+        //$TransactionType = $this->Transactions->TransactionType->find('list', ['limit' => 200])->all();
+        $transactionType = $this->Transactions->TransactionType->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'transaction_name'
+        ]);
+        $transactionStatus = $this->Transactions->TransactionStatus->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'status_name'
+        ]);
+        $company = $this->Transactions->Company->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'company_name'
+        ]);
+        //$this->set(compact('transaction', 'users', 'TransactionType'));
+        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company'));
     }
 
     /**
@@ -83,9 +133,12 @@ class TransactionsController extends AppController
         $transaction = $this->Transactions->get($id, [
             'contain' => [],
         ]);
+
         $this->Authorization->authorize($transaction, 'edit');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
+
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
 
@@ -93,9 +146,26 @@ class TransactionsController extends AppController
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }
-        $users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
-        $TransactionType = $this->Transactions->TransactionType->find('list', ['limit' => 200])->all();
-        $this->set(compact('transaction', 'users', 'TransactionType'));
+        //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
+        $users = $this->Transactions->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'firstname'
+        ]);
+        //$TransactionType = $this->Transactions->TransactionType->find('list', ['limit' => 200])->all();
+        $transactionType = $this->Transactions->TransactionType->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'transaction_name'
+        ]);
+        $transactionStatus = $this->Transactions->TransactionStatus->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'status_name'
+        ]);
+        $company = $this->Transactions->Company->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'company_name'
+        ]);
+        //$this->set(compact('transaction', 'users', 'TransactionType'));
+        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company'));
     }
 
     /**
@@ -108,7 +178,9 @@ class TransactionsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+
         $transaction = $this->Transactions->get($id);
+        
         $this->Authorization->authorize($transaction, 'delete');
         
         if ($this->Transactions->delete($transaction)) {

@@ -41,6 +41,16 @@ class TransactionsTable extends Table
     {
         parent::initialize($config);
 
+        //Set Timestamp for Adding transaction
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'date_added' => 'new',
+                    //'cancelled' => 'always',
+                ]
+            ]
+        ]);
+
         $this->setTable('transactions');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
@@ -90,6 +100,11 @@ class TransactionsTable extends Table
             ->notEmptyString('company_from');
 
         $validator
+            ->integer('transaction_type_id')
+            ->requirePresence('transaction_type_id', 'create')
+            ->notEmptyString('transaction_type_id');
+
+        $validator
             ->integer('company_to')
             ->requirePresence('company_to', 'create')
             ->notEmptyString('company_to');
@@ -110,7 +125,8 @@ class TransactionsTable extends Table
 
         $validator
             ->integer('status')
-            ->allowEmptyString('status');
+            ->allowEmptyString('status')
+            ->notEmptyString('status');
 
         $validator
             ->dateTime('date_added')
@@ -145,4 +161,10 @@ class TransactionsTable extends Table
 
         return $rules;
     }
+    public function generate_transcode(){
+        $str1 = str_shuffle(random_bytes(20));
+        $str2 = date("Y-m-d H:i:s").md5($str1);
+        return strtoupper("REFNO-".substr(str_shuffle(md5(base64_encode($str2))),0, 6)); //generate unique ref code for main transaction
+    }
+
 }

@@ -1,111 +1,107 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Transaction $transaction
+ * @var \App\Model\Entity\User $user
  */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Transaction'), ['action' => 'edit', $transaction->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Transaction'), ['action' => 'delete', $transaction->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Transactions'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Transaction'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="transactions view content">
-            <h3><?= h($transaction->id) ?></h3>
-            <table>
-                <tr>
-                    <th><?= __('User') ?></th>
-                    <td><?= $transaction->has('user') ? $this->Html->link($transaction->user->id, ['controller' => 'Users', 'action' => 'view', $transaction->user->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Transaction Code') ?></th>
-                    <td><?= h($transaction->transaction_code) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Subject') ?></th>
-                    <td><?= h($transaction->subject) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Received By') ?></th>
-                    <td><?= h($transaction->received_by) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($transaction->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Transaction Type Id') ?></th>
-                    <td><?= $this->Number->format($transaction->transaction_type_id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Company From') ?></th>
-                    <td><?= $this->Number->format($transaction->company_from) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Company To') ?></th>
-                    <td><?= $this->Number->format($transaction->company_to) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Status') ?></th>
-                    <td><?= $this->Number->format($transaction->status) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Added By') ?></th>
-                    <td><?= $this->Number->format($transaction->added_by) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Cancelled By') ?></th>
-                    <td><?= $this->Number->format($transaction->cancelled_by) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Received Date') ?></th>
-                    <td><?= h($transaction->received_date) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Date Added') ?></th>
-                    <td><?= h($transaction->date_added) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Cancelled') ?></th>
-                    <td><?= h($transaction->cancelled) ?></td>
-                </tr>
-            </table>
-            <div class="related">
-                <h4><?= __('Related Transaction Items') ?></h4>
-                <?php if (!empty($transaction->transaction_items)) : ?>
-                <div class="table-responsive">
-                    <table>
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Transaction Id') ?></th>
-                            <th><?= __('Item Id') ?></th>
-                            <th><?= __('Quantity') ?></th>
-                            <th><?= __('Internal Warranty') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
-                        </tr>
-                        <?php foreach ($transaction->transaction_items as $transactionItems) : ?>
-                        <tr>
-                            <td><?= h($transactionItems->id) ?></td>
-                            <td><?= h($transactionItems->transaction_id) ?></td>
-                            <td><?= h($transactionItems->item_id) ?></td>
-                            <td><?= h($transactionItems->quantity) ?></td>
-                            <td><?= h($transactionItems->internal_warranty) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'TransactionItems', 'action' => 'view', $transactionItems->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'TransactionItems', 'action' => 'edit', $transactionItems->id]) ?>
-                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'TransactionItems', 'action' => 'delete', $transactionItems->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transactionItems->id)]) ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
+?> 
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <?= $this->Flash->render() ?><!-- Validation Alert Display Here -->
+            <div class="card">
+              <div class="card-header">
+                    <strong>
+                        <h3>Transaction Code: <p style="font-family:'Courier New';color: #1C05F3;"><?= h($transaction->transaction_code) ?></p></h3>
+                    </strong>
+                    <?php
+                    $this->Common->generateQrInView($transaction->transaction_code)
+                    ?>
+                    <?= $this->Html->link(__('Request Item/s'), ['controller' => 'TransactionItems','action' => 'add/'.$transaction->id], ['class' => 'button float-right btn btn-primary float-right ']) ?>
+                </h3> 
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <?= $this->Form->create($transaction) ?> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Company From</label>
+                            <?=  $this->Form->control('company_from', ['options' => $company, 'class' => 'form-control', 'placeholder' => 'Company From', 'label' => false,'disabled']); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Company To</label>
+                            <?=  $this->Form->control('company_to', ['options' => $company, 'class' => 'form-control', 'placeholder' => 'Company To', 'label' => false,'disabled']); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Type</label>
+                            <?=  $this->Form->control('transaction_type_id', ['options' => $transactionType,'class' => 'form-control', 'placeholder' => 'Transaction Type', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Status</label>
+                            <?=  $this->Form->control('status', ['options' => $transactionStatus,'class' => 'form-control', 'placeholder' => 'Transaction Status', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-12">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Subject</label>
+                            <?=  $this->Form->control('subject', ['class' => 'form-control', 'placeholder' => 'Subject', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Received By:</label>
+                            <?=  $this->Form->control('received_by', ['options' => $users,'class' => 'form-control', 'placeholder' => 'Received By', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Received Date:</label>
+                            <?=  $this->Form->control('received_date', ['class' => 'form-control', 'placeholder' => 'Received By', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                </div> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- Select multiple-->
+                       <div class="form-group"> 
+                           <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-success"><font color="#F7F7F7">Back to Transaction List</font></a>
+                       </div>
+                   </div>
                 </div>
-                <?php endif; ?>
+                <?= $this->Form->end() ?>
+
+              </div>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
         </div>
-    </div>
-</div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->

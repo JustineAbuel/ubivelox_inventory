@@ -18,6 +18,10 @@ class TransactionItemsController extends AppController
      */
     public function index()
     {
+        $transactionItem = $this->TransactionItems->newEmptyEntity();
+
+        $this->Authorization->authorize($transactionItem, 'index');
+
         $this->paginate = [
             'contain' => ['Transactions', 'Items'],
         ];
@@ -35,9 +39,12 @@ class TransactionItemsController extends AppController
      */
     public function view($id = null)
     {
+
         $transactionItem = $this->TransactionItems->get($id, [
             'contain' => ['Transactions', 'Items'],
         ]);
+
+        $this->Authorization->authorize($transactionItem, 'view');
 
         $this->set(compact('transactionItem'));
     }
@@ -47,20 +54,31 @@ class TransactionItemsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($id=null)
     {
         $transactionItem = $this->TransactionItems->newEmptyEntity();
+
+        $this->Authorization->authorize($transactionItem, 'add');
+
         if ($this->request->is('post')) {
             $transactionItem = $this->TransactionItems->patchEntity($transactionItem, $this->request->getData());
+
+            $transactionItem->transaction_id = $id; //get transaction ID
+
             if ($this->TransactionItems->save($transactionItem)) {
                 $this->Flash->success(__('The transaction item has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'transactions','action' => 'view/'.$id]);//redirect to transaction main
             }
             $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
         }
+
         $transactions = $this->TransactionItems->Transactions->find('list', ['limit' => 200])->all();
-        $items = $this->TransactionItems->Items->find('list', ['limit' => 200])->all();
+        //$items = $this->TransactionItems->Items->find('list', ['limit' => 200])->all();
+        $items = $this->TransactionItems->Items->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'item_name'
+        ]);
         $this->set(compact('transactionItem', 'transactions', 'items'));
     }
 
@@ -76,6 +94,9 @@ class TransactionItemsController extends AppController
         $transactionItem = $this->TransactionItems->get($id, [
             'contain' => [],
         ]);
+
+        $this->Authorization->authorize($transactionItem, 'edit');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transactionItem = $this->TransactionItems->patchEntity($transactionItem, $this->request->getData());
             if ($this->TransactionItems->save($transactionItem)) {
@@ -100,7 +121,11 @@ class TransactionItemsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+
         $transactionItem = $this->TransactionItems->get($id);
+
+        $this->Authorization->authorize($transactionItem, 'delete');
+
         if ($this->TransactionItems->delete($transactionItem)) {
             $this->Flash->success(__('The transaction item has been deleted.'));
         } else {

@@ -1,45 +1,105 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Transaction $transaction
- * @var string[]|\Cake\Collection\CollectionInterface $users
+ * @var \App\Model\Entity\User $user
  */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $transaction->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $transaction->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Transactions'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+?> 
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><legend><?= __('Edit Transaction') ?></legend>
+                    <strong>
+                        <h3>Transaction Code: <p style="font-family:'Courier New';color: #1C05F3;"><?= h($transaction->transaction_code) ?></p></h3>
+                    </strong>
+                </h3> 
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <?= $this->Form->create($transaction) ?> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Company From</label>
+                            <?=  $this->Form->control('company_from', ['options' => $company, 'class' => 'form-control', 'placeholder' => 'Company From', 'label' => false]); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Company To</label>
+                            <?=  $this->Form->control('company_to', ['options' => $company, 'class' => 'form-control', 'placeholder' => 'Company To', 'label' => false]); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Type</label>
+                            <?=  $this->Form->control('transaction_type_id', ['options' => $transactionType,'class' => 'form-control', 'placeholder' => 'Transaction Type', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Status</label>
+                            <?=  $this->Form->control('status', ['options' => $transactionStatus,'class' => 'form-control', 'placeholder' => 'Transaction Status', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-12">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Transaction Subject</label>
+                            <?=  $this->Form->control('subject', ['class' => 'form-control', 'placeholder' => 'Subject', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Received By:</label>
+                            <?=  $this->Form->control('received_by', ['options' => $users,'class' => 'form-control', 'placeholder' => 'Received By', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Received Date:</label>
+                            <?=  $this->Form->control('received_date', ['class' => 'form-control', 'placeholder' => 'Received By', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                </div> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- Select multiple-->
+                       <div class="form-group"> 
+                            <?= $this->Form->button(__('Update'), ['class' => 'btn btn-success']) ?>
+                           <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
+                       </div>
+                   </div>
+                </div>
+
+                <?= $this->Form->end() ?>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="transactions form content">
-            <?= $this->Form->create($transaction) ?>
-            <fieldset>
-                <legend><?= __('Edit Transaction') ?></legend>
-                <?php
-                    echo $this->Form->control('user_id', ['options' => $users]);
-                    echo $this->Form->control('transaction_code');
-                    echo $this->Form->control('transaction_type_id');
-                    echo $this->Form->control('company_from');
-                    echo $this->Form->control('company_to');
-                    echo $this->Form->control('subject');
-                    echo $this->Form->control('received_by');
-                    echo $this->Form->control('received_date', ['empty' => true]);
-                    echo $this->Form->control('status');
-                    echo $this->Form->control('date_added', ['empty' => true]);
-                    echo $this->Form->control('added_by');
-                    echo $this->Form->control('cancelled', ['empty' => true]);
-                    echo $this->Form->control('cancelled_by');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
-</div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
