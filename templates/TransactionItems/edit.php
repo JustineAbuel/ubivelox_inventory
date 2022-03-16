@@ -1,37 +1,73 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\TransactionItem $transactionItem
- * @var string[]|\Cake\Collection\CollectionInterface $transactions
- * @var string[]|\Cake\Collection\CollectionInterface $items
+ * @var \App\Model\Entity\User $user
  */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $transactionItem->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $transactionItem->id), 'class' => 'side-nav-item']
-            ) ?>
-            <?= $this->Html->link(__('List Transaction Items'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+?> 
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><legend><?= __('Edit Transaction Item') ?></legend>
+                    <strong>
+                        <h3>Transaction Code: <p style="font-family:'Courier New';color: #1C05F3;"><?= h($transactionItem->transaction->transaction_code) ?></p></h3>
+                    </strong>
+                </h3> 
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <?= $this->Form->create($transactionItem) ?> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Item Name</label>
+                            <?=  $this->Form->control('item_id', ['options' => $itemOption, 'class' => 'form-control', 'placeholder' => 'Company From', 'label' => false]); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Quantity</label>
+                            <?=  $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity', 'label' => false]); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Internal Warranty Date</label>
+                            <?=  $this->Form->control('internal_warranty', ['class' => 'form-control', 'placeholder' => 'Internal Warranty Date', 'label' => false]); ?>
+                       
+                       </div>
+                   </div>
+                </div> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- Select multiple-->
+                       <div class="form-group"> 
+                            <?= $this->Form->button(__('Update'), ['class' => 'btn btn-success']) ?>
+                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view/'.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
+                       </div>
+                   </div>
+                </div>
+
+                <?= $this->Form->end() ?>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="transactionItems form content">
-            <?= $this->Form->create($transactionItem) ?>
-            <fieldset>
-                <legend><?= __('Edit Transaction Item') ?></legend>
-                <?php
-                    echo $this->Form->control('transaction_id', ['options' => $transactions]);
-                    echo $this->Form->control('item_id', ['options' => $items]);
-                    echo $this->Form->control('quantity');
-                    echo $this->Form->control('internal_warranty', ['empty' => true]);
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
-</div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->

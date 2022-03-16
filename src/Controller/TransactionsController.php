@@ -70,8 +70,28 @@ class TransactionsController extends AppController
 
         $qrCode = new QrCode();
 
+        $transactionItems = $this->Transactions->TransactionItems
+        ->find()
+        ->select(['id', 'transaction_id','item_id','quantity','internal_warranty','item_name' => 'i.item_name'])
+        ->join([
+        'table' => 'items',
+        'alias' => 'i',
+        'type' => 'INNER',
+        'conditions' => 'i.id = item_id',
+        ])
+        ->where(['transaction_id' => $id]);
+        //->order(['id' => 'DESC']);
+        //dd($transactionItems);
+
+        $totalQuantity = $this->Transactions->TransactionItems
+        ->find()
+        ->select(['id', 'transaction_id','item_id','quantity','total' => ('SUM(quantity)') ])
+        ->where(['transaction_id' => $id])
+        ->group('transaction_id');
+        //dd($totalQuantity);
+
         //$this->set(compact('transaction'));
-        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company','qrCode'));
+        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company','qrCode','transactionItems','totalQuantity'));
     }
 
     /**
@@ -130,7 +150,7 @@ class TransactionsController extends AppController
      */
     public function edit($id = null)
     {
-        $transaction = $this->Transactions->get($id, [
+        $transaction = $this->Transactions->get($this->request->getQuery('tid'), [
             'contain' => [],
         ]);
 
@@ -142,7 +162,8 @@ class TransactionsController extends AppController
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }

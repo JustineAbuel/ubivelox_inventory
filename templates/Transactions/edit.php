@@ -85,7 +85,7 @@
                        <!-- Select multiple-->
                        <div class="form-group"> 
                             <?= $this->Form->button(__('Update'), ['class' => 'btn btn-success']) ?>
-                           <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
+                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view/'.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
                        </div>
                    </div>
                 </div>

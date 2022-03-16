@@ -34,7 +34,7 @@
                     <th>Status</th>
                     <th>QR Code</th>
                     <th>Transaction Date</th> 
-                    <th>Action</th>
+                    <th>View Details</th>
                   </tr>
                   </thead> 
                   <tbody>
@@ -63,7 +63,7 @@
                         <td><?= h($transaction->date_added) ?></td>
                         <td class="actions   "> 
                             <?php echo $this->Html->link(
-                            "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
+                            "<font color='blue' size='6px'><i class='fa fa-eye'></i></font>", 
                             [
                                 'Controller' => 'TransactionsController',
                                 'action' => 'view', 
@@ -74,7 +74,7 @@
                             ]
                             ); 
                             ?>
-                            <?php echo $this->Html->link(
+                            <?php /*echo $this->Html->link(
                             "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                             [
                                 'Controller' => 'TransactionsController',
@@ -85,8 +85,9 @@
                                 'escape' => false //'escape' => false - convert plain text to html
                             ]
                             ); 
+                            */
                             ?>
-                            <?php echo $this->Form->postLink(
+                            <?php /*echo $this->Form->postLink(
                             "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                             [
                                 'Controller' => 'TransactionsController',
@@ -99,6 +100,7 @@
                             ],
                             
                             ); 
+                            */
                             ?> 
                         </td>
                     </tr>

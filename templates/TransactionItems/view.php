@@ -1,44 +1,71 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\TransactionItem $transactionItem
+ * @var \App\Model\Entity\User $user
  */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit Transaction Item'), ['action' => 'edit', $transactionItem->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete Transaction Item'), ['action' => 'delete', $transactionItem->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transactionItem->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Transaction Items'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New Transaction Item'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+?> 
+<section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <?= $this->Flash->render() ?><!-- Validation Alert Display Here -->
+            <div class="card">
+              <div class="card-header">
+                    <strong>
+                        <h3>Transaction Code: <p style="font-family:'Courier New';color: #1C05F3;"><?= h($transactionItem->transaction->transaction_code) ?></p></h3>
+                    </strong>
+                </h3> 
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <?= $this->Form->create($transactionItem) ?> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Item Name</label>
+                            <?=  $this->Form->control('item_id', ['options' => $items, 'class' => 'form-control', 'placeholder' => 'Company From', 'label' => false,'disabled']); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                            <label>Quantity</label>
+                            <?=  $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity', 'label' => false,'disabled']); ?>
+ 
+                       </div>
+                   </div>
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group">
+                            <label>Internal Warranty Date</label>
+                            <?=  $this->Form->control('internal_warranty', ['class' => 'form-control', 'placeholder' => 'Internal Warranty Date', 'label' => false,'disabled']); ?>
+                       
+                       </div>
+                   </div>
+                </div> 
+
+                <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- Select multiple-->
+                       <div class="form-group"> 
+                           <a href="<?php echo $this->Url->build(('/transactionItems')); ?>" class="btn btn-success"><font color="#F7F7F7">Back to Transaction Item List</font></a>
+                       </div>
+                   </div>
+                </div>
+                <?= $this->Form->end() ?>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
         </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="transactionItems view content">
-            <h3><?= h($transactionItem->id) ?></h3>
-            <table>
-                <tr>
-                    <th><?= __('Transaction') ?></th>
-                    <td><?= $transactionItem->has('transaction') ? $this->Html->link($transactionItem->transaction->id, ['controller' => 'Transactions', 'action' => 'view', $transactionItem->transaction->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Item') ?></th>
-                    <td><?= $transactionItem->has('item') ? $this->Html->link($transactionItem->item->id, ['controller' => 'Items', 'action' => 'view', $transactionItem->item->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($transactionItem->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Quantity') ?></th>
-                    <td><?= $this->Number->format($transactionItem->quantity) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Internal Warranty') ?></th>
-                    <td><?= h($transactionItem->internal_warranty) ?></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->

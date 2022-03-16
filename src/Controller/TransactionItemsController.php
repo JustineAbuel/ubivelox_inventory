@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use CodeItNow\BarcodeBundle\Utils\QrCode;
 
 /**
  * TransactionItems Controller
@@ -19,12 +20,14 @@ class TransactionItemsController extends AppController
     public function index()
     {
         $transactionItem = $this->TransactionItems->newEmptyEntity();
+        $this->set('title','List of Transaction Items');
 
         $this->Authorization->authorize($transactionItem, 'index');
 
         $this->paginate = [
             'contain' => ['Transactions', 'Items'],
         ];
+        
         $transactionItems = $this->paginate($this->TransactionItems);
 
         $this->set(compact('transactionItems'));
@@ -46,7 +49,14 @@ class TransactionItemsController extends AppController
 
         $this->Authorization->authorize($transactionItem, 'view');
 
-        $this->set(compact('transactionItem'));
+        $items = $this->TransactionItems->Items->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'item_name'
+        ]);
+
+        $qrCode = new QrCode();
+
+        $this->set(compact('transactionItem','items'));
     }
 
     /**
@@ -63,14 +73,34 @@ class TransactionItemsController extends AppController
         if ($this->request->is('post')) {
             $transactionItem = $this->TransactionItems->patchEntity($transactionItem, $this->request->getData());
 
-            $transactionItem->transaction_id = $id; //get transaction ID
+            $transactionItem->transaction_id = $this->request->getQuery('tid'); //get transaction ID
 
-            if ($this->TransactionItems->save($transactionItem)) {
-                $this->Flash->success(__('The transaction item has been saved.'));
+            $checkqtystat = $this->TransactionItems->Items->find('all', [
+                'conditions' => [
+                    'Items.id' => $transactionItem->item_id,
+                    //$transactionItem->quantity.' >' => 'Items.quantity'
+                ]
+            ]);
+            //->count(); //count row, if true return 1, else 0
+            //dd($checkqtystat);
 
-                return $this->redirect(['controller' => 'transactions','action' => 'view/'.$id]);//redirect to transaction main
-            }
-            $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+            foreach ($checkqtystat as $res) {
+                $item_quantity = $res->quantity; //item id
+                if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
+                            $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
+                            return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
+                }
+                else{
+                    if ($this->TransactionItems->save($transactionItem)) {
+                            $this->Flash->success(__('The transaction item has been saved.'));
+
+                            return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
+                    }
+                    $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+                }
+                
+            } 
+            
         }
 
         $transactions = $this->TransactionItems->Transactions->find('list', ['limit' => 200])->all();
@@ -92,23 +122,50 @@ class TransactionItemsController extends AppController
     public function edit($id = null)
     {
         $transactionItem = $this->TransactionItems->get($id, [
-            'contain' => [],
+            //'contain' => [],
+            'contain' => ['Transactions', 'Items'],
         ]);
 
         $this->Authorization->authorize($transactionItem, 'edit');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transactionItem = $this->TransactionItems->patchEntity($transactionItem, $this->request->getData());
-            if ($this->TransactionItems->save($transactionItem)) {
-                $this->Flash->success(__('The transaction item has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+            $checkqtystat = $this->TransactionItems->Items->find('all', [
+                'conditions' => [
+                    'Items.id' => $transactionItem->item_id,
+                    //$transactionItem->quantity.' >' => 'Items.quantity'
+                ]
+            ]);
+            //->count(); //count row, if true return 1, else 0
+            //dd($checkqtystat);
+            foreach ($checkqtystat as $res) {
+                $item_quantity = $res->quantity; //item id
+                //dd($item_quantity);
+                if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
+                            $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
+                            return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
+                }
+                else{
+                        if ($this->TransactionItems->save($transactionItem)) {
+                            $this->Flash->success(__('The transaction item has been saved.'));
+
+                            //return $this->redirect(['action' => 'index']);
+                            return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
+                        }
+                        $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+                    }
+
+                }
         }
+
         $transactions = $this->TransactionItems->Transactions->find('list', ['limit' => 200])->all();
         $items = $this->TransactionItems->Items->find('list', ['limit' => 200])->all();
-        $this->set(compact('transactionItem', 'transactions', 'items'));
+        $itemOption = $this->TransactionItems->Items->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'item_name'
+        ]);
+        $this->set(compact('transactionItem', 'transactions', 'items','itemOption'));
     }
 
     /**
@@ -132,6 +189,7 @@ class TransactionItemsController extends AppController
             $this->Flash->error(__('The transaction item could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        //return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
     }
 }

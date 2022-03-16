@@ -58,6 +58,15 @@
           </li>
 
           <li class="nav-item">
+            <a href="<?php echo $this->Url->build(('/transactionItems'), ['controller' => 'TransactionItems','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'transactionItems' ? 'active': '' ?>">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>
+                Transaction Items
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/company'), ['controller' => 'CompanyController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'company' ? 'active': '' ?>">
               <i class="nav-icon fas fa-building"></i>
               <p>
