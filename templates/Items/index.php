@@ -42,6 +42,7 @@
                   <tr> 
                     <th><?= ucfirst('id') ?></th>
                     <th><?= ucfirst('category_id') ?></th>
+                    <th><?= ucfirst('subcategory_id') ?></th>
                     <th><?= ucfirst('item_name') ?></th>
                     <th><?= ucfirst('serial_no') ?></th>
                     <th><?= ucfirst('issued_date') ?></th>
@@ -71,6 +72,7 @@
                 <tr class="<?php echo $tr_class; ?>">
                     <td><?= h($item->id) ?></td>
                     <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
+                    <td><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?></td>
                     <td><?= h($item->item_name) ?></td>
                     <td><?= h($item->serial_no) ?></td>
                     <td><?= h($item->issued_date) ?></td>
@@ -78,7 +80,7 @@
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>
                     <td><?= $item->item_type->type_name ?></td>
-                    <td><?= $item->quality == 1 ? 'Brand New' : 'Second Hand' ?></td>
+                    <td><?= $item->quality == 0 ? 'Brand New' : 'Second Hand' ?></td>
                      
                     <td>
                           <?php

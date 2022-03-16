@@ -25,7 +25,7 @@ class ItemsController extends AppController
  
         $this->loadModel('Users');
         $this->loadModel('Categories');  
-        $this->loadModel('Categories');  
+        $this->loadModel('Subcategories');  
         $this->loadModel('ItemType');  
         $this->loadModel('Company');  
 
@@ -63,7 +63,7 @@ class ItemsController extends AppController
         $this->Authorization->authorize($item, 'index');
         
         $this->paginate = [
-            'contain' => ['Categories', 'Company', 'ItemType' ],
+            'contain' => ['Categories', 'Company', 'ItemType', 'Subcategories'],
             'conditions' => [
                 'trashed IS ' => NULL 
             ]
@@ -102,19 +102,12 @@ class ItemsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
-        
-        // $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
-        // $this->Authorization->authorize($loggedinuser, 'add');
-
+    { 
         $item = $this->Items->newEmptyEntity(); 
         $this->Authorization->authorize($item, 'add');
-        // $this->Authorization->authorize($item);
-
+        
         if ($this->request->is('post')) {
-            $item = $this->Items->patchEntity($item, $this->request->getData());
-            // $item->date_added = 
-            // dd($this->Items->behaviors()->loaded());
+            $item = $this->Items->patchEntity($item, $this->request->getData()); 
             $item->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
             // dd($item);
             if ($this->Items->save($item)) {
@@ -122,17 +115,38 @@ class ItemsController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The item could not be saved. Please, try again.'));
-            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
-        }
-        $quality =  ['BRAND NEW', 'SECOND HAND'];
-        $categories = $this->Items->Categories->find('list')->all(); 
+            $this->Flash->error(__('The item could not be saved. Please, try again.')); 
+        } 
+        $quality =  ['BRAND NEW', 'SECOND HAND']; 
+        // $categories = $this->Categories->find('list', ['contain' => ['Subcategories']])->all();  
+        $categories = $this->Categories->find('list')->innerJoinWith('Subcategories')->all();
         $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();
-        $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all(); 
+        $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all();  
+
         $this->set(compact('item', 'categories','subcategories', 'company', 'itemTypes', 'quality'));
+ 
     }
 
+    public function getsubcategories(){ 
+        $this->Authorization->skipAuthorization();
+          
+        if($this->request->is('ajax')){
+            $this->layout = 'ajax';
+            $this->log('You are here', 'debug'); 
+            $subcategories = $this->Items->Subcategories->find('all')->where(['category_id' => $this->request->getData('category_id')])->all(); 
+            $option = '';
+            foreach($subcategories as $subcategory){
+                $option .= '<option value='.$subcategory->id.'>'.$subcategory->subcategory_name.'</option>';
+            }
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'subcategories' => $option
+                    // 'subcategories' => $subcategories
+                ])); 
+        }
+    }
     /**
      * Edit method
      *
@@ -166,7 +180,7 @@ class ItemsController extends AppController
         
         
         $quality =  ['BRAND NEW', 'SECOND HAND'];
-        $categories = $this->Items->Categories->find('list')->all(); 
+        $categories = $this->Items->Categories->find('list', ['contains' => ['Subcategories']])->all(); 
         $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();
         $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all(); 

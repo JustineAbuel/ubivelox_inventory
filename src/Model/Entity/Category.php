@@ -17,6 +17,7 @@ use Cake\ORM\Entity;
  * @property int|null $updated_by
  *
  * @property \App\Model\Entity\Item[] $items
+ * @property \App\Model\Entity\Subcategory[] $subcategories
  */
 class Category extends Entity
 {
@@ -37,5 +38,6 @@ class Category extends Entity
         'date_updated' => true,
         'updated_by' => true,
         'items' => true,
+        'subcategories' => true,
     ];
 }

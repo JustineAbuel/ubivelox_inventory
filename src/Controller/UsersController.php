@@ -169,17 +169,39 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData()); 
  
-            $user->date_added = date('Y-m-d H:i:s');
-            $user->date_updated = date('Y-m-d H:i:s');
-            $user->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            $user->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ; 
+            // $user->date_added = date('Y-m-d H:i:s');
+            // $user->date_updated = date('Y-m-d H:i:s');
+            // $user->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
+            // $user->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ; 
+ 
+            $http = new Client();
+            $response = $http->post('http://localhost:8888/INSERT_USERS', [           
+
             
-            if ($this->Users->save($user)) {
+                'username' => $user->username, 
+                'email' => $user->email, 
+                'firstname' => $user->firstname,
+                'middlename' => $user->middlename,
+                'lastname' => $user->lastname,
+                'contactno' => $user->contactno,
+                'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
+                'role_id' => $user->role_id,
+                'password' => $this->request->getData('password')
+
+            // $category->date_added = date('Y-m-d H:i:s');
+            // $category->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
+            // $category->date_updated = date('Y-m-d H:i:s');
+            // $category->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ;
+            
+            ]); 
+            // dd($response->getJson());
+            if ($response->getJson()['Status'] == 0) {
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            // $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__($response->getJson()['Description']));
         }
         $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
         $this->set(compact('user', 'userRole'));
