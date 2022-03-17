@@ -57,6 +57,12 @@ class UserRolesController extends AppController
         $userRoles = $this->UserRoles->newEmptyEntity(); 
         $this->Authorization->authorize($userRoles, 'index');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
+
         $userRoles = $this->paginate($this->UserRoles);
 
         $this->set(compact('userRoles'));
@@ -76,6 +82,11 @@ class UserRolesController extends AppController
         ]);
         $this->Authorization->authorize($userRole, 'view');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->set(compact('userRole'));
     }
 
@@ -88,6 +99,11 @@ class UserRolesController extends AppController
     {
         $userRole = $this->UserRoles->newEmptyEntity();
         $this->Authorization->authorize($userRole, 'add');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $userRole = $this->UserRoles->patchEntity($userRole, $this->request->getData());
             $http = new Client();
@@ -95,21 +111,28 @@ class UserRolesController extends AppController
 
                 'role_name' => $userRole->role_name,
                 'added_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
-
-            // $category->date_added = date('Y-m-d H:i:s');
-            // $category->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            // $category->date_updated = date('Y-m-d H:i:s');
-            // $category->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            
+ 
             ]); 
             if ($response->getJson()['Status'] == 0) {
                 $this->Flash->success(__('The user role has been saved.'));
+                
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added user role = '. $userRole->role_name ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             // $this->Flash->error(__('The user role could not be saved. Please, try again.'));
             
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an user role' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('userRole'));
     }
@@ -127,6 +150,11 @@ class UserRolesController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($userRole, 'edit');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $userRole = $this->UserRoles->patchEntity($userRole, $this->request->getData());
             $http = new Client();
@@ -134,20 +162,27 @@ class UserRolesController extends AppController
 
                 'role_name' => $userRole->role_name,
                 'updated_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
-
-            // $category->date_added = date('Y-m-d H:i:s');
-            // $category->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            // $category->date_updated = date('Y-m-d H:i:s');
-            // $category->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            
+ 
             ]); 
             if ($response->getJson()['Status'] == 0) {
                 $this->Flash->success(__('The user role has been saved.'));
+
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated user role with id = '. $userRole->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             // $this->Flash->error(__('The user role could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update user role' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('userRole'));
     }
@@ -168,8 +203,20 @@ class UserRolesController extends AppController
         $response = $http->delete('http://localhost:8888/DELETE_USER_ROLES/'.$id); 
         if ($response->getJson()['Status'] == 0) {
             $this->Flash->success(__('The user role has been deleted.'));
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted user role with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             $this->Flash->error(__('The user role could not be deleted. Please, try again.'));
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete user role' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

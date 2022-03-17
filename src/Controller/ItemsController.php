@@ -36,7 +36,11 @@ class ItemsController extends AppController
     
     public function dashboard(){ 
         $this->Authorization->skipAuthorization();
-
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 		$this->viewBuilder()->setLayout('dashboard');
         $items = $this->Items->find()->count();
         $users = $this->Users->find()->count();
@@ -56,12 +60,16 @@ class ItemsController extends AppController
 
 
     public function index()
-    {
-  
-        $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
+    {   
         $item = $this->Items->newEmptyEntity(); 
         $this->Authorization->authorize($item, 'index');
         
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
+         
         $this->paginate = [
             'contain' => ['Categories', 'Company', 'ItemType', 'Subcategories'],
             'conditions' => [
@@ -69,8 +77,7 @@ class ItemsController extends AppController
             ]
         ];  
         $items = $this->paginate($this->Items);  
-        // dd($items);
-         
+        // dd($items); 
         $qrCode = new QrCode();
 
 		$this->set('title','List of Items');
@@ -86,6 +93,8 @@ class ItemsController extends AppController
      */
     public function view($id = null)
     { 
+        
+
         $item = $this->Items->get($id, [
             // 'contain' => ['Categories', 'Suppliers', 'ItemTypes', 'Transactions'],
             'contain' => ['Categories', 'Company', 'ItemType' ],
@@ -93,6 +102,11 @@ class ItemsController extends AppController
 
         $this->Authorization->authorize($item, 'view');
 
+        $this->Common->dblogger([ 
+            'message' => 'Viewed Item with id = '. $this->request->getParam('pass')[0],
+            'request' => $this->request, 
+        ]);
+        
         $this->set(compact('item'));
     }
 
@@ -105,17 +119,33 @@ class ItemsController extends AppController
     { 
         $item = $this->Items->newEmptyEntity(); 
         $this->Authorization->authorize($item, 'add');
+
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         
         if ($this->request->is('post')) {
             $item = $this->Items->patchEntity($item, $this->request->getData()); 
             $item->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
             // dd($item);
-            if ($this->Items->save($item)) {
+            if ($item = $this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added item with id = '. $item->item_name ,
+                    'request' => $this->request, 
+                ]);
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The item could not be saved. Please, try again.')); 
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an item' ,
+                'request' => $this->request, 
+            ]);
         } 
         $quality =  ['BRAND NEW', 'SECOND HAND']; 
         // $categories = $this->Categories->find('list', ['contain' => ['Subcategories']])->all();  
@@ -132,8 +162,7 @@ class ItemsController extends AppController
         $this->Authorization->skipAuthorization();
           
         if($this->request->is('ajax')){
-            $this->layout = 'ajax';
-            $this->log('You are here', 'debug'); 
+            $this->layout = 'ajax'; 
             $subcategories = $this->Items->Subcategories->find('all')->where(['category_id' => $this->request->getData('category_id')])->all(); 
             $option = '';
             foreach($subcategories as $subcategory){
@@ -161,7 +190,11 @@ class ItemsController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($item, 'edit'); 
-        
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $item = $this->Items->patchEntity($item, $this->request->getData()); 
                 
@@ -172,15 +205,25 @@ class ItemsController extends AppController
             if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated an item with id = '. $item->id ,
+                    'request' => $this->request, 
+                ]);
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The item could not be saved. Please, try again.')); 
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update item' ,
+                'request' => $this->request, 
+            ]);
              
         }
         
         
-        $quality =  ['BRAND NEW', 'SECOND HAND'];
-        $categories = $this->Items->Categories->find('list', ['contains' => ['Subcategories']])->all(); 
+        $quality =  ['BRAND NEW', 'SECOND HAND']; 
+        $categories = $this->Categories->find('list')->innerJoinWith('Subcategories')->all();
         $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();
         $itemTypes = $this->Items->ItemType->find('list', ['limit' => 200])->all(); 
@@ -205,8 +248,19 @@ class ItemsController extends AppController
 
         if ($this->Items->save($item)) {
             $this->Flash->success(__('The item has been deleted.'));
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted item with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             $this->Flash->error(__('The item could not be deleted. Please, try again.')); 
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete item' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

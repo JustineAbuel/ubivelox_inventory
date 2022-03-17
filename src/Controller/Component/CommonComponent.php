@@ -12,13 +12,22 @@ use CodeItNow\BarcodeBundle\Utils\QrCode;
  */
 class CommonComponent extends Component
 {
+
     /**
      * Default configuration.
      *
      * @var array
      */
     protected $_defaultConfig = [];
-
+    
+    public $components = [
+        'Authentication.Authentication',
+        'RequestHandler'
+    ];
+    public function initialize(array $_defaultConfig): void
+    { 
+          
+    } 
     public function generateQr($param){
         $qrCode = new QrCode();
         $qrCode
@@ -32,5 +41,18 @@ class CommonComponent extends Component
             ->setLabelFontSize(16)
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         return $qrCode;
+    }
+
+    public function dblogger($param){
+ 
+        $loggedinuser = $this->Authentication->getIdentity()->getOriginalData();
+
+        $this->log($param['message'], 'info', [
+            'username' => $loggedinuser->username,
+            'role' => $loggedinuser->role_id,
+            'directory' => '>'. $param['request']->getParam('controller') . '>'.$param['request']->getParam('action'), 
+            'action' => $param['request']->getParam('action'),
+            'status' => 'success', 
+        ]); 
     }
 }

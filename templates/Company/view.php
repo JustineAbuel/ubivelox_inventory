@@ -10,6 +10,8 @@
         <div class="row">
           <div class="col-12">
 
+          <?= $this->Flash->render() ?>
+          
             <div class="card">
               <div class="card-header     "> 
                 <h3 class="card-title"><legend><?= __('Company Details') ?></legend></h3> 

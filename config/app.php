@@ -351,11 +351,8 @@ return [
      */
     'Log' => [
         'debug' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'debug',
-            'url' => env('LOG_DEBUG_URL', null),
-            'scopes' => false,
+            'className' => 'Database',
+            'model' => 'AuditTrails', 
             'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [

@@ -90,8 +90,35 @@
                 </div> 
 
                 <div class="row custom-padding">
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                           
+                       <?= $this->Form->control('item_type_id', ['options' => $itemTypes, 'class' => 'form-control', 'placeholder' => 'Type '] ); ?>
+                             
+                       </div>
+                   </div>
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                        <label for="quality">Quality</label>
+                        <div class="form-group"> 
+                        <?php 
+                        $this->Form->setTemplates([
+                            'nestingLabel' => '<div class="form-check form-check-inline">{{input}}<label{{attrs}} class="my-auto">{{text}}</label></div>',
+                            'formGroup' => '{{label}}{{input}}',
+                        ]);  
+                        echo  $this->Form->radio('quality', $quality ,[ 'type'=>'radio', 'class'=> 'form-check-input',  ] );
+                         ?>                        
+                         
+
+                        </div>
+                         
+                   </div>
+                </div>  
+
+                <div class="row custom-padding">
                    
-                <div class="col-sm-6">
+                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
                            <?= $this->Form->control('item_description', ['class' => 'form-control', 'placeholder' => 'Item Description'] ); ?>
@@ -107,36 +134,7 @@
                    </div>
                    
                 </div> 
-                
-
-                <div class="row custom-padding">
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                       <div class="form-group">
-                           
-                       <?= $this->Form->control('item_type_id', ['options' => $itemTypes, 'class' => 'form-control', 'placeholder' => 'Type '] ); ?>
-                             
-                       </div>
-                   </div>
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                        <label for="quality">quality</label>
-                        <div class="custom-control custom-radio custom-control-inline"> 
-                        <?=  
-                        // $this->Form->setTemplates([
-                        //     'nestingLabel' => '{{hidden}}{{input}}<label{{attrs}}>{{text}}</label>',
-                        //     'formGroup' => '{{input}}{{label}}',
-                        // ]);
-                         $this->Form->radio('quality', $quality ,[ 'type'=>'radio', 'class'=> 'form-check-input mr-5',  ] ); ?>                       ;
-
-
-                        </div>
-                         
-                   </div>
-                </div> 
-                
- 
-
+                 
 
                 <div class="row custom-padding">
                    <div class="col-sm-6">
@@ -187,7 +185,7 @@
                        <!-- text input -->
                        <div class="form-group"> 
 
-                        <?= $this->Form->control('part_no',["class"=> 'form-control', ] ); ?>                       
+                        <?= $this->Form->control('part_no',["class"=> 'form-control', 'placeholder' => 'Part number '] ); ?>                       
                         </div>
                    </div>
                 </div> 
@@ -216,3 +214,36 @@
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+
+    <script>
+$(document).ready(function(){
+    
+    $('#category-id').change(() => {
+        
+        var categoryId = $('#category-id').val();
+        $.ajax({
+            method: "POST",
+            url: "<?= $this->Url->build(['controller' => 'Items', 'action' => 'getsubcategories']) ?>",
+            type:"JSON",
+            data: {
+                category_id: categoryId
+            },
+            headers: {
+                'X-CSRF-Token': $("[name='_csrfToken']").val()
+            },
+            
+            beforeSend: function(){  },
+            success: function(msg){
+                 console.log(msg.subcategories)
+                $("#subcategory-id").empty().append(msg.subcategories);
+            },
+            cache: false, 
+            error:function (xhr, ajaxOptions, thrownError){  
+                alert(thrownError); 
+            }     
+        })
+    })
+
+
+});
+</script>

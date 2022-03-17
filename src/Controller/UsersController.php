@@ -93,15 +93,10 @@ class UsersController extends AppController
                 'currentpassword' => $this->hashPassword($requestData['currentpassword']),
                 'newpassword' => $requestData['newpassword'],
                 'retypepassword' => $requestData['retypepassword'],
-
-            // $category->date_added = date('Y-m-d H:i:s');
-            // $category->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            // $category->date_updated = date('Y-m-d H:i:s');
-            // $category->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ;
+ 
             
             ]); 
-            if ($response->getJson()['Status'] == 0) {
-            // if ($this->Categories->save($category)) {
+            if ($response->getJson()['Status'] == 0) { 
                 $this->Flash->success(__('Password changed successfully'));
 
                 return $this->redirect(['action' => 'index']);
@@ -117,15 +112,16 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
-    { 
-        // $this->Authorization->authorizeModel();
-        // $this->Authorization->skipAuthorization();
-        // $loggedInUserId = $this->request->getAttribute('identity')->id;
-        // $user = $this->Users->get($loggedInUserId);
+    {  
         //logged in user
         $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
         $this->Authorization->authorize($loggedinuser, 'index');
         
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->paginate = [
             'contain' => ['UserRoles'],
         ]; 
@@ -152,6 +148,11 @@ class UsersController extends AppController
         ]);
         $this->Authorization->authorize($user, 'view');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->set(compact('user'));
     }
 
@@ -166,6 +167,11 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
         $this->Authorization->authorize($user, 'add');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData()); 
  
@@ -186,22 +192,27 @@ class UsersController extends AppController
                 'contactno' => $user->contactno,
                 'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
                 'role_id' => $user->role_id,
-                'password' => $this->request->getData('password')
-
-            // $category->date_added = date('Y-m-d H:i:s');
-            // $category->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            // $category->date_updated = date('Y-m-d H:i:s');
-            // $category->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ;
-            
+                'password' => $this->request->getData('password') 
             ]); 
             // dd($response->getJson());
             if ($response->getJson()['Status'] == 0) {
                 $this->Flash->success(__('The user has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added user = '. $user->username ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             // $this->Flash->error(__('The user could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description']));
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an user' ,
+                'request' => $this->request, 
+            ]);
         }
         $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
         $this->set(compact('user', 'userRole'));
@@ -222,14 +233,29 @@ class UsersController extends AppController
         ]); 
         $this->Authorization->authorize($user, 'edit');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated user with id = '. $user->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update user' ,
+                'request' => $this->request, 
+            ]);
         }
         $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
         $this->set(compact('user', 'userRole'));
@@ -253,8 +279,18 @@ class UsersController extends AppController
 
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted user with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete user' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

@@ -30,6 +30,11 @@ class TransactionStatusController extends AppController
         $transactionStatus = $this->TransactionStatus->newEmptyEntity();
         $this->Authorization->authorize($transactionStatus, 'index');
         $transactionStatus = $this->paginate($this->TransactionStatus);
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $this->set(compact('transactionStatus'));
     }
@@ -47,6 +52,11 @@ class TransactionStatusController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($transactionStatus, 'view');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $this->set(compact('transactionStatus'));
     }
@@ -60,6 +70,11 @@ class TransactionStatusController extends AppController
     {
         $transactionStatus = $this->TransactionStatus->newEmptyEntity();
         $this->Authorization->authorize($transactionStatus, 'add');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $transactionStatus = $this->TransactionStatus->patchEntity($transactionStatus, $this->request->getData());
             /*
@@ -78,11 +93,21 @@ class TransactionStatusController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->TransactionType->save($transactionStatus)) {
                 $this->Flash->success(__('The transaction status has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added transaction status ='. $transactionStatus->status_name ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The transaction status could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add transaction status' ,
+                'request' => $this->request, 
+            ]); 
         }
         $this->set(compact('transactionStatus'));
     }
@@ -100,6 +125,11 @@ class TransactionStatusController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($transactionStatus, 'edit');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transactionStatus = $this->TransactionStatus->patchEntity($transactionStatus, $this->request->getData());
             /*
@@ -119,11 +149,21 @@ class TransactionStatusController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->TransactionType->save($transactionStatus)) {
                 $this->Flash->success(__('The transaction type has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated transaction status with id = '. $transactionStatus->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The transaction status could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update transaction status' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('transactionStatus'));
     }
@@ -151,13 +191,22 @@ class TransactionStatusController extends AppController
         $response = $http->delete('http://localhost:8888/DELETE_TRANSACTION_STATUS/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_STATUS/'.$id);  
         if ($response->getJson()['Status'] == 0) {
-
-        // if ($this->TransactionStatus->delete($category)) {
+ 
             $this->Flash->success(__('The transaction status has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted transaction status with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         }
         else {
             //$this->Flash->error(__('The transaction status could not be deleted. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete transaction status' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

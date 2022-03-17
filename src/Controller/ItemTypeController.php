@@ -31,6 +31,11 @@ class ItemTypeController extends AppController
         $itemType = $this->ItemType->newEmptyEntity();
         $this->Authorization->authorize($itemType, 'index');
         $itemType = $this->paginate($this->ItemType);
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $this->set(compact('itemType'));
     }
@@ -49,6 +54,11 @@ class ItemTypeController extends AppController
         ]);
         $this->Authorization->authorize($itemType, 'view');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->set(compact('itemType'));
     }
 
@@ -61,14 +71,29 @@ class ItemTypeController extends AppController
     {
         $itemType = $this->ItemType->newEmptyEntity();
         $this->Authorization->authorize($itemType, 'view');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $itemType = $this->ItemType->patchEntity($itemType, $this->request->getData());
             if ($this->ItemType->save($itemType)) {
                 $this->Flash->success(__('The item type has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added item type ='. $itemType->type_name ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The item type could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an item type' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('itemType'));
     }
@@ -86,14 +111,28 @@ class ItemTypeController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($itemType, 'edit');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $itemType = $this->ItemType->patchEntity($itemType, $this->request->getData());
             if ($this->ItemType->save($itemType)) {
                 $this->Flash->success(__('The item type has been saved.'));
-
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated item type with id = '. $itemType->id ,
+                    'request' => $this->request, 
+                ]);
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The item type could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update item type' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('itemType'));
     }
@@ -112,8 +151,18 @@ class ItemTypeController extends AppController
         $this->Authorization->authorize($itemType, 'delete');
         if ($this->ItemType->delete($itemType)) {
             $this->Flash->success(__('The item type has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted item type with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             $this->Flash->error(__('The item type could not be deleted. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete item type' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

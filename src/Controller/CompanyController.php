@@ -31,6 +31,11 @@ class CompanyController extends AppController
         
         $company = $this->Company->newEmptyEntity();
         $this->Authorization->authorize($company, 'index' );
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $company = $this->paginate($this->Company);
 
         $this->set(compact('company'));
@@ -49,6 +54,12 @@ class CompanyController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($company, 'view' );
+        
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $this->set(compact('company'));
     }
@@ -63,6 +74,11 @@ class CompanyController extends AppController
         $company = $this->Company->newEmptyEntity();
         $this->Authorization->authorize($company, 'add' );
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $company = $this->Company->patchEntity($company, $this->request->getData());
             //$company->date_added = date('Y-m-d H:i:s');
@@ -86,11 +102,21 @@ class CompanyController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->Company->save($company)) {
                 $this->Flash->success(__('The company has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added company ='. $company->company_name ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The company could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add company' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('company'));
     }
@@ -107,16 +133,17 @@ class CompanyController extends AppController
         $company = $this->Company->get($id, [
             'contain' => [],
         ]);
+        
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
+
         $this->Authorization->authorize($company, 'edit' );
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $company = $this->Company->patchEntity($company, $this->request->getData());
-            //$company->date_updated = date('Y-m-d H:i:s');
-            //$company->updated_by =  $this->request->getAttribute('identity')->getIdentifier();
-            /*if ($this->Company->save($company)) {
-                $this->Flash->success(__('The company has been saved.'));
+            $company = $this->Company->patchEntity($company, $this->request->getData()); 
 
-                return $this->redirect(['action' => 'index']);
-            }*/
             $http = new Client();
             $response = $http->put('http://localhost:8888/UPDATE_COMPANY/'.$id, [     
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/UPDATE_COMPANY/'.$id, [  
@@ -128,14 +155,23 @@ class CompanyController extends AppController
                 
             ]); 
     
-            if ($response->getJson()['Status'] == 0) {
-            // if ($this->Categories->save($company)) {
-                $this->Flash->success(__('The category has been saved.'));
+            if ($response->getJson()['Status'] == 0) { 
+                $this->Flash->success(__('The company has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated company with id = '. $company->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The company could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update company' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('company'));
     }
@@ -157,13 +193,22 @@ class CompanyController extends AppController
         $response = $http->delete('http://localhost:8888/DELETE_COMPANY/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_COMPANY/'.$id);  
         if ($response->getJson()['Status'] == 0) {
-
-        // if ($this->Company->delete($category)) {
+ 
             $this->Flash->success(__('The company has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted company with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         }
         else {
             //$this->Flash->error(__('The company could not be deleted. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete company' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

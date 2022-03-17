@@ -23,6 +23,12 @@ class TransactionsController extends AppController
 
         $this->Authorization->authorize($transaction, 'index');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
+
         $this->set('title','List of Transactions');
         $this->paginate = [
             'contain' => ['Users', 'Company','TransactionType','TransactionStatus'],
@@ -49,6 +55,11 @@ class TransactionsController extends AppController
 
         $this->Authorization->authorize($transaction, 'view');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
         $users = $this->Transactions->Users->find('list', [
             'keyField' => 'id',
@@ -106,6 +117,11 @@ class TransactionsController extends AppController
 
         $this->Authorization->authorize($transaction, 'add');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
 
@@ -115,10 +131,20 @@ class TransactionsController extends AppController
 
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added transaction = '. $transaction->transaction ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an transaction' ,
+                'request' => $this->request, 
+            ]);
         }
         //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
         $users = $this->Transactions->Users->find('list', [
@@ -157,6 +183,11 @@ class TransactionsController extends AppController
 
         $this->Authorization->authorize($transaction, 'edit');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
 
@@ -165,8 +196,19 @@ class TransactionsController extends AppController
 
                 //return $this->redirect(['action' => 'index']);
                 return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
+                
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated transaction with id = '. $transaction->id ,
+                    'request' => $this->request, 
+                ]);
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update transaction' ,
+                'request' => $this->request, 
+            ]);
         }
         //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
         $users = $this->Transactions->Users->find('list', [
@@ -207,8 +249,18 @@ class TransactionsController extends AppController
         
         if ($this->Transactions->delete($transaction)) {
             $this->Flash->success(__('The transaction has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted transaction with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             $this->Flash->error(__('The transaction could not be deleted. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete transaction' ,
+                'request' => $this->request, 
+            ]);
         }
 
         //return $this->redirect(['action' => 'index']);

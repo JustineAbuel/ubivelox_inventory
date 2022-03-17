@@ -88,7 +88,8 @@ class Application extends BaseApplication
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit');
         }
-
+        //added so the log wont save in db
+        Configure::write('DebugKit.ignoreAuthorization', true); 
         // Load more plugins here
         $this->addPlugin('Authorization');
     }

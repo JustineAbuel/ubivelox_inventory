@@ -31,6 +31,12 @@ class CategoriesController extends AppController
         
         $category = $this->Categories->newEmptyEntity();
         $this->Authorization->authorize($category, 'index');
+        
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $this->set('title','List of Categories');
         $categories = $this->paginate($this->Categories);
@@ -47,12 +53,17 @@ class CategoriesController extends AppController
      */
     public function view($id = null)
     {
-        $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
-        $this->Authorization->authorize($loggedinuser, 'view');
+       
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         $category = $this->Categories->get($id, [
             'contain' => ['Items'],
         ]);
+        $this->Authorization->authorize($category, 'view');
 
         $this->set(compact('category'));
     }
@@ -65,9 +76,14 @@ class CategoriesController extends AppController
     public function add()
     { 
 
-        $category = $this->Categories->newEmptyEntity();
-        
+        $category = $this->Categories->newEmptyEntity(); 
         $this->Authorization->authorize($category, 'add' );
+
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
 
         if ($this->request->is('post')) {
             $category = $this->Categories->patchEntity($category, $this->request->getData()); 
@@ -89,12 +105,21 @@ class CategoriesController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->Categories->save($category)) {
                 $this->Flash->success(__('The category has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added category ='. $category->category_name ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             // $this->Flash->error(__('The category could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description']));
-            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add an category' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('category'));
     }
@@ -113,11 +138,16 @@ class CategoriesController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($category, 'edit' );
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $category = $this->Categories->patchEntity($category, $this->request->getData());
 
             $http = new Client();
-            $response = $http->put('UPDATE_CATEGORIES/'.$id, [     
+            $response = $http->put('http://localhost:8888/UPDATE_CATEGORIES/'.$id, [     
  
                 'id' => $id,
                 'category_name' => $category->category_name ,
@@ -129,11 +159,21 @@ class CategoriesController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->Categories->save($category)) {
                 $this->Flash->success(__('The category has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated category with id = '. $category->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             // $this->Flash->error(__('The category could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update category' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('category'));
     }
@@ -160,10 +200,20 @@ class CategoriesController extends AppController
 
         // if ($this->Categories->delete($category)) {
             $this->Flash->success(__('The category has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted category with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         } else {
             // $this->Flash->error(__('The category could not be deleted. Please, try again.'));
             
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete category' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

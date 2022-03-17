@@ -110,18 +110,8 @@
                             'formGroup' => '{{label}}{{input}}',
                         ]);  
                         echo  $this->Form->radio('quality', $quality ,[ 'type'=>'radio', 'class'=> 'form-check-input',  ] );
-                        // $this->Form->input('q1', [
-                        //     'templates' => [
-                        //         'radioWrapper' => '<div class="radio-inline screen-center screen-radio">{{label}}</div>'
-                        //     ],
-                        //     'type' => 'radio',
-                        //     'options' => $quality,
-                        //     'required' => 'required', 
-                        // ])
                          ?>                        
-                        
-
-
+                         
                         </div>
                          
                    </div>
@@ -200,7 +190,7 @@
                        <!-- text input -->
                        <div class="form-group"> 
 
-                        <?= $this->Form->control('part_no',["class"=> 'form-control', ] ); ?>                       
+                        <?= $this->Form->control('part_no',["class"=> 'form-control', 'placeholder' => 'Part number '] ); ?>                       
                         </div>
                    </div>
                 </div> 

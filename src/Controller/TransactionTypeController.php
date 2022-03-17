@@ -31,6 +31,11 @@ class TransactionTypeController extends AppController
         $this->Authorization->authorize($transactionType, 'index');
         $transactionType = $this->paginate($this->TransactionType);
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->set(compact('transactionType'));
     }
 
@@ -48,6 +53,11 @@ class TransactionTypeController extends AppController
         ]);
         $this->Authorization->authorize($transactionType, 'view');
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         $this->set(compact('transactionType'));
     }
 
@@ -60,6 +70,11 @@ class TransactionTypeController extends AppController
     {
         $transactionType = $this->TransactionType->newEmptyEntity();
         $this->Authorization->authorize($transactionType, 'add');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is('post')) {
             $transactionType = $this->TransactionType->patchEntity($transactionType, $this->request->getData());
             /*
@@ -78,10 +93,21 @@ class TransactionTypeController extends AppController
             // if ($this->TransactionType->save($transactionType)) {
                 $this->Flash->success(__('The transaction type has been saved.'));
 
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added transaction type ='. $transactionType->transaction_name ,
+                    'request' => $this->request, 
+                ]);
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The transaction type could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to add transaction type' ,
+                'request' => $this->request, 
+            ]); 
         }
         $this->set(compact('transactionType'));
     }
@@ -99,6 +125,11 @@ class TransactionTypeController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($transactionType, 'edit');
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
+            'request' => $this->request, 
+        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transactionType = $this->TransactionType->patchEntity($transactionType, $this->request->getData());
             /*
@@ -117,11 +148,23 @@ class TransactionTypeController extends AppController
             if ($response->getJson()['Status'] == 0) {
             // if ($this->TransactionType->save($transactionType)) {
                 $this->Flash->success(__('The transaction type has been saved.'));
+                
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated transaction type with id = '. $transactionType->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             //$this->Flash->error(__('The transaction type could not be saved. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update transaction type' ,
+                'request' => $this->request, 
+            ]);
         }
         $this->set(compact('transactionType'));
     }
@@ -149,13 +192,22 @@ class TransactionTypeController extends AppController
         $response = $http->delete('http://localhost:8888/DELETE_TRANSACTION_TYPE/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_TYPE/'.$id);  
         if ($response->getJson()['Status'] == 0) {
-
-        // if ($this->TransactionType->delete($category)) {
+ 
             $this->Flash->success(__('The transaction type has been deleted.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Successfully deleted transaction type with id = '. $id ,
+                'request' => $this->request, 
+            ]);
         }
         else {
             //$this->Flash->error(__('The transaction type could not be deleted. Please, try again.'));
             $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to delete transaction type' ,
+                'request' => $this->request, 
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);
