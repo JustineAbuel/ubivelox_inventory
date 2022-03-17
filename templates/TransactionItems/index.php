@@ -33,8 +33,8 @@
                   <tbody>
                     <?php foreach ($transactionItems as $transactionItem): ?>
                     <tr>
-                        <td><?= $transactionItem->has('transaction') ? $this->Html->link($transactionItem->transaction->transaction_code, ['controller' => 'Transactions', 'action' => 'view', $transactionItem->transaction->id]) : '' ?></td>
-                        <td><?= $transactionItem->has('item') ? $this->Html->link($transactionItem->item->item_name, ['controller' => 'Items', 'action' => 'view', $transactionItem->item->id]) : '' ?></td>
+                        <td><?= $transactionItem->has('transaction') ? $this->Html->link($transactionItem->transaction->transaction_code, ['controller' => 'Transactions', 'action' => 'view?tid='.$transactionItem->transaction->id]) : '' ?></td>
+                        <td><?= h($transactionItem->item->item_name) ?></td>
                         <td><?= h($transactionItem->quantity) ?></td>
                         <td><?= h($transactionItem->internal_warranty) ?></td>
                         <td class="actions   "> 

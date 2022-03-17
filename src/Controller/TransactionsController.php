@@ -43,7 +43,7 @@ class TransactionsController extends AppController
      */
     public function view($id = null)
     {
-        $transaction = $this->Transactions->get($id, [
+        $transaction = $this->Transactions->get($this->request->getQuery('tid'), [
             'contain' => ['Users', 'TransactionType', 'TransactionItems','Company'],
         ]);
 
@@ -79,19 +79,20 @@ class TransactionsController extends AppController
         'type' => 'INNER',
         'conditions' => 'i.id = item_id',
         ])
-        ->where(['transaction_id' => $id]);
+        ->where(['transaction_id' => $this->request->getQuery('tid')]);
+        $counttransitemrec = $transactionItems->count(); //count requested transaction items
         //->order(['id' => 'DESC']);
         //dd($transactionItems);
 
         $totalQuantity = $this->Transactions->TransactionItems
         ->find()
         ->select(['id', 'transaction_id','item_id','quantity','total' => ('SUM(quantity)') ])
-        ->where(['transaction_id' => $id])
+        ->where(['transaction_id' => $this->request->getQuery('tid')])
         ->group('transaction_id');
         //dd($totalQuantity);
 
         //$this->set(compact('transaction'));
-        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company','qrCode','transactionItems','totalQuantity'));
+        $this->set(compact('transaction', 'users','transactionType','transactionStatus','company','qrCode','transactionItems','totalQuantity','counttransitemrec'));
     }
 
     /**
@@ -163,7 +164,7 @@ class TransactionsController extends AppController
                 $this->Flash->success(__('The transaction has been saved.'));
 
                 //return $this->redirect(['action' => 'index']);
-                return $this->redirect(['controller' => 'transactions','action' => 'view/'.$this->request->getQuery('tid')]);//redirect to transaction main
+                return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
         }
@@ -210,6 +211,7 @@ class TransactionsController extends AppController
             $this->Flash->error(__('The transaction could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        //return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
     }
 }

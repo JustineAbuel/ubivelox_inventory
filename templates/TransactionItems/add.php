@@ -49,7 +49,7 @@
                        <!-- Select multiple-->
                        <div class="form-group"> 
                             <?= $this->Form->button(__('Add Item'), ['class' => 'btn btn-primary']) ?>
-                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view/'.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
+                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view?tid='.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
                        </div>
                    </div>
                 </div>

@@ -57,7 +57,7 @@
                         <td><strong><?= h($transaction->transaction_status->status_name) ?></strong></td>
                         <th>
                           <?php
-                          $this->Common->generateQrInView($transaction->transaction_code)
+                          $this->Common->generateQrInView($transaction->id)
                           ?>
                         </th>
                         <td><?= h($transaction->date_added) ?></td>
@@ -66,8 +66,8 @@
                             "<font color='blue' size='6px'><i class='fa fa-eye'></i></font>", 
                             [
                                 'Controller' => 'TransactionsController',
-                                'action' => 'view', 
-                                $transaction->id
+                                'action' => 'view?tid='.$transaction->id
+                                
                             ],
                             [
                                 'escape' => false //'escape' => false - convert plain text to html

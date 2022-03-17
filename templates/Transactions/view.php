@@ -15,9 +15,16 @@
                         <h3>Transaction Code: <p style="font-family:'Courier New';color: #1C05F3;"><?= h($transaction->transaction_code) ?></p></h3>
                     </strong>
                     <?php
-                    $this->Common->generateQrInView($transaction->transaction_code)
+                    $this->Common->generateQrInView($transaction->id)
                     ?>
                 </h3> 
+                <?php 
+                    if($transaction->cancelled != ""){
+                    ?>
+                    <center><h2><font color="red">*** CANCELLED TRANSACTION ***</font></h2></center>
+                    <?php 
+                    }
+                ?>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -86,9 +93,20 @@
                    <div class="col-sm-6">
                        <!-- Select multiple-->
                        <div class="form-group"> 
+                        <?php 
+                        if($transaction->cancelled != ""){
+                        ?>
+                        <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-success"><font color="#F7F7F7">Back to Transaction List</font></a>
+                        <?php
+                        }
+                        else{
+                        ?>
                           <?= $this->Html->link(__('Request/Add Item/s'), ['controller' => 'TransactionItems','action' => 'add?tid='.$transaction->id], ['class' => 'button btn btn-primary']) ?>
                           <?= $this->Html->link(__('Edit Transaction'), ['controller' => 'Transactions','action' => 'edit?tid='.$transaction->id], ['class' => 'button btn btn-primary']) ?>
                            <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-success"><font color="#F7F7F7">Back to Transaction List</font></a>
+                           <?php 
+                        }
+                        ?>
                        </div>
                    </div>
                 </div>
@@ -132,6 +150,9 @@
                   </tr>
                   </thead> 
                   <tbody>
+                    <?php 
+                    if($counttransitemrec > 0){ //check if there is a record found
+                    ?>
                     <?php foreach ($transactionItems as $transactionItem): ?>
                     <tr>
                         <td><?= h($transactionItem->item_name) ?></td>
@@ -144,21 +165,39 @@
                         <td><?= h($transactionItem->internal_warranty) ?></td>
                         <td class="actions   "> 
 
-                            <?php echo $this->Html->link(
+                            <?php /*echo $this->Html->link(
                                 "<font color='green' size='5px'><i class='fa fa-edit'></i></font>", 
                                 [ 'controller' => 'TransactionItems', 'action' => 'edit/'.$transactionItem->id.'?tid='.$transaction->id],
                                 [ 'escape' => false ]//'escape' => false - convert plain text to html 
-                            );  ?>
-
+                            );  */?>
+                            <?php 
+                            if($transaction->cancelled != ""){
+                             echo "<font color='red'><strong>Cancelled Item</strong></font>";
+                            }
+                            else{
+                            ?>
                             <?php echo $this->Form->postLink(
                                 "<font color='red' size='5px'><i class='fa fa-trash'></i></font>", 
                                 [ 'controller' => 'TransactionItems', 'action' => 'delete/'.$transactionItem->id.'?tid='.$transaction->id ],
                                 [ 'confirm' => __('Are you sure you want to delete # {0}?', $transactionItem->id), 'escape' => false ]//'escape' => false - convert plain text to html],   
                             );  ?> 
+                            <?php 
+                            }
+                            ?>
                         </td>
                     </tr>
 
                     <?php endforeach; ?> 
+                    <?php 
+                    }
+                    else{
+                    ?>
+                    <tr>
+                      <td colspan="12">No Result Found</td>
+                    </tr>
+                    <?php
+                    }
+                    ?>
                   </tbody>
                   <!--
                   <tfoot>
@@ -168,6 +207,9 @@
                   </tfoot>
                   -->
                 </table>
+                <?php 
+                if($counttransitemrec > 0){
+                ?>
                 <table>
                   <tr>
                       <td colspan="12">
@@ -183,19 +225,34 @@
                         </h4>
                       </td>
                     </tr>
+                    <?php 
+                    if($transaction->cancelled != ""){
+                    ?>
+                    <center><h2><font color="red">*** CANCELLED TRANSACTION ***</font></h2></center>
+                    <?php
+                    }
+                    else{
+                    ?>
                     <tr>
                       <td>
-                        <!--<?= $this->Html->link(__('Process Transaction'), ['controller' => 'TransactionItems','action' => 'processtransaction?tid='.$transaction->id], ['class' => 'button btn btn-primary']) ?>-->
-                        <a class="btn btn-primary" onclick="alert('Under Maintenance!')">Process Transaction</a>
-
-                        <!--<?= $this->Html->link(__('Generate Transaction Slip'), ['controller' => 'TransactionItems','action' => 'generatetransslip?tid='.$transaction->id], ['class' => 'button btn btn-warning']) ?>-->
-                        <a class="btn btn-warning" onclick="alert('Under Maintenance!')">Generate Transaction Slip</a>
-
-                        <!--<?= $this->Html->link(__('Cancel Transaction'), ['controller' => 'TransactionItems','action' => 'canceltransaction?tid='.$transaction->id], ['class' => 'button btn btn-danger']) ?>-->
-                        <a class="btn btn-danger" onclick="alert('Under Maintenance!')">Cancel Transaction</a>
+                        <br>
+                        <?= $this->Html->link(__('Generate Transaction Slip'), ['controller' => 'TransactionItems','action' => 'printtrans?tid='.$transaction->id], ['class' => 'button btn btn-warning']) ?>
+                        
+                        <br><br>
+                        <?php echo $this->Form->postLink(
+                                "<font color='red' size='5px'><i class='fa fa-times'> Cancel Transaction</i></font>", 
+                                [ 'controller' => 'TransactionItems', 'action' => 'canceltransaction?tid='.$this->request->getQuery('tid')],
+                                [ 'confirm' => __('Are you sure you want to cancel transaction # {0}?', $this->request->getQuery('tid')), 'escape' => false ]//'escape' => false - convert plain text to html],   
+                        ); ?>
                       </td>
                     </tr>
+                    <?php 
+                    }
+                    ?>
                 </table>
+                <?php
+                }
+                ?>
               </div>
               <!-- /.card-body -->
             </div>

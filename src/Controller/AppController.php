@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Datasource\ConnectionManager; //for printing transactions
 
 /**
  * Application Controller
@@ -78,5 +79,7 @@ class AppController extends Controller
          * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
+
+        $this->connection = ConnectionManager::get('default'); //this will be used for printing, //for printing transactions
     }
 }

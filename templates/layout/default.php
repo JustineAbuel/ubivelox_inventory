@@ -1,6 +1,9 @@
  
 <!DOCTYPE html>
 <html lang="en">
+<title>UBP - Inventory System</title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+
 <?php  include("header-items.php"); ?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

@@ -85,7 +85,7 @@
                        <!-- Select multiple-->
                        <div class="form-group"> 
                             <?= $this->Form->button(__('Update'), ['class' => 'btn btn-success']) ?>
-                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view/'.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
+                           <?= $this->Html->link(__(' Back to Transaction'), ['controller' => 'Transactions','action' => 'view?tid='.$this->request->getQuery('tid')], ['class' => 'btn btn-warning']) ?>
                        </div>
                    </div>
                 </div>
