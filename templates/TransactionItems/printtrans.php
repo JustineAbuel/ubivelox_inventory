@@ -1,19 +1,16 @@
+<script type="text/javascript">
+  //window.print();
+</script>
 <!DOCTYPE html>
 <html>
 <head>
   <title></title>
 </head>
 <body>
-  <table border="1px" align="center" cellpadding="1px" cellspacing="1px">
+  <table border="1px" align="center" cellpadding="1px" cellspacing="1px" width="100%">
     <thead>
       <tr>
-        <th colspan="12">
-            <?php echo "Transaction Code: ".$trans_code; ?><br>
-            <?php echo "Transaction Type: ".$trans_type_name; ?><br>
-            <?php echo "Company To: ".$trans_company_name; ?><br>
-            <?php echo "Transaction Date: ".$trans_date_added; ?><br>
-            <?php echo "Subject: ".$trans_subject; ?>
-          </th>
+         <td colspan="12" align="center"><?=  $this->Html->image('ubivelox.png', ['alt' => 'Ubivelox', 'width'=>'200px']); ?></td>
       </tr>
       <tr>
         <th colspan="12">
@@ -31,10 +28,18 @@
         </center></th>
       </tr>
       <tr>
+        <td colspan="12">
+            <?php echo "<strong>Transaction Code:</strong> ".$trans_code; ?><br>
+            <?php echo "<strong>Transaction Type:</strong> ".$trans_type_name; ?><br>
+            <?php echo "<strong>Company To:</strong> ".$trans_company_name; ?><br>
+            <?php echo "<strong>Transaction Date:</strong> ".$trans_date_added; ?><br>
+            <?php echo "<strong>Subject:</strong> ".$trans_subject; ?>
+        </td>
+      </tr>
+      <tr>
         <th colspan="12"><center>List of Items</center></th>
       </tr>
       <tr>
-        <th>Transaction ID</th>
         <th>Transaction Item</th>
         <th>Quantity</th>
         <th>Internal Warranty</th>
@@ -45,7 +50,6 @@
       foreach($transitems as $transitem){  
       ?>
       <tr>
-        <td><?php echo $trans_code; ?></td>
         <td><?php echo $transitem['item_id']; ?></td>
         <td><?php echo $transitem['quantity']; ?></td>
         <td><?php echo $transitem['internal_warranty']; ?></td>
