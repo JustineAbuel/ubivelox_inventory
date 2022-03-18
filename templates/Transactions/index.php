@@ -48,6 +48,8 @@
                       }
                       elseif($transaction->status == 3){ //cancelled
                           $tr_class = "table-danger";
+                      }else{
+                        $tr_class = '';
                       }
                     ?>
                     <tr class="<?php echo $tr_class; ?>">

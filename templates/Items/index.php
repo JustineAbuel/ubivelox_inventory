@@ -4,7 +4,11 @@
  * @var \App\Model\Entity\Item[]|\Cake\Collection\CollectionInterface $items
  */
 ?>
- 
+ <style>
+   th {
+    white-space: nowrap;
+   }
+ </style>
   <!-- Content Wrapper. Contains page content -->
 
 
@@ -39,17 +43,16 @@
                 <button type="button" class="table-danger">Out of Stock</button><br><br>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
-                  <tr> 
-                    <th><?= ucfirst('id') ?></th>
-                    <th><?= ucfirst('category_id') ?></th>
-                    <th><?= ucfirst('subcategory_id') ?></th>
-                    <th><?= ucfirst('item_name') ?></th>
-                    <th><?= ucfirst('serial_no') ?></th>
-                    <th><?= ucfirst('issued_date') ?></th>
+                  <tr>  
+                    <th><?= ucfirst('item') ?></th>
+                    <th><?= ucfirst('category') ?></th>
+                    <th><?= ucfirst('subcategory') ?></th>
+                    <th><?= ucfirst('serial no') ?></th>
+                    <th><?= ucfirst('issued date') ?></th>
                     <th><?= ucfirst('warranty') ?></th>
                     <th><?= ucfirst('quantity') ?></th>
-                    <th><?= ucfirst('supplier_id') ?></th>
-                    <th><?= ucfirst('item_type_id') ?></th>
+                    <th><?= ucfirst('supplier') ?></th>
+                    <th><?= ucfirst('item type') ?></th>
                     <th><?= ucfirst('quality') ?></th>
                      
                     <th>QR Code</th>
@@ -69,11 +72,10 @@
                       $tr_class = "table-danger";
                     }
                     ?>
-                <tr class="<?php echo $tr_class; ?>">
-                    <td><?= h($item->id) ?></td>
+                <tr class="<?php echo $tr_class; ?>"> 
+                    <td><?= h($item->item_name) ?></td>
                     <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
                     <td><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?></td>
-                    <td><?= h($item->item_name) ?></td>
                     <td><?= h($item->serial_no) ?></td>
                     <td><?= h($item->issued_date) ?></td>
                     <td><?= h($item->manufacturer_warranty) ?></td>
