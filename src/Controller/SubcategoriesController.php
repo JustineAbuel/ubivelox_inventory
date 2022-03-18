@@ -16,7 +16,7 @@ class SubcategoriesController extends AppController
     {
         parent::initialize();
   
-        $this->Authorization->skipAuthorization();
+        // $this->Authorization->skipAuthorization();
         
     }
     /**
@@ -26,6 +26,9 @@ class SubcategoriesController extends AppController
      */
     public function index()
     {
+        $subcategory = $this->Subcategories->newEmptyEntity();
+        $this->Authorization->authorize($subcategory, 'index');
+
         $this->paginate = [
             'contain' => ['Categories'],
         ];
@@ -53,6 +56,7 @@ class SubcategoriesController extends AppController
         $subcategory = $this->Subcategories->get($id, [
             'contain' => ['Categories', 'Items'],
         ]);
+        $this->Authorization->authorize($subcategory, 'view');
 
         $this->Common->dblogger([
             //change depending on action
@@ -71,6 +75,7 @@ class SubcategoriesController extends AppController
     public function add()
     {
         $subcategory = $this->Subcategories->newEmptyEntity();
+        $this->Authorization->authorize($subcategory, 'add');
         $this->Common->dblogger([
             //change depending on action
             'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
@@ -114,6 +119,7 @@ class SubcategoriesController extends AppController
         $subcategory = $this->Subcategories->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($subcategory, 'edit');
         $this->Common->dblogger([
             //change depending on action
             'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
@@ -156,6 +162,7 @@ class SubcategoriesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $subcategory = $this->Subcategories->get($id);
+        $this->Authorization->authorize($subcategory, 'delete');
         if ($this->Subcategories->delete($subcategory)) {
             $this->Flash->success(__('The subcategory has been deleted.'));
             $this->Common->dblogger([
