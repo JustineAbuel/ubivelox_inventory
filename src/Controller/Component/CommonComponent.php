@@ -42,12 +42,29 @@ class CommonComponent extends Component
             ->setImageType(QrCode::IMAGE_TYPE_PNG);
         return $qrCode;
     }
-
+    function getUserIP()
+    {
+        $client = isset($_SERVER["HTTP_CLIENT_IP"]) ? $_SERVER["HTTP_CLIENT_IP"] : '';
+        $forward = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : '';
+        $remote = $_SERVER["REMOTE_ADDR"];
+    
+        if (filter_var($client, FILTER_VALIDATE_IP)) {
+            $ip = $client;
+        } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
+            $ip = $forward;
+        } else {
+            $ip = $remote;
+        }
+    
+        return $ip;
+    } 
     public function dblogger($param){
  
         $loggedinuser = $this->Authentication->getIdentity()->getOriginalData();
 
         $this->log($param['message'], 'info', [
+            'channel' => 1,
+            'ip_address' =>  $this->getUserIP(),
             'username' => $loggedinuser->username,
             'role' => $loggedinuser->role_id,
             'directory' => '>'. $param['request']->getParam('controller') . '>'.$param['request']->getParam('action'), 

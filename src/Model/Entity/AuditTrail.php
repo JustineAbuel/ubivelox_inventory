@@ -31,6 +31,8 @@ class AuditTrail extends Entity
      */
     protected $_accessible = [
         'level' => true,
+        'channel' => true,
+        'ip_address' => true,
         'username' => true,
         'role' => true,
         'directory' => true,

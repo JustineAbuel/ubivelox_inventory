@@ -22,7 +22,7 @@
               <div class="card-header     "> 
                     <h3 class="card-title "><?= $title ?></h3> 
                     
-    <?= $this->Html->link(__('New Category'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    <?= $this->Html->link(__('New Subcategory'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
                 
               </div>

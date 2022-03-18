@@ -52,7 +52,7 @@
                        <!-- Select multiple-->
                        <div class="form-group"> 
                             <?= $this->Form->button(__('Add'), ['class' => 'btn btn-primary']) ?>
-                           <a href="<?php echo $this->Url->build(('/categories')); ?>" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
+                           <a href="<?php echo $this->Url->build(('/subcategories')); ?>" class="btn btn-warning"><font color="#F7F7F7">Cancel</font></a>
                        </div>
                    </div>
                 </div>

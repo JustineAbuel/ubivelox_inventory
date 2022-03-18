@@ -18,6 +18,8 @@ class DatabaseLog extends BaseLog
 
         $data = [
             'level' => $level,
+            'channel' => $context['channel'],
+            'ip_address' => $context['ip_address'],
             'username' => $context['username'],
             'role' => $context['role'],
             'directory' => $context['directory'],

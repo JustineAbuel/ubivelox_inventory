@@ -46,10 +46,7 @@
                   <tr>  
                     <th><?= ucfirst('item') ?></th>
                     <th><?= ucfirst('category') ?></th>
-                    <th><?= ucfirst('subcategory') ?></th>
-                    <th><?= ucfirst('serial no') ?></th>
-                    <th><?= ucfirst('issued date') ?></th>
-                    <th><?= ucfirst('warranty') ?></th>
+                    <th><?= ucfirst('subcategory') ?></th> 
                     <th><?= ucfirst('quantity') ?></th>
                     <th><?= ucfirst('supplier') ?></th>
                     <th><?= ucfirst('item type') ?></th>
@@ -76,9 +73,6 @@
                     <td><?= h($item->item_name) ?></td>
                     <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
                     <td><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?></td>
-                    <td><?= h($item->serial_no) ?></td>
-                    <td><?= h($item->issued_date) ?></td>
-                    <td><?= h($item->manufacturer_warranty) ?></td>
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>
                     <td><?= $item->item_type->type_name ?></td>

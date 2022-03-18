@@ -60,6 +60,16 @@ class AuditTrailsTable extends Table
             ->allowEmptyString('level');
 
         $validator
+            ->scalar('channel')
+            ->maxLength('channel', 20)
+            ->allowEmptyString('channel');
+
+        $validator
+            ->scalar('ip_address')
+            ->maxLength('ip_address', 50)
+            ->allowEmptyString('ip_address');
+
+        $validator
             ->scalar('username')
             ->maxLength('username', 50)
             ->allowEmptyString('username');
