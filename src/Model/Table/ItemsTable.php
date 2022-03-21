@@ -72,6 +72,9 @@ class ItemsTable extends Table
         $this->belongsTo('ItemType', [
             'foreignKey' => 'item_type_id',
             'joinType' => 'INNER',
+        ]); 
+        $this->hasMany('Incoming', [
+            'foreignKey' => 'item_id',
         ]);
         $this->hasMany('Transactions', [
             'foreignKey' => 'item_id',

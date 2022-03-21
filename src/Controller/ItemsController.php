@@ -27,7 +27,8 @@ class ItemsController extends AppController
         $this->loadModel('Categories');  
         $this->loadModel('Subcategories');  
         $this->loadModel('ItemType');  
-        $this->loadModel('Company');  
+        $this->loadModel('Company'); 
+        $this->loadModel('Incoming');  
 
         // $this->Authorization->skipAuthorization();
         
@@ -127,10 +128,20 @@ class ItemsController extends AppController
         
         if ($this->request->is('post')) {
             $item = $this->Items->patchEntity($item, $this->request->getData()); 
-            $item->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
+            $identity = $this->request->getAttribute('identity')->getIdentifier(); 
+            $item->added_by = $identity;
             // dd($item);
             if ($item = $this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
+
+                $incomingTable = $this->Items->Incoming;
+                $incoming = $incomingTable->newEmptyEntity();  
+
+                $incoming->item_id = $item->id;
+                $incoming->quantity = $this->request->getData('quantity');
+                $incoming->added_by = $identity;
+                $incoming->date_added = date('Y-m-d H:i:s');
+                $incomingTable->save($incoming);
 
                 $this->Common->dblogger([
                     //change depending on action
@@ -162,14 +173,46 @@ class ItemsController extends AppController
           
         if($this->request->is('ajax')){
             $this->layout = 'ajax'; 
-            $msg = '12333';
-            return $this->response
-                ->withType('application/json')
-                ->withStringBody(json_encode([
-                    'msg' => $msg
-                    // 'subcategories' => $subcategories
-                ])); 
+            // $item = $this->Items->find('all')->where(['id' => $this->request->getData('item_id')])->first();
+            $item = $this->Items->get($this->request->getData('item_id'));
+            $quantity = $this->request->getData('quantity');
+            $identity = $this->request->getAttribute('identity')->getIdentifier(); 
+            $item = $this->Items->patchEntity($item, 
+                [ 'quantity' => $item->quantity += $quantity ]); 
+
+            if ($this->Items->save($item)) {
+                $this->Flash->success(__('Stocks added for '.$item->item_name)); 
+                
+                $incomingTable = $this->Items->Incoming;
+                $incoming = $incomingTable->newEmptyEntity();  
+
+                $incoming->item_id = $item->id;
+                $incoming->quantity = $quantity;
+                $incoming->added_by = $identity;
+                $incoming->date_added = date('Y-m-d H:i:s');
+                $incomingTable->save($incoming);
+
+                $msg = 1;
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully added stocks for item with id = '. $item->id ,
+                    'request' => $this->request, 
+                ]);
+            }else{
+                $msg = 2;
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Could not add stocks for item with id = '. $item->id ,
+                    'request' => $this->request, 
+                ]);
+                $this->Flash->error(__('Could not add stocks')); 
+            }
+
+            $response = $this->response->withType('application/json')
+                ->withStringBody(json_encode(['data' => $item, 'msg' => $msg]));
+            return $response; 
         }
+         
     }
 
     public function getsubcategories(){ 

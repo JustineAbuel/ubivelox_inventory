@@ -44,9 +44,7 @@
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>  
-                    <th><?= ucfirst('item') ?></th>
-                    <th><?= ucfirst('category') ?></th>
-                    <th><?= ucfirst('subcategory') ?></th> 
+                    <th><?= ucfirst('item') ?></th>  
                     <th><?= ucfirst('serial no') ?></th> 
                     <th><?= ucfirst('quantity') ?></th>
                     <th><?= ucfirst('supplier') ?></th>
@@ -62,8 +60,8 @@
                         <?php 
                     if(h($item['quantity']) > 0){
                         $tr_class = "table-primary";
-                        if(h($item['stocks']) <= 1){
-                        $tr_class = "table-warning";
+                      if(h($item['quantity']) <= 1){
+                          $tr_class = "table-warning";
                       }
                     }
                     else{
@@ -71,9 +69,12 @@
                     }
                     ?>
                 <tr class="<?php echo $tr_class; ?>"> 
-                    <td><?= h($item->item_name) ?></td>
-                    <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
-                    <td><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?></td>
+                    <td>
+                      
+                      <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
+                       <b><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?> </b></small>
+                      <blockquote class="mt-1  mx-0 bg-transparent"><?= h($item->item_name) ?></blockquote>
+                    </td> 
                     <td><?= $item->serial_no ?></td>
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>
@@ -86,6 +87,13 @@
                           ?>
                     </td> 
                     <td>
+                       
+                        <?php echo $this->Html->link(
+                            " <span style='color:black;'><i class='fa fa-plus' ></i> </span>", 
+                            '#addQuantityModal',
+                            ['escape' => false, 'data-toggle' => "modal", 'data-name'=> $item->item_name, 'data-id'=>  $item->id, 'class'=>"open-AddStockDialog border-transparent bg-transparent p-0" ]
+                            ); 
+                            ?>
                         <?php echo $this->Html->link(
                             "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
                             [ 'Controller' => 'ItemsController', 'action' => 'view' ,$item->id ],
@@ -103,11 +111,7 @@
                           [ 'Controller' => 'ItemsController', 'action' => 'delete', $item['id'] ],
                           [ 'confirm' => 'Are you sure you want to delete this record?', 'escape' => false ]//'escape' => false - convert plain text to html                            
                           ); 
-                          ?> 
-                        <a data-toggle="modal" data-name="<?= $item->item_name ?>" data-id="<?= $item->id?>"  class="open-AddStockDialog border-transparent bg-transparent p-0" href="#addQuantityModal">
-                          <span style="color:black;"><i class='fa fa-plus' ></i> </span>
-                        </a>
-
+                          ?>  
 
                     </td>
                 </tr>
@@ -138,11 +142,12 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="number" name="item-id" id="item-id" class="form-control" value=""/>
+        <input type="number" name="item-id" id="item-id" required min="0"  class="form-control" value=""/>
+        <div class="errorMsgQuantity"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="addQuantityBtn">Add quantity</button>
       </div>
     </div>
   </div>
@@ -152,16 +157,49 @@
 
 <script>
 $( document ).ready(function() {
-
+    $('#addQuantityModal').on('hidden.bs.modal', function () {
+      $("input[name=item-id]").val('') 
+    })
     $(document).on("click", ".open-AddStockDialog", function () {
         var itemId = $(this).data('id');
-        var itemName = $(this).data('name');
-        // console.log(itemName);
-        $(".modal-header #addQuantityModalLabel").text( itemName );
-        $(".modal-body #item-id").attr('id', itemId );
+        var itemName = $(this).data('name'); 
+        $(".modal-header #addQuantityModalLabel").html('Add stocks to <b>' + itemName + '</b>'); 
+        $("input[name=item-id]").attr('id', itemId)
   
     }); 
- 
+    $('#addQuantityBtn').click(function(){
+        var quantity =  $("input[name=item-id]").val() 
+        var itemId =  $("input[name=item-id]").attr('id')
+        if(quantity <= 0 || quantity == null || quantity == ""){
+          $('.errorMsgQuantity').html('<small>Please enter a valid value</small>')
+          $("#"+itemId).addClass( "is-invalid" ).focus()
+        }else{
+          $.ajax({
+              method: "POST",
+              url: "<?= $this->Url->build(['controller' => 'Items', 'action' => 'addStocksQuantity']) ?>",
+              type:"JSON",
+              data: {
+                  item_id: itemId,
+                  quantity: quantity
+              },
+              headers: {
+                  'X-CSRF-Token': $("[name='_csrfToken']").val()
+              },
+              
+              beforeSend: function(){  },
+              success: function(msg){ 
+
+                  location.reload();
+                  
+              },
+              cache: false, 
+              error:function (xhr, ajaxOptions, thrownError){  
+                  alert(thrownError); 
+              }     
+          })
+        }
+    })
+    function reloadTable() { table = $('#example1').DataTable(); table.ajax.reload(); }; 
 });
 $(function () {
   $("#example1").DataTable({
@@ -170,42 +208,11 @@ $(function () {
     "ordering": false,
     "paging":   true,
     "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
-  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  $('#example2').DataTable({
-    "paging": true,
-    "lengthChange": false,
-    "searching": false,
-    "info": true,
-    "autoWidth": false,
-    "responsive": true,
-  });
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
 
   
   
-});
-
-function addStocksQuantity(){
-  
-  $.ajax({
-      method: "POST",
-      url: "<?= $this->Url->build(['controller' => 'Items', 'action' => 'addStocksQuantity']) ?>",
-      type:"JSON",
-      data: {
-          category_id: categoryId
-      },
-      headers: {
-          'X-CSRF-Token': $("[name='_csrfToken']").val()
-      },
-      
-      beforeSend: function(){  },
-      success: function(msg){
-            console.log(msg.subcategories)
-          $("#subcategory-id").empty().append(msg.subcategories);
-      },
-      cache: false, 
-      error:function (xhr, ajaxOptions, thrownError){  
-          alert(thrownError); 
-      }     
-  })
-}
+}); 
+        
+ 
 </script>

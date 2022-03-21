@@ -4,7 +4,11 @@
  * @var \App\Model\Entity\Item[]|\Cake\Collection\CollectionInterface $items
  */
 ?>
- 
+ <style>
+   th {
+    white-space: nowrap;
+   }
+ </style>
   <!-- Content Wrapper. Contains page content -->
 
 
@@ -39,16 +43,12 @@
                 <button type="button" class="table-danger">Out of Stock</button><br><br>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
-                  <tr> 
-                    <th><?= ucfirst('id') ?></th>
-                    <th><?= ucfirst('category_id') ?></th>
-                    <th><?= ucfirst('item_name') ?></th>
-                    <th><?= ucfirst('serial_no') ?></th>
-                    <th><?= ucfirst('issued_date') ?></th>
-                    <th><?= ucfirst('warranty') ?></th>
+                  <tr>  
+                    <th><?= ucfirst('item') ?></th>  
+                    <th><?= ucfirst('serial no') ?></th> 
                     <th><?= ucfirst('quantity') ?></th>
-                    <th><?= ucfirst('supplier_id') ?></th>
-                    <th><?= ucfirst('item_type_id') ?></th>
+                    <th><?= ucfirst('supplier') ?></th>
+                    <th><?= ucfirst('item type') ?></th>
                     <th><?= ucfirst('quality') ?></th>
                      
                     <th>QR Code</th>
@@ -59,25 +59,26 @@
                         <?php 
                     if(h($item['quantity']) > 0){
                         $tr_class = "table-primary";
-                        if(h($item['stocks']) <= 1){
-                        $tr_class = "table-warning";
+                      if(h($item['quantity']) <= 1){
+                          $tr_class = "table-warning";
                       }
                     }
                     else{
                       $tr_class = "table-danger";
                     }
                     ?>
-                <tr class="<?php echo $tr_class; ?>">
-                    <td><?= h($item->id) ?></td>
-                    <td><?= $item->has('category') ?  $item->category->category_name  : '' ?></td>
-                    <td><?= h($item->item_name) ?></td>
-                    <td><?= h($item->serial_no) ?></td>
-                    <td><?= h($item->issued_date) ?></td>
-                    <td><?= h($item->manufacturer_warranty) ?></td>
+                <tr class="<?php echo $tr_class; ?>"> 
+                    <td>
+                      
+                      <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
+                       <b><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?> </b></small>
+                      <blockquote class="mt-1  mx-0 bg-transparent"><?= h($item->item_name) ?></blockquote>
+                    </td> 
+                    <td><?= $item->serial_no ?></td>
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>
                     <td><?= $item->item_type->type_name ?></td>
-                    <td><?= $item->quality == 1 ? 'Brand New' : 'Second Hand' ?></td>
+                    <td><?= $item->quality == 0 ? 'Brand New' : 'Second Hand' ?></td>
                      
                     <td>
                           <?php
@@ -85,6 +86,13 @@
                           ?>
                     </td> 
                     <td>
+                       
+                        <?php echo $this->Html->link(
+                            " <span style='color:black;'><i class='fa fa-plus' ></i> </span>", 
+                            '#addQuantityModal',
+                            ['escape' => false, 'data-toggle' => "modal", 'data-name'=> $item->item_name, 'data-id'=>  $item->id, 'class'=>"open-AddStockDialog border-transparent bg-transparent p-0" ]
+                            ); 
+                            ?>
                         <?php echo $this->Html->link(
                             "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
                             [ 'Controller' => 'ItemsController', 'action' => 'view' ,$item->id ],
@@ -102,16 +110,11 @@
                           [ 'Controller' => 'ItemsController', 'action' => 'delete', $item['id'] ],
                           [ 'confirm' => 'Are you sure you want to delete this record?', 'escape' => false ]//'escape' => false - convert plain text to html                            
                           ); 
-                          ?>
+                          ?>  
+
                     </td>
                 </tr> 
-                  <!--
-                  <tfoot>
-                  <tr>
-                    <th></th>
-                  </tr>
-                  </tfoot>
-                  -->
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -126,22 +129,82 @@
     </section>
     <!-- /.content -->
  
+<!-- Modal -->
+<div class="modal fade" id="addQuantityModal" tabindex="-1" aria-labelledby="addQuantityModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addQuantityModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="number" name="item-id" id="item-id"   class="form-control" value=""/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="addQuantityBtn">Add quantity</button>
+      </div>
+    </div>
+  </div>
+</div> 
+ 
+
+
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      "paging":   true,
-      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+$( document ).ready(function() {
+    $('#addQuantityModal').on('hidden.bs.modal', function () {
+      $("input[name=item-id]").val('') 
+    })
+    $(document).on("click", ".open-AddStockDialog", function () {
+        var itemId = $(this).data('id');
+        var itemName = $(this).data('name'); 
+        $(".modal-header #addQuantityModalLabel").html('Add stocks to <b>' + itemName + '</b>'); 
+        $("input[name=item-id]").attr('id', itemId)
+  
+    }); 
+    $('#addQuantityBtn').click(function(){
+        var quantity =  $("input[name=item-id]").val() 
+        var itemId =  $("input[name=item-id]").attr('id')
+        $.ajax({
+            method: "POST",
+            url: "<?= $this->Url->build(['controller' => 'Items', 'action' => 'addStocksQuantity']) ?>",
+            type:"JSON",
+            data: {
+                item_id: itemId,
+                quantity: quantity
+            },
+            headers: {
+                'X-CSRF-Token': $("[name='_csrfToken']").val()
+            },
+            
+            beforeSend: function(){  },
+            success: function(msg){ 
+
+                location.reload();
+                 
+            },
+            cache: false, 
+            error:function (xhr, ajaxOptions, thrownError){  
+                alert(thrownError); 
+            }     
+        })
+    })
+    function reloadTable() { table = $('#example1').DataTable(); table.ajax.reload(); }; 
+});
+$(function () {
+  $("#example1").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+    "ordering": false,
+    "paging":   true,
+    "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
+
+  
+  
+}); 
+        
+ 
 </script>
