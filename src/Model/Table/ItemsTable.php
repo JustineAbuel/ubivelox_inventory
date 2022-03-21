@@ -196,7 +196,7 @@ class ItemsTable extends Table
         $rules->add($rules->existsIn('subcategory_id', 'Subcategories'), ['errorField' => 'subcategory_id']);
         $rules->add($rules->existsIn('supplier_id', 'Company'), ['errorField' => 'supplier_id']);
         $rules->add($rules->existsIn('item_type_id', 'ItemType'), ['errorField' => 'item_type_id']);
-        $rules->add($rules->isUnique(['item_name'], 'Item name already exists'));
+        // $rules->add($rules->isUnique(['item_name'], 'Item name already exists'));
 
         return $rules;
     }

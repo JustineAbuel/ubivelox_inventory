@@ -74,10 +74,9 @@ class ItemsController extends AppController
             'contain' => ['Categories', 'Company', 'ItemType', 'Subcategories'],
             'conditions' => [
                 'trashed IS ' => NULL 
-            ]
-        ];  
-        $items = $this->paginate($this->Items);  
-        // dd($items); 
+            ], 
+        ];   
+        $items = $this->paginate($this->Items);   
         $qrCode = new QrCode();
 
 		$this->set('title','List of Items');
@@ -156,6 +155,21 @@ class ItemsController extends AppController
 
         $this->set(compact('item', 'categories','subcategories', 'company', 'itemTypes', 'quality'));
  
+    }
+
+    public function addStocksQuantity(){
+        $this->Authorization->skipAuthorization();
+          
+        if($this->request->is('ajax')){
+            $this->layout = 'ajax'; 
+            $msg = '12333';
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'msg' => $msg
+                    // 'subcategories' => $subcategories
+                ])); 
+        }
     }
 
     public function getsubcategories(){ 
