@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace App\View;
 
 use Cake\View\View;
+use Cake\Datasource\ConnectionManager; //for printing transactions
 
 /**
  * Application View
@@ -26,6 +27,7 @@ use Cake\View\View;
  */
 class AppView extends View
 {
+    public $connection;
     /**
      * Initialization hook method.
      *
@@ -42,5 +44,7 @@ class AppView extends View
         $this->loadHelper('Breadcrumbs');
         $this->loadHelper('Authentication.Identity');
         // $this->loadHelper('Authorize');
+
+        $this->connection = ConnectionManager::get('default'); //this will be used for printing, //for printing transactions
     }
 }

@@ -70,6 +70,9 @@ class TransactionsTable extends Table
         $this->hasMany('TransactionItems', [
             'foreignKey' => 'transaction_id',
         ]);
+        $this->hasMany('Outgoing', [
+            'foreignKey' => 'transaction_id',
+        ]);
         $this->belongsTo('Company', [
             'foreignKey' => 'company_to',
             'joinType' => 'INNER'
@@ -162,7 +165,7 @@ class TransactionsTable extends Table
         return $rules;
     }
     public function generate_transcode(){
-        $str1 = str_shuffle(random_bytes(20));
+        $str1 = str_shuffle(random_bytes(20).sha1("Ub1v3L0XpHiL1pPiN3$iNc.!"));
         $str2 = date("Y-m-d H:i:s").md5($str1);
         return strtoupper("REFNO-".substr(str_shuffle(md5(base64_encode($str2))),0, 6)); //generate unique ref code for main transaction
     }

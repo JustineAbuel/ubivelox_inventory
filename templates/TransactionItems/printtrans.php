@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  //window.print();
+  window.print();
 </script>
 <!DOCTYPE html>
 <html>
@@ -7,10 +7,28 @@
   <title></title>
 </head>
 <body>
-  <table border="1px" align="center" cellpadding="1px" cellspacing="1px" width="100%">
+  <table align="center" cellpadding="1px" cellspacing="1px" width="100%">
     <thead>
       <tr>
-         <td colspan="12" align="center"><?=  $this->Html->image('ubivelox.png', ['alt' => 'Ubivelox', 'width'=>'200px']); ?></td>
+         <td colspan="12" align="center">
+          <?=  $this->Html->image('ubiveloxiconpng.png', ['alt' => 'Ubivelox', 'width'=>'200px']); ?>
+          <center>
+            <small>
+              Unit 7D Strata 100 Building, Emerald Avenue,
+              Ortigas Center, Pasig City, Metro Manila
+              Philippines 1605<br>
+              Tel No: +63 (02) 954 2719<br>
+              Email: ubivelox@gmail.com<br>
+              <!--
+              Facebook: Ubivelox Philippines Inc.<br>
+              Twittter: @ubiveloxph
+              -->
+            </small>
+          </center>
+         </td>
+      </tr>
+      <tr>
+        <td colspan="12"><hr></td>
       </tr>
       <tr>
         <th colspan="12">
@@ -37,10 +55,17 @@
         </td>
       </tr>
       <tr>
+        <td colspan="12"><hr></td>
+      </tr>
+      <tr>
         <th colspan="12"><center>List of Items</center></th>
       </tr>
       <tr>
+        <td colspan="12"><hr></td>
+      </tr>
+      <tr align="center">
         <th>Transaction Item</th>
+        <th>Serial Number</th>
         <th>Quantity</th>
         <th>Internal Warranty</th>
       </tr>
@@ -48,10 +73,16 @@
     <tbody>
       <?php 
       foreach($transitems as $transitem){  
+
+        $items = $this->connection->execute("SELECT * FROM items WHERE id=".$transitem['item_id']);
+        $row_itm = $items->fetch('assoc');
+        $itemname = $row_itm['item_name'];
+        $serial = $row_itm['serial_no'];
       ?>
-      <tr>
-        <td><?php echo $transitem['item_id']; ?></td>
-        <td><?php echo $transitem['quantity']; ?></td>
+      <tr align="center">
+        <td><?php echo $itemname; ?></td>
+        <td><?php echo $serial; ?></td>
+        <td><?php echo $transitem['total_quantity']; ?></td>
         <td><?php echo $transitem['internal_warranty']; ?></td>
       </tr>
       <?php
@@ -62,8 +93,8 @@
       </tr>
       <tr>
         <td align="right" colspan="12">
-          <?php echo "Received By: ".$trans_fullname; ?><br>
-          <?php echo "Date Received: ".$trans_sreceived_date; ?>
+          <?php echo "<strong>Received By:</strong><br> ".$trans_fullname; ?><br><br>
+          <?php echo "<strong>Date Received:</strong><br> ".$trans_sreceived_date; ?>
         </td>
       </tr>
     </tbody>

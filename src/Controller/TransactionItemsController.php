@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use CodeItNow\BarcodeBundle\Utils\QrCode;
+use Cake\I18n\Time;
+use Cake\I18n\FrozenTime;
 
 /**
  * TransactionItems Controller
@@ -59,7 +61,7 @@ class TransactionItemsController extends AppController
         $qrCode = new QrCode();
 
 
-        $this->set(compact('transactionItem','items','transitem'));
+        $this->set(compact('transactionItem','items'));
     }
 
     /**
@@ -86,6 +88,38 @@ class TransactionItemsController extends AppController
             ]);
             //->count(); //count row, if true return 1, else 0
             //dd($checkqtystat);
+
+            $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed Transactions>'.$this->request->getQuery('tid').">" . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . '>'."Item>".$transactionItem->item_id,
+            'request' => $this->request, 
+            ]);
+
+            /* start - Insert logs to ougtoing */
+            $querySelectTrans = $this->TransactionItems->Transactions
+            ->find()
+            ->select(['id','status'])
+            ->where(['id' => $this->request->getQuery('tid')])
+            ->all();
+
+            //dd($querySelectTrans);
+
+            foreach ($querySelectTrans as $transtat) {
+
+                $queryOutgoing = $this->TransactionItems->Transactions->Outgoing->query();
+                $queryOutgoing->insert(['transaction_id', 'item_id','status','notes','date_added','added_by'])
+                ->values([
+                    'transaction_id' => $this->request->getQuery('tid'), //get transaction ID,
+                    'item_id' => $transactionItem->item_id,
+                    'status' => $transtat->status,
+                    'notes' => 'Outgoing Transaction Item',
+                    'date_added' => date('Y-m-d H:i:s'),
+                    'added_by' => $this->request->getAttribute('identity')->getIdentifier() //session user id
+                ])
+                ->execute();
+            }
+            /* end - Insert logs to ougtoing */
+
 
             foreach ($checkqtystat as $res) {
 
@@ -122,10 +156,16 @@ class TransactionItemsController extends AppController
 
         $transactions = $this->TransactionItems->Transactions->find('list', ['limit' => 200])->all();
         //$items = $this->TransactionItems->Items->find('list', ['limit' => 200])->all();
-        $items = $this->TransactionItems->Items->find('list', [
+        $items = $this->TransactionItems->Items->find('list', 
+        [
             'keyField' => 'id',
-            'valueField' => 'item_name'
-        ]);
+            'valueField' => function ($e) {
+                return $e->item_name . ' - ' . $e->serial_no;
+            }
+        ]
+        )
+        ->where(['item_type_id' => 2]); //display external items only for outgoing transactions
+
         $this->set(compact('transactionItem', 'transactions', 'items'));
     }
 
@@ -206,6 +246,12 @@ class TransactionItemsController extends AppController
                 ]
         ]);
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed Transactions>'.$this->request->getQuery('tid').">" . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . '>'."Item>".$transactionItem->item_id,
+            'request' => $this->request, 
+        ]);
+
         foreach ($checkqtystat as $res) {
 
                 $item_quantity = $res->quantity; //item id/qty
@@ -258,6 +304,12 @@ class TransactionItemsController extends AppController
             ])
             ->execute();
 
+        $this->Common->dblogger([
+            //change depending on action
+            'message' => 'Accessed Transactions>'.$this->request->getQuery('tid').">" . $this->request->getParam('controller') . '>'.$this->request->getParam('action'),
+            'request' => $this->request, 
+        ]);
+
         foreach ($transactionItems as $transactionItem){
 
                 $checkqtystat = $this->TransactionItems->Items->find('all', [
@@ -295,30 +347,32 @@ class TransactionItemsController extends AppController
         $trans = $this->connection->execute("SELECT * FROM transactions WHERE id=".$this->request->getQuery('tid'));
         //->fetchALL("assoc");
         $row_trans = $trans->fetch('assoc');
-        $trans_code = $row_trans['transaction_code'];
-        $trans_typeid = $row_trans['transaction_type_id'];
-        $trans_company_to = $row_trans['company_to'];
-        $trans_date_added = $row_trans['date_added'];
-        $trans_subject = $row_trans['subject'];
-        $trans_received_by = $row_trans['received_by'];
-        $trans_sreceived_date = $row_trans['received_date'];
+        $trans_code = isset($row_trans['transaction_code']) ? $row_trans['transaction_code'] : '';
+        $trans_typeid = isset($row_trans['transaction_type_id']) ? $row_trans['transaction_type_id'] : '';
+        $trans_company_to = isset($row_trans['company_to']) ? $row_trans['company_to'] : '';
+        $trans_date_added = isset($row_trans['date_added']) ? $row_trans['date_added'] : '';
+        $trans_subject = isset($row_trans['subject']) ? $row_trans['subject'] : '';
+        $trans_received_by = isset($row_trans['received_by']) ? $row_trans['received_by'] : '';
+        $trans_sreceived_date = isset($row_trans['received_date']) ? $row_trans['received_date'] : '';
 
-        $transtype = $this->connection->execute("SELECT * FROM transaction_type WHERE id=".$trans_typeid);
+        $transtype = $this->connection->execute("SELECT * FROM transaction_type WHERE id='$trans_typeid' ");
         //->fetchALL("assoc");
         $row_trans_type = $transtype->fetch('assoc');
-        $trans_type_name = $row_trans_type['transaction_name'];
+        $trans_type_name = isset($row_trans_type['transaction_name']) ? $row_trans_type['transaction_name'] : '';
 
-        $compny = $this->connection->execute("SELECT * FROM company WHERE id=".$trans_company_to);
+        $compny = $this->connection->execute("SELECT * FROM company WHERE id='$trans_company_to' ");
         //->fetchALL("assoc");
         $row_compny = $compny->fetch('assoc');
-        $trans_company_name = $row_compny['company_name'];
+        $trans_company_name = isset($row_compny['company_name']) ? $row_compny['company_name'] : '';
 
-        $usr = $this->connection->execute("SELECT * FROM users WHERE id=".$trans_received_by);
+        $usr = $this->connection->execute("SELECT * FROM users WHERE id='$trans_received_by' ");
         //->fetchALL("assoc");
         $row_usr = $usr->fetch('assoc');
-        $trans_fullname = $row_usr['firstname']." ".$row_usr['lastname'];
+        $trans_fname = isset($row_usr['firstname']) ? $row_usr['firstname'] : '';
+        $trans_lname = isset($row_usr['lastname']) ? $row_usr['lastname'] : '';
+        $trans_fullname = $trans_fname." ".$trans_lname;
 
-        $transitems = $this->connection->execute("SELECT * FROM transaction_items WHERE transaction_id=".$this->request->getQuery('tid'))->fetchALL("assoc"); 
+        $transitems = $this->connection->execute("SELECT *,SUM(quantity) AS total_quantity FROM transaction_items WHERE transaction_id=".$this->request->getQuery('tid')." GROUP BY item_id")->fetchALL("assoc"); 
         //$this->Flash->set('Here is your data', [ 'element' => 'success']);
 
         $this->set(compact('trans','transitems','transtype','trans_code','trans_type_name','trans_company_name','trans_typeid','trans_date_added','trans_subject','trans_received_by','trans_sreceived_date','trans_fullname'));

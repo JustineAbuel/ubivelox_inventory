@@ -83,7 +83,7 @@ class TransactionsController extends AppController
 
         $transactionItems = $this->Transactions->TransactionItems
         ->find()
-        ->select(['id', 'transaction_id','item_id','quantity','internal_warranty','item_name' => 'i.item_name'])
+        ->select(['id', 'transaction_id','item_id','quantity','internal_warranty','item_name' => 'i.item_name','serial_no' => 'i.serial_no' ])
         ->join([
         'table' => 'items',
         'alias' => 'i',
@@ -91,6 +91,7 @@ class TransactionsController extends AppController
         'conditions' => 'i.id = item_id',
         ])
         ->where(['transaction_id' => $this->request->getQuery('tid')]);
+        //->group('i.serial_no'); //item serial no
         $counttransitemrec = $transactionItems->count(); //count requested transaction items
         //->order(['id' => 'DESC']);
         //dd($transactionItems);

@@ -143,6 +143,7 @@
                   <thead>
                   <tr>
                     <th>Item Name</th>
+                    <th>Serial Number</th>
                     <th>Quantity</th>
                     <th>QR Code</th>
                     <th>Internal Warranty Date</th>
@@ -156,6 +157,7 @@
                     <?php foreach ($transactionItems as $transactionItem): ?>
                     <tr>
                         <td><?= h($transactionItem->item_name) ?></td>
+                        <td><?= h($transactionItem->serial_no) ?></td>
                         <td><?= h($transactionItem->quantity) ?></td>
                         <td>
                           <?php

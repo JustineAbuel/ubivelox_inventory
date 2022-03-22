@@ -1,108 +1,112 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Category[]|\Cake\Collection\CollectionInterface $categories
+ * @var \App\Model\Entity\Outgoing[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
  
   <!-- Content Wrapper. Contains page content -->
+
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <?= $this->Flash->render() ?><!-- Validation Alert Display Here -->
+            
+          
+          <?= $this->Flash->render() ?>
+
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title "><?= $title ?></h3>                   
-                <?= $this->Html->link(__('New Transaction'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right ']) ?>
+                    <h3 class="card-title "><?= $title ?></h3> 
+                    
+                    <?= $this->Html->link(__('New Outgoing Transaction Item'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <strong>Legend:</strong>
-                <button type="button" class="table-primary">Delivered</button>
-                <button type="button" class="table-warning">For Delivery</button>
-                <button type="button" class="table-danger">Cancelled</button>
-                <br><br>
+                <label>Legend:</label>
+                <button type="button" class="table-danger">For Repair</button>
+                <button type="button" class="table-success">Repaired</button>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>
+                    <th>Tranaction ID</th>
                     <th>Transaction Code</th>
-                    <th>Company To</th>
-                    <th>Transaction Type</th>
+                    <th>Item Name</th>
                     <th>Status</th>
-                    <th>QR Code</th>
-                    <th>Transaction Date</th> 
-                    <th>View Details</th>
+                    <th>Notes/Remarks</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
                   </tr>
                   </thead> 
                   <tbody>
-                    <?php foreach ($transactions as $transaction): ?>
-                      <?php 
-                      if($transaction->status == 1){ //for-delivery
-                          $tr_class = "table-warning";
-                      }
-                      elseif($transaction->status == 2){ //deliverred
-                          $tr_class = "table-primary";
-                      }
-                      elseif($transaction->status == 3){ //cancelled
-                          $tr_class = "table-danger";
-                      }else{
-                        $tr_class = '';
-                      }
+                    <?php foreach ($outgoing as $outgoing): ?>
+                    <?php
+                    if($outgoing->status == 2){ //delivered
+                        $itemstat  = "Delivered";
+                        $trclass = "table-light";
+                    }
+                    elseif($outgoing->status == 4){ //for repair
+                        $itemstat  = "For Repair";
+                        $trclass = "table-danger";
+                    }
+                    elseif($outgoing->status == 5){ //repaired
+                        $itemstat  = "Repaired";
+                        $trclass = "table-success";
+                    }
+                    else{
+                        $itemstat  = "";
+                    }
                     ?>
-                    <tr class="<?php echo $tr_class; ?>">
-                        <td><?= h($transaction->transaction_code) ?></td>
-                        <td><?= h($transaction->company->company_name ) ?></td>
-                        <td><?= h($transaction->transaction_type->transaction_name) ?></td>
-                        <td><strong><?= h($transaction->transaction_status->status_name) ?></strong></td>
-                        <th>
-                          <?php
-                          $this->Common->generateQrInView($transaction->id)
-                          ?>
-                        </th>
-                        <td><?= h($transaction->date_added) ?></td>
+                    <tr class="<?php echo $trclass; ?>">
+                        <td><?= h($outgoing->transaction_id) ?></td>
+                        <td><!--<?= h($outgoing->transaction_code) ?>-->
+                          <strong><?= $this->Html->link(__($outgoing->transaction_code), ['controller' => 'Transactions', 'action' => 'view?tid='.$outgoing->transaction_id]) ?></strong>
+                        </td>
+                        <td><?= h($outgoing->item_name) ?></td>
+                        <td><?php echo $itemstat; ?></td>
+                        <td><?= h($outgoing->notes) ?></td>
+                        <td><?= h($outgoing->date_added) ?></td>
                         <td class="actions   "> 
                             <?php echo $this->Html->link(
-                            "<font color='blue' size='6px'><i class='fa fa-eye'></i></font>", 
+                            "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
                             [
-                                'Controller' => 'TransactionsController',
-                                'action' => 'view?tid='.$transaction->id
-                                
+                                'Controller' => 'OutgoingController',
+                                'action' => 'view', 
+                                $outgoing->id
                             ],
                             [
                                 'escape' => false //'escape' => false - convert plain text to html
                             ]
                             ); 
                             ?>
-                            <?php /*echo $this->Html->link(
+                            <?php echo $this->Html->link(
                             "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                             [
-                                'Controller' => 'TransactionsController',
+                                'Controller' => 'OutgoingController',
                                 'action' => 'edit', 
-                                $transaction->id
+                                $outgoing->id
                             ],
                             [
                                 'escape' => false //'escape' => false - convert plain text to html
                             ]
                             ); 
-                            */
                             ?>
-                            <?php /*echo $this->Form->postLink(
+                            <?php echo $this->Form->postLink(
                             "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                             [
-                                'Controller' => 'TransactionsController',
+                                'Controller' => 'OutgoingController',
                                 'action' => 'delete', 
-                                $transaction->id
+                                $outgoing->id
                             ],
                             [
-                                'confirm' => __('Are you sure you want to delete # {0}?', $transaction->id),
+                                'confirm' => __('Are you sure you want to delete # {0}?', $outgoing->id),
                                 'escape' => false //'escape' => false - convert plain text to html
                             ],
                             
                             ); 
-                            */
                             ?> 
                         </td>
                     </tr>
@@ -136,9 +140,11 @@
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      "order": [[ 5, "desc" ]],
       "paging":   true,
-      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+      "lengthMenu": [[100, 200, 300, -1],
+        [100, 200, 300, "All"]],
+      //"aaSorting": [0,'asc'], // sorting column 0
+      "aaSorting": [], //no sorting
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
