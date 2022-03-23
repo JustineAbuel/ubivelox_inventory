@@ -31,10 +31,11 @@
                 <button type="button" class="table-success">Repaired</button>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
-                  <tr>
+                  <tr class="table-primary">
                     <th>Tranaction ID</th>
                     <th>Transaction Code</th>
                     <th>Item Name</th>
+                    <th>Serial Number</th>
                     <th>Status</th>
                     <th>Notes/Remarks</th>
                     <th>Date Added</th>
@@ -66,6 +67,7 @@
                           <strong><?= $this->Html->link(__($outgoing->transaction_code), ['controller' => 'Transactions', 'action' => 'view?tid='.$outgoing->transaction_id]) ?></strong>
                         </td>
                         <td><?= h($outgoing->item_name) ?></td>
+                        <td><?= h($outgoing->serial_no) ?></td>
                         <td><?php echo $itemstat; ?></td>
                         <td><?= h($outgoing->notes) ?></td>
                         <td><?= h($outgoing->date_added) ?></td>
