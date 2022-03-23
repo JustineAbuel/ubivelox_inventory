@@ -192,6 +192,14 @@ class TransactionsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $transaction = $this->Transactions->patchEntity($transaction, $this->request->getData());
 
+            $queryupdateOutgoing = $this->Transactions->Outgoing->query();
+            $queryupdateOutgoing->update()
+            ->set([
+                    'status' => $transaction->status])
+            ->where([
+                    'transaction_id' => $this->request->getQuery('tid')])
+            ->execute();
+
             if ($this->Transactions->save($transaction)) {
                 $this->Flash->success(__('The transaction has been saved.'));
 
