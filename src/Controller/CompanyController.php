@@ -91,7 +91,7 @@ class CompanyController extends AppController
             }
             */
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_COMPANY', [   //pointed at local
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_COMPANY', [   //pointed at local
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/INSERT_COMPANY', [  
                 'company_name' => $company->company_name, 
                 'address' => $company->address,
@@ -145,7 +145,7 @@ class CompanyController extends AppController
             $company = $this->Company->patchEntity($company, $this->request->getData()); 
 
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_COMPANY/'.$id, [     
+            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_COMPANY/'.$id, [     
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/UPDATE_COMPANY/'.$id, [  
                 'company_name' => $company->company_name ,
                 'address' => $company->address ,
@@ -190,7 +190,7 @@ class CompanyController extends AppController
         $this->Authorization->authorize($company, 'delete' );
 
         $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_COMPANY/'.$id);  
+        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_COMPANY/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_COMPANY/'.$id);  
         if ($response->getJson()['Status'] == 0) {
  

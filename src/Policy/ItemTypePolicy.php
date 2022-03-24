@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
-use App\Model\Entity\ItemTypeType;
+use App\Model\Entity\ItemType;
 use Authorization\IdentityInterface;
 
 /**

@@ -107,7 +107,7 @@ class UserRolesController extends AppController
         if ($this->request->is('post')) {
             $userRole = $this->UserRoles->patchEntity($userRole, $this->request->getData());
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_USER_ROLES', [           
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USER_ROLES', [           
 
                 'role_name' => $userRole->role_name,
                 'added_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
@@ -158,7 +158,7 @@ class UserRolesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $userRole = $this->UserRoles->patchEntity($userRole, $this->request->getData());
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_USER_ROLES/'.$id, [           
+            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_USER_ROLES/'.$id, [           
 
                 'role_name' => $userRole->role_name,
                 'updated_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
@@ -200,7 +200,7 @@ class UserRolesController extends AppController
         $userRole = $this->UserRoles->get($id);
         $this->Authorization->authorize($userRole, 'delete');
         $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_USER_ROLES/'.$id); 
+        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_USER_ROLES/'.$id); 
         if ($response->getJson()['Status'] == 0) {
             $this->Flash->success(__('The user role has been deleted.'));
             

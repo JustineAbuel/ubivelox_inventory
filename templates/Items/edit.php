@@ -14,7 +14,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Add Item</h3><br><br>
+                <h3 class="card-title">Edit Item</h3><br><br>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -76,7 +76,7 @@
                        <!-- text input -->
                        <div class="form-group">
                            
-                       <?= $this->Form->control('issued_date', ['class' => 'form-control', 'empty'=> true] ); ?>
+                       <?= $this->Form->control('issued_date', ['class' => 'form-control'] ); ?>
                              
                        </div>
                    </div>

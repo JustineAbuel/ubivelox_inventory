@@ -85,7 +85,7 @@ class TransactionTypeController extends AppController
             }
             */
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_TRANSACTION_TYPE', [   //pointed at local
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_TRANSACTION_TYPE', [   //pointed at local
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/INSERT_TRANSACTION_TYPE', [  
                 'transaction_name' => $transactionType->transaction_name, 
             ]); 
@@ -140,7 +140,7 @@ class TransactionTypeController extends AppController
             }
             */
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_TRANSACTION_TYPE/'.$id, [     
+            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_TRANSACTION_TYPE/'.$id, [     
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/UPDATE_TRANSACTION_TYPE/'.$id, [  
                 'transaction_name' => $transactionType->transaction_name ,               
             ]); 
@@ -189,7 +189,7 @@ class TransactionTypeController extends AppController
         }
         */
         $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_TRANSACTION_TYPE/'.$id);  
+        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_TYPE/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_TYPE/'.$id);  
         if ($response->getJson()['Status'] == 0) {
  

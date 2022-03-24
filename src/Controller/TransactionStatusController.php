@@ -85,7 +85,7 @@ class TransactionStatusController extends AppController
             }
             */
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_TRANSACTION_STATUS', [   //pointed at local
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_TRANSACTION_STATUS', [   //pointed at local
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/INSERT_TRANSACTION_STATUS', [  
                 'status_name' => $transactionStatus->status_name, 
                 'added_by' => $this->request->getAttribute('identity')->getIdentifier()  
@@ -140,7 +140,7 @@ class TransactionStatusController extends AppController
             }
             */
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_TRANSACTION_STATUS/'.$id, [     
+            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_TRANSACTION_STATUS/'.$id, [     
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/UPDATE_TRANSACTION_STATUS/'.$id, [  
                 'status_name' => $transactionStatus->status_name,   
                 'updated_by' => $this->request->getAttribute('identity')->getIdentifier()            
@@ -188,7 +188,7 @@ class TransactionStatusController extends AppController
         }
         */
         $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_TRANSACTION_STATUS/'.$id);  
+        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_STATUS/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_STATUS/'.$id);  
         if ($response->getJson()['Status'] == 0) {
  

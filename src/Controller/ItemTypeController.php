@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+
 /**
  * ItemType Controller
  *
@@ -28,8 +30,12 @@ class ItemTypeController extends AppController
      */
     public function index()
     {
-        $itemType = $this->ItemType->newEmptyEntity();
-        $this->Authorization->authorize($itemType, 'index');
+        // dd($test = getEnv('MYNEWVARIABLE'));
+        $itemType = TableRegistry::getTableLocator()->get('ItemType')->newEmptyEntity();
+        $this->Authorization->authorize($itemType, 'index' );
+        //  dd($itemType);
+        // $this->Authorization->skipAuthorization();
+
         $itemType = $this->paginate($this->ItemType);
         $this->Common->dblogger([
             //change depending on action

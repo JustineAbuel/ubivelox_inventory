@@ -68,17 +68,19 @@
 
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/outgoing'), ['controller' => 'Outgoing','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'outgoing' ? 'active': '' ?>">
-              <i class="nav-icon fas fa-shopping-cart"></i>
+              <!-- <i class="nav-icon fas fa-shopping-cart"></i> -->
+              <i class="nav-icon fas fa-truck-moving"></i>
               <p>
-                Outgoing Transaction Items
+                Outgoing Management
               </p>
             </a>
           </li>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/incoming'), ['controller' => 'IncomingController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'incoming' ? 'active': '' ?>">
-              <i class="nav-icon fas fa-users"></i>
+              <!-- <i class="nav-icon fas fa-users"></i> -->
+              <i class="nav-icon fas fa-truck-loading"></i>
               <p>
-                Incoming Transaction Items
+                Incoming Management
               </p>
             </a>
           </li> 
@@ -120,7 +122,7 @@
           </li>  
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'user-roles' ? 'active': '' ?>">
-              <i class="nav-icon fas fa-users"></i>
+              <i class="nav-icon fas fa-user-tag"></i>
               <p>
                 User Roles
               </p>

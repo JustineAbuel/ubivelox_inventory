@@ -187,7 +187,7 @@ class UsersController extends AppController
             // $user->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ; 
  
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_USERS', [           
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USERS', [           
 
             
                 'username' => $user->username, 

@@ -21,7 +21,7 @@
           <?= $this->Flash->render() ?>
             <div class="card">
               <div class="card-header     "> 
-                    <h3 class="card-title ">List of Items</h3> 
+                    <h3 class="card-title ">Item details</h3> 
                     <?php echo $this->Html->link((
                     ' Add New Item '
                     ),[

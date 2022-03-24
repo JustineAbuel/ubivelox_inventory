@@ -90,7 +90,7 @@ class CategoriesController extends AppController
  
             
             $http = new Client();
-            $response = $http->post('http://localhost:8888/INSERT_CATEGORIES', [           
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_CATEGORIES', [           
 
                 'category_name' => $category->category_name ,
                 'category_description' => $category->category_description ,
@@ -147,7 +147,7 @@ class CategoriesController extends AppController
             $category = $this->Categories->patchEntity($category, $this->request->getData());
 
             $http = new Client();
-            $response = $http->put('http://localhost:8888/UPDATE_CATEGORIES/'.$id, [     
+            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_CATEGORIES/'.$id, [     
  
                 'id' => $id,
                 'category_name' => $category->category_name ,
@@ -194,7 +194,7 @@ class CategoriesController extends AppController
         $this->Authorization->authorize($category, 'delete' );
 
         $http = new Client();
-        $response = $http->delete('http://localhost:8888/DELETE_CATEGORIES/'.$id);  
+        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_CATEGORIES/'.$id);  
         
         if ($response->getJson()['Status'] == 0) {
 

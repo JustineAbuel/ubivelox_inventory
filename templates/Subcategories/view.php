@@ -20,7 +20,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                    <h3 class="card-title ">View Subcategory</h3> 
+                    <h3 class="card-title ">Subcategory details</h3> 
                     
     <?= $this->Html->link(__('New Subcategory'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
