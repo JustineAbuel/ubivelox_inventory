@@ -33,7 +33,24 @@
                        <!-- text input -->
                        <div class="form-group"> 
                             <label>Status</label>
-                            <?=  $this->Form->control('status', ['options' => $itemStatus,'class' => 'form-control', 'placeholder' => 'Quantity', 'label' => false,'disabled']); ?>
+                            <select name="status" class="form-control" disabled="">
+                              <option value="<?php echo $outgoing->status; ?>">
+                                <?php 
+                                if($outgoing->status == 2){ //delivered
+                                    echo "Delivered";
+                                }
+                                elseif($outgoing->status == 4){ //for repair
+                                    echo "For Repair";
+                                }
+                                elseif($outgoing->status == 5){ //repaired
+                                     echo "Repaired";
+                                }
+                                else{
+                                      echo "";
+                                }
+                                ?>
+                              </option>
+                            </select>
  
                        </div>
                    </div>

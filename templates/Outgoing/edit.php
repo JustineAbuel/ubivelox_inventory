@@ -55,7 +55,9 @@
                                 elseif($outgoing->status == 5){ //repaired
                                      echo "Repaired";
                                 }
-                                else{}
+                                else{
+                                      echo "";
+                                }
                                 ?>
                                 </option>
                                 <option value="4">For Repair</option>
