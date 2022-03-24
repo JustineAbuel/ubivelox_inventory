@@ -37,7 +37,7 @@
                     <th>Item Name</th>
                     <th>Serial Number</th>
                     <th>Status</th>
-                    <th>QR Code</th>
+                    <th>Item QR Code</th>
                     <th>Notes/Remarks</th>
                     <th>Date Added</th>
                     <th>Action</th>
