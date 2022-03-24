@@ -32,7 +32,7 @@
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr class="table-primary">
-                    <th>Tranaction ID</th>
+                    <th>Transaction ID</th>
                     <th>Transaction Code</th>
                     <th>Item Name</th>
                     <th>Serial Number</th>
