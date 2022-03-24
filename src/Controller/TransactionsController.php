@@ -32,6 +32,7 @@ class TransactionsController extends AppController
         $this->set('title','List of Transactions');
         $this->paginate = [
             'contain' => ['Users', 'Company','TransactionType','TransactionStatus'],
+            'order' => ['id' => 'desc']
         ];
         $transactions = $this->paginate($this->Transactions);
 

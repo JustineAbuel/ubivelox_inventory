@@ -98,7 +98,7 @@ class TransactionItemsController extends AppController
             /* start - Insert logs to ougtoing */
             $querySelectTrans = $this->TransactionItems->Transactions
             ->find()
-            ->select(['id','transaction_type_id','status'])
+            ->select(['id','status'])
             ->where(['id' => $this->request->getQuery('tid')])
             ->all();
 
@@ -106,61 +106,51 @@ class TransactionItemsController extends AppController
 
             foreach ($querySelectTrans as $transtat) {
 
-                $transaction_type_id = $transtat->transaction_type_id; //transaction type 1=borrowed,2=purchased
+                $queryOutgoing = $this->TransactionItems->Transactions->Outgoing->query();
+                $queryOutgoing->insert(['transaction_id', 'item_id','status','notes','date_added','added_by'])
+                ->values([
+                    'transaction_id' => $this->request->getQuery('tid'), //get transaction ID,
+                    'item_id' => $transactionItem->item_id,
+                    'status' => $transtat->status,
+                    'notes' => 'Outgoing Transaction Item',
+                    'date_added' => date('Y-m-d H:i:s'),
+                    'added_by' => $this->request->getAttribute('identity')->getIdentifier() //session user id
+                ])
+                ->execute();
+            }
+            /* end - Insert logs to ougtoing */
 
-                foreach ($checkqtystat as $res) {
+
+            foreach ($checkqtystat as $res) {
 
                 $item_quantity = $res->quantity; //item id/qty
 
                 $total_deducted = $item_quantity - $transactionItem->quantity; //deduction from trans qty to item qty
 
-                $item_type = $res->item_type_id; //item type, 1=internal,2=external
-
-                    if($transaction_type_id == 2 && $item_type != 2){ //transaction type must be purchased and item type must be external type
-                        $this->Flash->error(__('Transaction Type is Purchased, Item Type must be external only, Please try again.'));
-                        return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
-                    }
-                    else{
-
-                        if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
+                if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
 
                             $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
                             return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
-                        }
-                        else{
-                            if ($this->TransactionItems->save($transactionItem)) {
+                }
+                else{
+                    if ($this->TransactionItems->save($transactionItem)) {
 
-                                $queryupdate = $this->TransactionItems->Items->query();
-                                $queryupdate->update()
-                                    ->set([
-                                        'quantity' => $total_deducted])
-                                    ->where([
-                                        'id' => $transactionItem->item_id])
-                                    ->execute();
+                        $queryupdate = $this->TransactionItems->Items->query();
+                        $queryupdate->update()
+                            ->set([
+                                'quantity' => $total_deducted])
+                            ->where([
+                                'id' => $transactionItem->item_id])
+                            ->execute();
 
-                                $this->Flash->success(__('The transaction item has been saved.'));
+                            $this->Flash->success(__('The transaction item has been saved.'));
 
-                                return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
-                            }
-                            $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
-                        }
-                        
-
-                        $queryOutgoing = $this->TransactionItems->Transactions->Outgoing->query();
-                        $queryOutgoing->insert(['transaction_id', 'item_id','status','notes','date_added','added_by'])
-                        ->values([
-                            'transaction_id' => $this->request->getQuery('tid'), //get transaction ID,
-                            'item_id' => $transactionItem->item_id,
-                            'status' => $transtat->status,
-                            'notes' => 'Outgoing Transaction Item',
-                            'date_added' => date('Y-m-d H:i:s'),
-                            'added_by' => $this->request->getAttribute('identity')->getIdentifier() //session user id
-                        ])
-                        ->execute();
-                        /* end - Insert logs to ougtoing */
-                        }
+                            return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
                     }
-            }            
+                    $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+                }
+                
+            } 
             
         }
 
@@ -173,8 +163,8 @@ class TransactionItemsController extends AppController
                 return $e->item_name . ' - ' . $e->serial_no;
             }
         ]
-        ); //display all interl and external items
-        //->where(['item_type_id' => 2]); //display external items only for outgoing transactions
+        )
+        ->where(['item_type_id' => 2]); //display external items only for outgoing transactions
 
         $this->set(compact('transactionItem', 'transactions', 'items'));
     }

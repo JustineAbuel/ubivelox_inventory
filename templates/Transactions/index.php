@@ -136,7 +136,8 @@
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      "order": [[ 5, "desc" ]],
+      //"order": [[ 5, "desc" ]],
+      "order": [],
       "paging":   true,
       "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

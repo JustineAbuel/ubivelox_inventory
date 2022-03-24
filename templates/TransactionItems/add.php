@@ -21,7 +21,7 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <label>Item <font color="blue"><strong>(All external items only)</strong></font></label>
+                            <label>Item <font color="blue"><strong>(All internal & external items)</strong></font></label>
                             <?=  $this->Form->control('item_id', ['options' => $items,'class' => 'form-control', 'placeholder' => 'Item', 'label' => false]); ?>
                        
                        </div>
