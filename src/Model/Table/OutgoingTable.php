@@ -99,6 +99,11 @@ class OutgoingTable extends Table
             ->allowEmptyString('item_id');
 
         $validator
+            ->integer('quantity')
+            ->requirePresence('quantity', 'create')
+            ->allowEmptyString('quantity');
+
+        $validator
             ->integer('status')
             ->requirePresence('status', 'create')
             ->notEmptyString('status');

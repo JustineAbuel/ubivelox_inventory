@@ -35,6 +35,7 @@ class Outgoing extends Entity
     protected $_accessible = [
         'transaction_id' => true,
         'item_id' => true,
+        'quantity' => true,
         'status' => true,
         'notes' => true,
         'date_added' => true,

@@ -138,6 +138,20 @@ class TransactionItemsController extends AppController
                                         'id' => $transactionItem->item_id])
                                     ->execute();
 
+                                $queryOutgoing = $this->TransactionItems->Transactions->Outgoing->query();
+                                $queryOutgoing->insert(['transaction_id', 'item_id','quantity','status','notes','date_added','added_by'])
+                                ->values([
+                                    'transaction_id' => $this->request->getQuery('tid'), //get transaction ID,
+                                    'item_id' => $transactionItem->item_id,
+                                    'quantity' => $transactionItem->quantity,
+                                    'status' => $transtat->status,
+                                    'notes' => 'Outgoing Transaction Item',
+                                    'date_added' => date('Y-m-d H:i:s'),
+                                    'added_by' => $this->request->getAttribute('identity')->getIdentifier() //session user id
+                                ])
+                                ->execute();
+                                /* end - Insert logs to ougtoing */
+
                                 $this->Flash->success(__('The transaction item has been saved.'));
 
                                 return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
@@ -145,19 +159,6 @@ class TransactionItemsController extends AppController
                             $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
                         }
                         
-
-                        $queryOutgoing = $this->TransactionItems->Transactions->Outgoing->query();
-                        $queryOutgoing->insert(['transaction_id', 'item_id','status','notes','date_added','added_by'])
-                        ->values([
-                            'transaction_id' => $this->request->getQuery('tid'), //get transaction ID,
-                            'item_id' => $transactionItem->item_id,
-                            'status' => $transtat->status,
-                            'notes' => 'Outgoing Transaction Item',
-                            'date_added' => date('Y-m-d H:i:s'),
-                            'added_by' => $this->request->getAttribute('identity')->getIdentifier() //session user id
-                        ])
-                        ->execute();
-                        /* end - Insert logs to ougtoing */
                         }
                     }
             }            

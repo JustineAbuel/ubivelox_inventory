@@ -101,6 +101,17 @@ class OutgoingController extends AppController
         if ($this->request->is('post')) {
             $outgoing = $this->Outgoing->patchEntity($outgoing, $this->request->getData());
 
+            $transItemRec = $this->Outgoing->TransactionItems
+            ->find()
+            ->where([
+            'AND' => [['transaction_id' => $outgoing->transaction_id],['item_id' => $outgoing->item_id]], 
+            ]);
+
+            foreach ($transItemRec as $key => $value) {
+                //dd($value->quantity); //quantity from transaction items
+                $outgoing->quantity = $value->quantity; //insert transaction item quantity
+            }
+
             $outgoing->added_by = $this->request->getAttribute('identity')->getIdentifier(); //session user id
 
             $outgoingRec = $this->Outgoing->find('list')
@@ -118,6 +129,7 @@ class OutgoingController extends AppController
             else{
 
                 if ($this->Outgoing->save($outgoing)) {
+
                     $this->Flash->success(__('The outgoing has been saved.'));
 
                     $this->Common->dblogger([
