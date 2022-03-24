@@ -37,6 +37,7 @@
                     <th>Item Name</th>
                     <th>Serial Number</th>
                     <th>Status</th>
+                    <th>QR Code</th>
                     <th>Notes/Remarks</th>
                     <th>Date Added</th>
                     <th>Action</th>
@@ -69,6 +70,11 @@
                         <td><?= h($outgoing->item_name) ?></td>
                         <td><?= h($outgoing->serial_no) ?></td>
                         <td><?php echo $itemstat; ?></td>
+                        <td>
+                          <?php
+                            $this->Common->generateQrInView($outgoing->item_id)
+                          ?>
+                        </td>
                         <td><?= h($outgoing->notes) ?></td>
                         <td><?= h($outgoing->date_added) ?></td>
                         <td class="actions   "> 

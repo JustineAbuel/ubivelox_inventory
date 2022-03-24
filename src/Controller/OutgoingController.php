@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use CodeItNow\BarcodeBundle\Utils\QrCode;
 
 /**
  * Outgoing Controller
@@ -51,6 +52,8 @@ class OutgoingController extends AppController
         ->where([
         'OR' => [['Outgoing.status' => 4],['Outgoing.status' => 5],['Outgoing.status' => 2]], //diplay all 4=for repair, 5=repaired, and 2=delivered items only
         ]);
+
+        $qrCode = new QrCode();
 
         $this->set(compact('outgoing'));
     }
