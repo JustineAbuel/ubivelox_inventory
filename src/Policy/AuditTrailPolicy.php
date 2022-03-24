@@ -99,6 +99,11 @@ class AuditTrailPolicy
                 $allowed = false;
                  
                 break;
+            case 5:
+                //Logistics
+                $allowed = false;
+                 
+                break;
             default:
                 $allowed = false;
                 break;

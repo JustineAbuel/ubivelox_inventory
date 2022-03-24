@@ -76,6 +76,9 @@ class ItemsTable extends Table
         $this->hasMany('Incoming', [
             'foreignKey' => 'item_id',
         ]);
+        $this->hasMany('Outgoing', [
+            'foreignKey' => 'item_id',
+        ]);
         $this->hasMany('Transactions', [
             'foreignKey' => 'item_id',
         ]);

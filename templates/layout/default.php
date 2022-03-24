@@ -18,6 +18,14 @@
   <?php include("main-sidebar.php"); ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    <?php
+    // $this->Breadcrumbs->add(
+    //     'Home',
+    //     ['controller' => 'Items', 'action' => 'dashboard']
+    // );
+    // echo $this->Breadcrumbs->render();
+  
+    ?>
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -33,6 +41,7 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
+    
     <!-- /.content-header -->
     <?= $this->fetch('content'); ?>
   </div>

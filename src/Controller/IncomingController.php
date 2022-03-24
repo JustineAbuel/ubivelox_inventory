@@ -27,6 +27,7 @@ class IncomingController extends AppController
     {
         $this->paginate = [
             'contain' => ['Items'],
+            'order' => ['date_added' => 'DESC']
         ];
         $incoming = $this->paginate($this->Incoming);
 

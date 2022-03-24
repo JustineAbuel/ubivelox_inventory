@@ -97,6 +97,17 @@ class ItemPolicy
                 } 
                  
                 break;
+                
+            case 5:
+                //Logistics
+                $allowedView = ['index', 'view', 'add'];
+               
+                if(in_array($action, $allowedView)){ 
+                    $allowed = true;
+                } 
+                 
+                break;
+
             default:
                 $allowed = false;
                 break;

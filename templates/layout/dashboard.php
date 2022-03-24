@@ -15,7 +15,7 @@
 
   <?= $this->Flash->render() ?>
   <?= $this->fetch('content'); ?>
-
+  <?= $this->fetch('script');?>
   <footer class="main-footer">
     <strong>Copyright &copy; 2022-<?php echo date('Y'); ?></strong>
     All rights reserved.

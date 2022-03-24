@@ -133,7 +133,7 @@
  
 <!-- Modal -->
 <div class="modal fade" id="addQuantityModal" tabindex="-1" aria-labelledby="addQuantityModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addQuantityModalLabel"></h5>
@@ -164,8 +164,7 @@ $( document ).ready(function() {
         var itemId = $(this).data('id');
         var itemName = $(this).data('name'); 
         $(".modal-header #addQuantityModalLabel").html('Add stocks to <b>' + itemName + '</b>'); 
-        $("input[name=item-id]").attr('id', itemId)
-  
+        $("input[name=item-id]").attr('id', itemId) 
     }); 
     $('#addQuantityBtn').click(function(){
         var quantity =  $("input[name=item-id]").val() 
@@ -199,7 +198,7 @@ $( document ).ready(function() {
           })
         }
     })
-    function reloadTable() { table = $('#example1').DataTable(); table.ajax.reload(); }; 
+    
 });
 $(function () {
   $("#example1").DataTable({

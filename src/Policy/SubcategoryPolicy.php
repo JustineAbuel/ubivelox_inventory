@@ -91,6 +91,12 @@ class SubcategoryPolicy
                 $allowed = false;
                  
                 break;
+                
+            case 5:
+                //Logistics  
+                $allowed = true;
+                 
+                break;
             default:
                 $allowed = false;
                 break;

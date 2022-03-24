@@ -97,8 +97,16 @@ class TransactionPolicy
                     $allowed = true;
                 } 
                 break;
-                 
+                  
+            case 5:
+                //Logistics 
+                $allowedView = ['index', 'view'];
+               
+                if(in_array($action, $allowedView)){ 
+                    $allowed = true;
+                } 
                 break;
+                
             default:
                 $allowed = false;
                 break;

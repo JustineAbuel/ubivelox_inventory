@@ -28,7 +28,8 @@ class ItemsController extends AppController
         $this->loadModel('Subcategories');  
         $this->loadModel('ItemType');  
         $this->loadModel('Company'); 
-        $this->loadModel('Incoming');  
+        $this->loadModel('Incoming'); 
+        $this->loadModel('Outgoing');  
 
         // $this->Authorization->skipAuthorization();
         
@@ -54,8 +55,104 @@ class ItemsController extends AppController
                     ])
                     ->count(); 
 
+
+        $month = date('Y-m');
+        // dd($month);
+        $condition = [
+            'conditions' => [
+                'date_added >' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00')), 
+                'date_added <' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00'))
+            ],
+        ];
+        $query = $this->Items->Incoming->find();
+        $incoming = $query->select([
+            'day' => $query->func()->dayname([
+                'Incoming.date_added' => 'identifier'
+            ]),
+            'totalQuantity' => $query->func()->sum('Incoming.quantity')
+        ])->group(['day'])->all();
+
+        $addedThisMonth = $this->Items->find('all')->where(['date_added >' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00')), 'date_added <' => date('Y-m-d H:i:s', strtotime($month.'-31 00:00:00'))])->count();
+        // dd($items);
+        $returnedItems = $this->Outgoing->find()->where(['OR' => [ 'status IS' => 5, 'status' => 4]])->count();
+        $returnedWithoutDamage = $this->Outgoing->find()->where([ 'status IS' => 5])->count();
+        $damagedItem = $this->Outgoing->find()->where([ 'status IS' => 4])->count();
+
+        // dd($damagedItem);
+
+
+        // $query = $this->Outgoing->find('all', ['contain' => ['Transactions']]);
+        // $outgoing = $query->innerJoinWith('TransactionItems')
+        // ->group(['transaction_code'])->all();
+        // $query = $this->Outgoing->find();
+        // $outgoing = $query->innerJoinWith('TransactionsItems', function($q){
+        //     return $q->where('Outgoing.transaction_id == TransactionItems.transaction_id');
+        // });
+
+        // $outgoing = $this->Outgoing->find('all', 
+        //     [
+        //     'contain' => [
+        //         'Transactions.TransactionItems' => [
+        //             'fields' => [
+        //                 'TransactionItems.quantity',
+        //                 'TransactionItems.transaction_id'
+        //             ]
+        //         ]
+        //         ]
+        //     ])
+        // // ->select([
+        // //     'month' => $query->func()->monthname([
+        // //         'Outgoing.date_added' => 'identifier'
+        // //     ]), 
+        // //     'transaction_id' 
+        // // ])
+        // $outgoing = $this->Outgoing->find('all', [
+        //     'contain' => ['Transactions.TransactionItems']
+        // ])
+        // ->select([
+            
+        // ])
+        // ->group(['Outgoing.transaction_id'])->all(); 
+        // 
+        $outgoing = $this->Outgoing; 
+        $query = $outgoing->find()
+            ->select([
+                'id',
+                'transaction_id',
+                'item_id',
+                'day' => $query->func()->dayname([
+                    'Outgoing.date_added' => 'identifier'
+                ]),
+                'totalQuantity' => $query->func()->sum('TransactionItems.quantity'),
+            ])
+            // // ->select($outgoing->TransactionItems)
+            ->select($outgoing->Transactions)
+            ->contain(['TransactionItems','Transactions', 'Transactions.TransactionItems'])
+            // ->where(['TransactionItems.transaction_id == Outgoing__transaction_id'])
+            ->group([ 'day'])->all();
+        //     dd($query); 
+        // $data = [];
+        // $totalQuantity = 0;
+        // foreach($query as $key => $outgoingData){ 
+        //     $label[] = $outgoingData->day; 
+            
+        //     // dd($outgoingData->transaction->transaction_items);
+        //     foreach($outgoingData->transaction->transaction_items as $transactionItems){
+        //         $totalQuantity = $totalQuantity + $transactionItems->quantity;
+        //     }
+        //     array_push($data, $totalQuantity);
+             
+            
+        // }
+        // // array_push($data, $totalQuantity);
+        // dd($data);
+        // // $outgoing = $query->insert('tQuantity', );
+       
+
         
-        $this->set(compact('items', 'users', 'categories', 'stocklevel'));
+        // dd($outgoing);
+        
+        $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem'));
  
     }
 

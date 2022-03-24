@@ -18,6 +18,10 @@ class UserPolicy
 // implements BeforePolicyInterface 
 
 {
+    public function canChangePassword(IdentityInterface $user, User $resource)
+    {
+        return $this->isAllowed($user, 'change-password');
+    }
     public function canIndex(IdentityInterface $user, User $resource)
     {
         return $this->isAllowed($user, 'index');
@@ -100,6 +104,11 @@ class UserPolicy
             
             case 4:
                 //Sales
+                $allowed = false;
+                break;
+
+            case 5:
+                //Logistics 
                 $allowed = false;
                 break;
             default:

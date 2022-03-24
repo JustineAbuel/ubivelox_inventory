@@ -65,9 +65,6 @@
 <?= $this->Html->script('dist/js/adminlte'); ?>
 <!-- AdminLTE for demo purposes -->
 <!--<script src="dist/js/demo.js"></script>-->
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<?= $this->Html->script('dist/js/pages/dashboard'); ?>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) --> 
 </head>
-
-<!-- Display content here -->
-<?php //echo $this->fetch('content'); ?>
+ 

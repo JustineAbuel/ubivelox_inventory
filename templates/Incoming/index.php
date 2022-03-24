@@ -30,20 +30,20 @@
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>  
-                    
-                    <th><?= ucfirst('id') ?></th>
+                     
                     <th><?= ucfirst('item id') ?></th>
                     <th><?= ucfirst('quantity') ?></th>
+                    <th><?= ucfirst('total stocks') ?></th>
                     <th><?= ucfirst('date added') ?></th>
                     <th><?= ucfirst('added by') ?></th> 
                   </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($incoming as $incoming): ?>
-                <tr > 
-                    <td><?= $this->Number->format($incoming->id) ?></td>
+                <tr >  
                     <td><?= $incoming->has('item') ? $this->Html->link($incoming->item->item_name, ['controller' => 'Items', 'action' => 'view', $incoming->item->id]) : '' ?></td>
                     <td><?= $this->Number->format($incoming->quantity) ?></td>
+                    <td><?= $this->Number->format($incoming->item->quantity) ?></td>
                     <td><?= h($incoming->date_added) ?></td>
                     <td><?= $this->Number->format($incoming->added_by) ?></td> 
                 </tr>
@@ -61,8 +61,7 @@
       </div>
       <!-- /.container-fluid -->
     </section>
-    <!-- /.content --> 
-    
+    <!-- /.content -->  
 
 <script> 
 $(function () {
@@ -71,7 +70,7 @@ $(function () {
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
     "ordering": false,
     "paging":   true,
-    "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+    "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
   }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
 
   

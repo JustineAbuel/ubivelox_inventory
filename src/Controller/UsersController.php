@@ -77,32 +77,38 @@ class UsersController extends AppController
     {
         $this->Authorization->skipAuthorization();
         
-        $user = $id ? $this->Users->get($id) : $this->request->getAttribute('identity')->getOriginalData();
+        
 
+        $setid = $this->Authentication->getIdentity()->getIdentifier(); 
+        if($id){
+            $loggedinuser = $this->Authentication->getIdentity()->getOriginalData(); 
+            $this->Authorization->authorize($loggedinuser, 'changePassword');
+            $setid = $id;
+        }
+
+
+        $user =  $this->Users->get($setid); 
+
+       
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData()); 
-            $requestData = $this->request->getData();
-            // dd(password_hash($requestData['currentpassword'], PASSWORD_BCRYPT));
-            // dd($this->hashPassword($requestData['currentpassword']));
+            $requestData = $this->request->getData();   
+            if(password_verify($requestData['currentpassword'], $user->password)){ 
+                if($requestData['newpassword'] === $requestData['retypepassword']){
+                    
+                    $user = $this->Users->patchEntity($user, ['password' => $this->request->getData('newpassword')]);  
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('Password changed successfully'));
+        
+                        return $this->redirect(['action' => 'index']);
+                    }  
+                    $this->Flash->error(__('The password could not be saved. Please, try again.'));
+                }else{
+                    $this->Flash->error(__('New and retype password does not match. Please, try again'));
+                }
 
-            $http = new Client();
-            $response = $http->post('http://localhost:8888/CHANGE_PASSWORD/'.$user->id, [           
-
-            
-                'id' => $user->id,
-                'currentpassword' => $this->hashPassword($requestData['currentpassword']),
-                'newpassword' => $requestData['newpassword'],
-                'retypepassword' => $requestData['retypepassword'],
- 
-            
-            ]); 
-            if ($response->getJson()['Status'] == 0) { 
-                $this->Flash->success(__('Password changed successfully'));
-
-                return $this->redirect(['action' => 'index']);
+            }else{ 
+                $this->Flash->error(__('Incorrect password'));
             } 
-            $this->Flash->error(__($response->getJson()['Description']));
-            // $this->Flash->error(__('The password could not be saved. Please, try again.'));
         } 
         $this->set(compact('user'));
     }
