@@ -259,7 +259,7 @@ $(function () {
  <?php 
  $label = [];
  foreach ($incoming as $key => $value){
-  $label[] = $value->day; 
+  $label[] = $value->month .'/'. $value->day; 
   $data[] = $value->totalQuantity;
  }  
  ?>   
@@ -289,7 +289,7 @@ var salesChartData = {
       pointStrokeColor: '#c1c7d1',
       pointHighlightFill: '#fff',
       pointHighlightStroke: 'rgba(220,220,220,1)',
-      data: [10, 14, 22]
+      data: [10, 14, 17, 0]
     }
   ]
 }
