@@ -19,7 +19,20 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body"> 
-                <?= $this->Form->create($item) ?> 
+                <?= $this->Form->create($item, ['type' => 'file']) ?> 
+                
+                
+                <!-- <div class="row custom-padding">
+                   <div class="col-sm-6"> 
+                       <div class="form-group">
+                            <div class="custom-file">
+                           <? //$this->Form->control('image', ['type' => 'file','class' => 'custom-file-input', 'placeholder' => 'Image', 'label' => 'Choose file']); ?>
+                           <label class="custom-file-label" for="customFile">Choose file</label>
+                         
+                            </div>
+                       </div>
+                   </div> 
+                </div> -->
                 <div class="row custom-padding">
                    <div class="col-sm-6">
                        <!-- text input -->

@@ -130,6 +130,7 @@ class UsersController extends AppController
         ]);
         $this->paginate = [
             'contain' => ['UserRoles'],
+            'order' => ['id' => 'DESC']
         ]; 
         $users = $this->paginate($this->Users);
          

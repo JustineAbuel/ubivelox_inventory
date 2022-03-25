@@ -57,15 +57,12 @@ class ItemsController extends AppController
                     ->count(); 
 
 
-        $month = date('Y-m');
-        // dd($month);
-        $condition = [
-            'conditions' => [
-                'date_added >' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00')), 
-                'date_added <' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00'))
-            ],
+        $month = date('Y-m'); 
+        $condition = [ 
+                'date_added >' => date('Y-m-01 00:00:00'), 
+                'date_added <=' => date('Y-m-t 23:59:59') 
         ];
-        $query = $this->Items->Incoming->find();
+        $query = $this->Items->Incoming->find()->where($condition);
         $incoming = $query->select([
             'month' => $query->func()->month([
                 'Incoming.date_added' => 'identifier'
@@ -75,9 +72,10 @@ class ItemsController extends AppController
             ]),
             'totalQuantity' => $query->func()->sum('Incoming.quantity')
         ])->group(['day'])->all();
+        // dd($incoming);
  
 
-        $addedThisMonth = $this->Items->find('all')->where(['date_added >' => date('Y-m-d H:i:s', strtotime($month.'-01 00:00:00')), 'date_added <' => date('Y-m-d H:i:s', strtotime($month.'-31 00:00:00'))])->count();
+        $addedThisMonth = $this->Items->find('all')->where(['date_added >' => date('Y-m-01 00:00:00'), 'date_added <' => date('Y-m-t 23:59:59') ])->count();
         // dd($items);
         $returnedItems = $this->Outgoing->find()->where(['OR' => [ 'status IS' => 5, 'status' => 4]])->count();
         $returnedWithoutDamage = $this->Outgoing->find()->where([ 'status IS' => 5])->count();
@@ -147,6 +145,7 @@ class ItemsController extends AppController
             'conditions' => [
                 'trashed IS ' => NULL 
             ], 
+            'order' => ['id' => 'DESC']
         ];   
         $items = $this->paginate($this->Items);   
         $qrCode = new QrCode();

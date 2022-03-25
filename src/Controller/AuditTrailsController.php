@@ -28,9 +28,10 @@ class AuditTrailsController extends AppController
         
         $auditTrail = $this->AuditTrails->newEmptyEntity();
         $this->Authorization->authorize($auditTrail, 'index');
+  
+         
 
-
-        $auditTrails = $this->AuditTrails->find()->all();
+        $auditTrails = $this->AuditTrails->find()->order(['id' => 'DESC'])->all();
 
         $this->set(compact('auditTrails'));
     }
@@ -48,7 +49,11 @@ class AuditTrailsController extends AppController
             'contain' => [],
         ]);
         $this->Authorization->authorize($auditTrail, $this->request->getParam('action'));
-
+        $this->Common->dblogger([ 
+            'message' => 'Viewed Item with id = '. $this->request->getParam('pass')[0],
+            'request' => $this->request, 
+        ]);
+        
         $this->set(compact('auditTrail'));
     }
 

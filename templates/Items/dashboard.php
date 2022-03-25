@@ -89,27 +89,19 @@
         </div>
         <!-- /.row -->
         <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
-          <section class="col-lg-6 connectedSortablea">
-            <!-- Custom tabs (Charts with tabs)-->
+        <div class="row"> 
+          <section class="col-lg-7 connectedSortable"> 
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="fas fa-chart-pie mr-1"></i>
                   Sales
                 </h3>
-                <div class="card-tools">
-                  <!-- <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                    </li> 
-                  </ul> -->
+                <div class="card-tools"> 
                 </div>
-              </div><!-- /.card-header -->
+              </div> 
               <div class="card-body">
-                <div class="tab-content p-0">
-                  <!-- Morris chart - Sales -->
+                <div class="tab-content p-0"> 
                   <div class="chart tab-pane active" id="revenue-chart"
                        style="position: relative; height: 300px;">
                       <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
@@ -118,16 +110,97 @@
                     <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
                   </div>
                 </div>
-              </div><!-- /.card-body -->
+              </div> 
+            </div> 
+          </section>
+          <section class="col-lg-5 connectedSortable">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Recently Added Products</h3>
+
+                <!-- <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div> -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <ul class="products-list product-list-in-card pl-2 pr-2">
+                  <li class="item">
+                    <div class="product-img"> 
+                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
+                    </div>
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-title">Samsung TV
+                        <span class="badge badge-warning float-right">$1800</span></a>
+                      <span class="product-description">
+                        Samsung 32" 1080p 60Hz LED Smart HDTV.
+                      </span>
+                    </div>
+                  </li>
+                  <!-- /.item -->
+                  <li class="item">
+                    <div class="product-img">
+                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
+                    </div>
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-title">Bicycle
+                        <span class="badge badge-info float-right">$700</span></a>
+                      <span class="product-description">
+                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                      </span>
+                    </div>
+                  </li>
+                  <!-- /.item -->
+                  <li class="item">
+                    <div class="product-img">
+                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
+                    </div>
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-title">
+                        Xbox One <span class="badge badge-danger float-right">
+                        $350
+                      </span>
+                      </a>
+                      <span class="product-description">
+                        Xbox One Console Bundle with Halo Master Chief Collection.
+                      </span>
+                    </div>
+                  </li>
+                  <!-- /.item -->
+                  <li class="item">
+                    <div class="product-img">
+                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
+                    </div>
+                    <div class="product-info">
+                      <a href="javascript:void(0)" class="product-title">PlayStation 4
+                        <span class="badge badge-success float-right">$399</span></a>
+                      <span class="product-description">
+                        PlayStation 4 500GB Console (PS4)
+                      </span>
+                    </div>
+                  </li>
+                  <!-- /.item -->
+                </ul>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer text-center">
+                <a href="javascript:void(0)" class="uppercase">View All Products</a>
+              </div>
+              <!-- /.card-footer -->
             </div>
-            <!-- /.card -->
           </section>
         </div>
         <!-- <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Incoming and Outgoing Items</h5>
+                <h5 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Incoming and Outgoing Items</h5>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -154,7 +227,7 @@
                 <div class="row">
                   <div class="col-md-8">
                     <p class="text-center">
-                      <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                      <strong>In and Outs for month of <?= date('MM')?></strong>
                     </p>
  
                     <div class="chart tab-pane active" id="revenue-chart"  >
@@ -203,29 +276,25 @@
               <div class="card-footer">
                 <div class="row">
                   <div class="col-sm-3 col-6">
-                    <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
+                    <div class="description-block border-right"> 
                       <h5 class="description-header">$35,210.43</h5>
                       <span class="description-text">TOTAL REVENUE</span>
                     </div> 
                   </div> 
                   <div class="col-sm-3 col-6">
-                    <div class="description-block border-right">
-                      <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
+                    <div class="description-block border-right"> 
                       <h5 class="description-header">$10,390.90</h5>
                       <span class="description-text">TOTAL COST</span>
                     </div> 
                   </div> 
                   <div class="col-sm-3 col-6">
-                    <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
+                    <div class="description-block border-right"> 
                       <h5 class="description-header">$24,813.53</h5>
                       <span class="description-text">TOTAL PROFIT</span>
                     </div> 
                   </div> 
                   <div class="col-sm-3 col-6">
-                    <div class="description-block">
-                      <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
+                    <div class="description-block"> 
                       <h5 class="description-header">1200</h5>
                       <span class="description-text">GOAL COMPLETIONS</span>
                     </div> 
@@ -234,8 +303,8 @@
               </div> 
             </div>  
           </div> 
-        </div>
-        -->
+        </div> -->
+       
        
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->

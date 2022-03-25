@@ -128,6 +128,15 @@
               </p>
             </a>
           </li>  
+          <li class="nav-item">
+            <a href="<?php echo $this->Url->build(('/auditTrails'), ['controller' => 'AuditTrails','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'auditTrails' ? 'active': '' ?>">
+  
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>
+              Audit Trails
+              </p>
+            </a>
+          </li>  
 
         </ul>
       </nav>
