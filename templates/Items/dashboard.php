@@ -260,10 +260,14 @@ $(function () {
  $label = [];
  foreach ($incoming as $key => $value){
   $label[] = $value->month .'/'. $value->day; 
-  $data[] = $value->totalQuantity;
+  $incomingData[] = $value->totalQuantity;
+ }   
+
+ foreach ($outgoing as $key => $value){
+  // $label[] = $value->month .'/'. $value->day; 
+  $outgoingData[] = $value->totalQuantity;
  }  
- ?>   
-<?php 
+?><?php
 $this->Html->scriptStart(['block' => true]);
 echo "  
 var salesChartData = {
@@ -278,7 +282,7 @@ var salesChartData = {
       pointStrokeColor: 'rgba(60,141,188,1)',
       pointHighlightFill: '#fff',
       pointHighlightStroke: 'rgba(60,141,188,1)',
-      data: ".json_encode($data)."
+      data: ".json_encode($incomingData)."
     },
     {
       label: 'Outgoing',
@@ -289,7 +293,7 @@ var salesChartData = {
       pointStrokeColor: '#c1c7d1',
       pointHighlightFill: '#fff',
       pointHighlightStroke: 'rgba(220,220,220,1)',
-      data: [10, 14, 17, 0]
+      data:  ".json_encode($outgoingData)."
     }
   ]
 }
