@@ -48,6 +48,12 @@ class TransactionItemsTable extends Table
             'foreignKey' => 'transaction_id',
             'joinType' => 'INNER',
         ]);
+
+        $this->belongsTo('Outgoing', [
+            'foreignKey' => 'transaction_id',
+            'joinType' => 'INNER',
+        ]);
+
         $this->belongsTo('Items', [
             'foreignKey' => 'item_id',
             'joinType' => 'INNER',

@@ -114,8 +114,14 @@ class TransactionsTable extends Table
 
         $validator
             ->scalar('subject')
+            ->requirePresence('company_to', 'create')
             ->maxLength('subject', 255)
-            ->allowEmptyString('subject');
+            ->notEmptyString('subject');
+
+        $validator
+            ->integer('status')
+            ->requirePresence('company_to', 'create')
+            ->notEmptyString('status');
 
         $validator
             ->scalar('received_by')
@@ -125,11 +131,6 @@ class TransactionsTable extends Table
         $validator
             ->dateTime('received_date')
             ->allowEmptyDateTime('received_date');
-
-        $validator
-            ->integer('status')
-            ->allowEmptyString('status')
-            ->notEmptyString('status');
 
         $validator
             ->dateTime('date_added')

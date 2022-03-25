@@ -1,4 +1,16 @@
 <script type="text/javascript">
+
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + '/' + dd + '/' + yyyy;
+
+  document.title = "UBP-Inventory Transaction Slip"; //set file name
+
+  document.write(today);
+
   window.print();
 </script>
 <!DOCTYPE html>

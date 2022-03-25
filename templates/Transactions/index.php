@@ -139,7 +139,8 @@
       //"order": [[ 5, "desc" ]],
       "order": [],
       "paging":   true,
-      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+      //"lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,

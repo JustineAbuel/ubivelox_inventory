@@ -19,7 +19,12 @@
 
             <div class="card">
               <div class="card-header     "> 
-                    <h3 class="card-title "><?= $title ?></h3> 
+                    <h3 class="card-title ">
+                      <strong><?= $title ?><br>
+                      <font color="blue"><small>(All Delivered, For Repair, Repaired and For Disposal Items Only)</small>
+                      </font>
+                    </h3> 
+                      </strong>
                     
                     <?= $this->Html->link(__('New Outgoing Transaction Item'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
 
@@ -27,8 +32,10 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <label>Legend:</label>
-                <button type="button" class="table-danger">For Repair</button>
+                <button type="button" class="table-light">Delivered</button>
+                <button type="button" class="table-warning">For Repair</button>
                 <button type="button" class="table-success">Repaired</button>
+                <button type="button" class="table-danger">For Disposal</button>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr class="table-primary">
@@ -46,17 +53,21 @@
                   <tbody>
                     <?php foreach ($outgoing as $outgoing): ?>
                     <?php
-                    if($outgoing->status == 2){ //delivered
+                        if($outgoing->status == 2){ //delivered
                         $itemstat  = "Delivered";
                         $trclass = "table-light";
                     }
                     elseif($outgoing->status == 4){ //for repair
                         $itemstat  = "For Repair";
-                        $trclass = "table-danger";
+                        $trclass = "table-warning";
                     }
                     elseif($outgoing->status == 5){ //repaired
                         $itemstat  = "Repaired";
                         $trclass = "table-success";
+                    }
+                    elseif($outgoing->status == 6){ //for disposal
+                        $itemstat  = "For Disposal";
+                        $trclass = "table-danger";
                     }
                     else{
                         $itemstat  = "";
@@ -149,8 +160,8 @@
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
-      "lengthMenu": [[100, 200, 300, -1],
-        [100, 200, 300, "All"]],
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+      //"lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
       //"aaSorting": [0,'asc'], // sorting column 0
       "aaSorting": [], //no sorting
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');

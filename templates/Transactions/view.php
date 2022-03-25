@@ -94,7 +94,7 @@
                        <!-- Select multiple-->
                        <div class="form-group"> 
                         <?php 
-                        if($transaction->cancelled != ""){
+                        if($transaction->cancelled != "" || $transaction->received_by != "" ||  $transaction->received_date != ""){
                         ?>
                         <a href="<?php echo $this->Url->build(('/transactions')); ?>" class="btn btn-success"><font color="#F7F7F7">Back to Transaction List</font></a>
                         <?php
@@ -147,7 +147,20 @@
                     <th>Quantity</th>
                     <th>QR Code</th>
                     <th>Internal Warranty Date</th>
+                    <?php 
+                    if($transaction->cancelled != ""){ //if cancelled
+                    ?>
                     <th>Action</th>
+                    <?php    
+                    }
+                    elseif($transaction->received_by != "" ||  $transaction->received_date != ""){ //if received
+                    }
+                    else{
+                    ?>
+                    <th>Action</th>
+                    <?php 
+                    }
+                    ?>
                   </tr>
                   </thead> 
                   <tbody>
@@ -165,7 +178,6 @@
                           ?>
                         </td>
                         <td><?= h($transactionItem->internal_warranty) ?></td>
-                        <td class="actions   "> 
 
                             <?php /*echo $this->Html->link(
                                 "<font color='green' size='5px'><i class='fa fa-edit'></i></font>", 
@@ -174,19 +186,28 @@
                             );  */?>
                             <?php 
                             if($transaction->cancelled != ""){
-                             echo "<font color='red'><strong>Cancelled Item</strong></font>";
+                            ?>
+                            <td>
+                              <center><font color="red">*** CANCELLED ITEM ***</font></center>  
+                            </td>
+                            <?php
+                            }
+                            elseif($transaction->received_by != "" ||  $transaction->received_date != ""){
                             }
                             else{
                             ?>
+                            <td class="actions   "> 
                             <?php echo $this->Form->postLink(
                                 "<font color='red' size='5px'><i class='fa fa-trash'></i></font>", 
                                 [ 'controller' => 'TransactionItems', 'action' => 'delete/'.$transactionItem->id.'?tid='.$transaction->id ],
                                 [ 'confirm' => __('Are you sure you want to delete # {0}?', $transactionItem->id), 'escape' => false ]//'escape' => false - convert plain text to html],   
                             );  ?> 
                             <?php 
+                            ?>
+                            </td>
+                            <?php
                             }
                             ?>
-                        </td>
                     </tr>
 
                     <?php endforeach; ?> 
@@ -213,7 +234,7 @@
                 if($counttransitemrec > 0){
                 ?>
                 <table>
-                  <tr>
+                    <tr>
                       <td colspan="12">
                         <h4>
                           <font color="#1C05F3">Total Item Quantity: 
@@ -228,10 +249,7 @@
                       </td>
                     </tr>
                     <?php 
-                    if($transaction->cancelled != ""){
-                    ?>
-                    <center><h2><font color="red">*** CANCELLED TRANSACTION ***</font></h2></center>
-                    <?php
+                    if($transaction->cancelled != ""){ //if cancelled
                     }
                     else{
                     ?>
@@ -239,8 +257,24 @@
                       <td>
                         <br>
                         <?= $this->Html->link(__('Generate Transaction Slip'), ['controller' => 'TransactionItems','action' => 'printtrans?tid='.$transaction->id], ['class' => 'button btn btn-warning']) ?>
-                        
                         <br><br>
+                      </td>
+                    </tr>
+                    <?php 
+                    }
+                    ?>
+                    <?php 
+                    if($transaction->cancelled != ""){ //if cancelled
+                    ?>
+                    <center><h2><font color="red">*** CANCELLED TRANSACTION ***</font></h2></center>
+                    <?php
+                    }
+                    elseif($transaction->received_by != "" ||  $transaction->received_date != ""){ //if already received
+                    }
+                    else{
+                    ?>
+                    <tr>
+                      <td>
                         <?php echo $this->Form->postLink(
                                 "<font color='red' size='5px'><i class='fa fa-times'> Cancel Transaction</i></font>", 
                                 [ 'controller' => 'TransactionItems', 'action' => 'canceltransaction?tid='.$this->request->getQuery('tid')],
@@ -276,7 +310,8 @@
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
-      "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+      //"lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,

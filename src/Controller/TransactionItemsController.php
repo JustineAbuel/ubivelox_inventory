@@ -30,6 +30,7 @@ class TransactionItemsController extends AppController
 
         $this->paginate = [
             'contain' => ['Transactions', 'Items'],
+            'order' => ['id' => 'desc']
         ];
         
         $transactionItems = $this->paginate($this->TransactionItems);
@@ -118,14 +119,14 @@ class TransactionItemsController extends AppController
 
                     if($transaction_type_id == 2 && $item_type != 2){ //transaction type must be purchased and item type must be external type
                         $this->Flash->error(__('Transaction Type is Purchased, Item Type must be external only, Please try again.'));
-                        return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
+                        return $this->redirect(['controller' => 'TransactionItems','action' => 'add?tid='.$this->request->getQuery('tid')]);//redirect to transaction items adding
                     }
                     else{
 
                         if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
 
                             $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
-                            return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
+                            return $this->redirect(['controller' => 'TransactionItems','action' => 'add?tid='.$this->request->getQuery('tid')]);//redirect to transaction items adding
                         }
                         else{
                             if ($this->TransactionItems->save($transactionItem)) {
@@ -303,7 +304,7 @@ class TransactionItemsController extends AppController
         ])
         ->where(['transaction_id' => $this->request->getQuery('tid')]);
 
-        $setCancelled = $this->TransactionItems->Transactions->query();
+        $setCancelled = $this->TransactionItems->Transactions->query(); //cancel transaction
         $setCancelled->update()
             ->set([
             'status' => 3, //cancelled status
@@ -312,6 +313,16 @@ class TransactionItemsController extends AppController
             ])
             ->where([
             'id' => $this->request->getQuery('tid')
+            ])
+            ->execute();
+
+        $setCancelledOutgoing = $this->TransactionItems->Outgoing->query(); //cancel outgoing items
+        $setCancelledOutgoing->update()
+            ->set([
+            'status' => 3, //cancelled status
+            ])
+            ->where([
+            'transaction_id' => $this->request->getQuery('tid')
             ])
             ->execute();
 

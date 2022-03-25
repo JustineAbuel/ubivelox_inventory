@@ -91,7 +91,8 @@ class TransactionsController extends AppController
         'type' => 'INNER',
         'conditions' => 'i.id = item_id',
         ])
-        ->where(['transaction_id' => $this->request->getQuery('tid')]);
+        ->where(['transaction_id' => $this->request->getQuery('tid')])
+        ->order(['TransactionItems.id' => 'desc']);
         //->group('i.serial_no'); //item serial no
         $counttransitemrec = $transactionItems->count(); //count requested transaction items
         //->order(['id' => 'DESC']);
@@ -132,6 +133,10 @@ class TransactionsController extends AppController
             $transaction->added_by = $this->request->getAttribute('identity')->getIdentifier(); 
 
             if ($this->Transactions->save($transaction)) {
+
+                $lastId = $this->Transactions->save($transaction); //get inserted auto increment ID
+                
+                //dd($lastId);
                 $this->Flash->success(__('The transaction has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
@@ -139,7 +144,8 @@ class TransactionsController extends AppController
                     'request' => $this->request, 
                 ]);
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$lastId->id]);//redirect to transaction main
             }
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
             $this->Common->dblogger([

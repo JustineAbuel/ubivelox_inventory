@@ -50,8 +50,13 @@ class OutgoingController extends AppController
         'conditions' => 'i.id = item_id',
         ])
         ->where([
-        'OR' => [['Outgoing.status' => 4],['Outgoing.status' => 5],['Outgoing.status' => 2]], //diplay all 4=for repair, 5=repaired, and 2=delivered items only
-        ]);
+        'OR' => [
+                ['Outgoing.status' => 4],  //4=display all for repair,
+                ['Outgoing.status' => 5],  //5=repaired,
+                ['Outgoing.status' => 6],  //6=for disposal, and
+                ['Outgoing.status' => 2]], //2=delivered items only
+        ])
+        ->order(['Outgoing.id' => 'desc']);
 
         $qrCode = new QrCode();
 
@@ -124,7 +129,7 @@ class OutgoingController extends AppController
 
             if($outgoingRec > 0){ //check if selected transaction item already exist!
                 $this->Flash->error(__('Selected Transaction Item already exist, Please try again!'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'add']); //redirect to add again
             }
             else{
 

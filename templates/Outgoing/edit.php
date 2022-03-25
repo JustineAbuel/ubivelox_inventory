@@ -46,7 +46,7 @@
                             <select name="status" class="form-control" required="">
                                 <option value="<?php echo $outgoing->status; ?>">
                                 <?php 
-                                if($outgoing->status == 2){ //delivered
+                                    if($outgoing->status == 2){ //delivered
                                     echo "Delivered";
                                 }
                                 elseif($outgoing->status == 4){ //for repair
@@ -55,6 +55,9 @@
                                 elseif($outgoing->status == 5){ //repaired
                                      echo "Repaired";
                                 }
+                                elseif($outgoing->status == 6){ //for disposal
+                                     echo "For Disposal";
+                                }
                                 else{
                                       echo "";
                                 }
@@ -62,6 +65,7 @@
                                 </option>
                                 <option value="4">For Repair</option>
                                 <option value="5">Repaired</option>
+                                <option value="6">For Disposal</option>
                             </select>
                        </div>
                    </div>
