@@ -41,8 +41,25 @@
                     <tr>
                         <td><?= $this->Number->format($user->id) ?></td>
                         <td>
-                            <?= ucfirst(h($user->lastname)) . ' '. ucfirst(h($user->firstname)) . ' ' .ucfirst(h($user->middlename[0])) . '. ' ?>
-                            <p class="m-0"><small><?= h($user->email) ?></small></p>
+                          <div class="media"> 
+                            <?php 
+                              $imageclass = 'rounded-circle align-self-center mr-3';
+                              $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+                              if(!$user->image){      
+                                echo $this->Html->image('avatar.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+
+                              }else{
+                                echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                              
+                              }
+                            ?>
+                            <div class="media-body">
+                              <h6 class="mt-0"><?= ucfirst(h($user->lastname)) . ' '. ucfirst(h($user->firstname)) . ' ' .ucfirst(h($user->middlename[0])) . '. ' ?></h6>
+                              <p class="m-0"><small><?= h($user->email) ?></small></p>
+                            </div>
+                          </div>
+                            
+                            
                         </td>
                         <td><?= h($user->username) ?></td> 
                         <td><?= h($user->contactno) ?></td>  

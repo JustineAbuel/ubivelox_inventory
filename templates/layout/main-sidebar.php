@@ -1,5 +1,9 @@
 <?php 
-$user = $this->request->getAttribute('identity');
+// $user =  $this->request->getAttribute('identity');
+// $user = $this->Identity->get(); 
+$user = $this->request->getAttribute('authentication')->getIdentity();
+// dd($user->image);
+      // dd($user);
 ?>
 
   <!-- Main Sidebar Container -->
@@ -14,13 +18,21 @@ $user = $this->request->getAttribute('identity');
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex active">
         <div class="image"> 
            
-      <?= $this->Html->image('avatar.png', ['width' => '200px','alt'=>'User img' ]); ?> 
+      <?php  
+      $imageclass = 'rounded-circle align-self-center';
+      $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+      if(!$user->image){      
+        echo $this->Html->image('avatar.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+      }else{
+        echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+      }
+      ?>
         </div>
         <div class="info">
-          <a href="/users/change-password" class="d-block"><?= ucfirst($user->firstname) . ' ' . ucfirst($user->lastname)?></a>
+          <a href="/users/profile" class="d-block"><?= ucfirst($user->firstname) . ' ' . ucfirst($user->lastname)?></a>
         </div>
       </div>
 

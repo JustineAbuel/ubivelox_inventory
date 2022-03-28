@@ -112,6 +112,101 @@ class UsersController extends AppController
         } 
         $this->set(compact('user'));
     }
+    public function profile()
+    {
+         
+        $this->Authorization->skipAuthorization();
+        
+        // $user = $this->Users->get($id, [
+        //     'contain' => [],
+        // ]); 
+        $user = $this->Users->get($this->Authentication->getIdentity()->getIdentifier() );
+        $this->Authorization->authorize($user, 'edit');
+ 
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $image = $this->request->getData('image_file');
+            // debug($image);
+            // dd($imageName);
+            if (!$user->getErrors()) {
+                // never trust anything in `$image` if you haven't properly validated it!!!
+                $image = $this->request->getData('image_file');
+                $fileName = $image->getClientFilename(); 
+
+                if(!is_dir(WWW_ROOT.'img/uploads/profilepicture'.DS.$user->id))
+                mkdir(WWW_ROOT.'img/uploads/profilepicture'.DS.$user->id);
+
+                if($fileName){
+                    $image->moveTo(WWW_ROOT . 'img/uploads/profilepicture'. DS .$user->id.'/'. DS . $fileName);
+                
+                    $user->image = $fileName;
+                }
+            }
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                $this->Authentication->setIdentity($user);
+                // dd($request->getAttribute('identity'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated user profile with id = '. $user->id ,
+                    'request' => $this->request, 
+                ]);
+
+                return $this->redirect(['action' => 'profile']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update profile' ,
+                'request' => $this->request, 
+            ]);
+        }
+        $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
+        $this->set(compact('user', 'userRole'));
+    }
+    public function profilePicture()
+    {
+           
+        $user = $this->Users->get($this->Authentication->getIdentity()->getIdentifier() );
+        $this->Authorization->authorize($user, 'edit');
+ 
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData(),['validate' => 'image']);
+            $image = $this->request->getData('image_file');
+            // debug($image);
+            // dd($imageName);
+            if (!$user->getErrors()) {
+                // never trust anything in `$image` if you haven't properly validated it!!!
+                $image = $this->request->getData('image_file');
+                $fileName = $image->getClientFilename(); 
+                if($fileName){
+                    $image->moveTo(WWW_ROOT . 'img' . DS . $fileName);
+                
+                    $user->image = $fileName;
+                }
+            } 
+            
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated user profile picture with id = '. $user->id ,
+                    'request' => $this->request, 
+                ]);
+                $this->Authentication->setIdentity($user);
+                return $this->redirect(['action' => 'profile']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'Unable to update profile' ,
+                'request' => $this->request, 
+            ]);
+        }
+        // $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
+        $this->set(compact('user', 'userRole'));
+    }
     /**
      * Index method
      *
@@ -187,22 +282,24 @@ class UsersController extends AppController
             // $user->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
             // $user->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ; 
  
-            $http = new Client();
-            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USERS', [           
+            // $http = new Client();
+            // $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USERS', [           
 
             
-                'username' => $user->username, 
-                'email' => $user->email, 
-                'firstname' => $user->firstname,
-                'middlename' => $user->middlename,
-                'lastname' => $user->lastname,
-                'contactno' => $user->contactno,
-                'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
-                'role_id' => $user->role_id,
-                'password' => $this->request->getData('password') 
-            ]); 
-            // dd($response->getJson());
-            if ($response->getJson()['Status'] == 0) {
+            //     'username' => $user->username, 
+            //     'email' => $user->email, 
+            //     'firstname' => $user->firstname,
+            //     'middlename' => $user->middlename,
+            //     'lastname' => $user->lastname,
+            //     'contactno' => $user->contactno,
+            //     'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
+            //     'role_id' => $user->role_id,
+            //     'password' => $this->request->getData('password') 
+            // ]); 
+            // // dd($response->getJson());
+            // if ($response->getJson()['Status'] == 0) {
+                
+            if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
