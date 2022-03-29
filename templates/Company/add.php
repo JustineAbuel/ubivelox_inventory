@@ -49,7 +49,7 @@
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group">
-                        <?=  $this->Form->control('contact no', ['class' => 'form-control', 'placeholder' => 'Contact No']); ?>
+                        <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact No']); ?>
                        
                        </div>
                    </div>
