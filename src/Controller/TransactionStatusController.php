@@ -187,21 +187,21 @@ class TransactionStatusController extends AppController
             $this->Flash->error(__('The transaction status could not be deleted. Please, try again.'));
         }
         */
-        $http = new Client();
-        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_STATUS/'.$id);  
-        // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_STATUS/'.$id);  
-        if ($response->getJson()['Status'] == 0) {
+        // $http = new Client();
+        // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_STATUS/'.$id);  
+        // // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_STATUS/'.$id);  
+        // if ($response->getJson()['Status'] == 0) {
  
+        if ($this->TransactionStatus->delete($transactionStatus)) {
             $this->Flash->success(__('The transaction status has been deleted.'));
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Successfully deleted transaction status with id = '. $id ,
                 'request' => $this->request, 
             ]);
-        }
-        else {
-            //$this->Flash->error(__('The transaction status could not be deleted. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+        } else {
+            $this->Flash->error(__('The transaction status could not be deleted. Please, try again.'));
+            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to delete transaction status' ,

@@ -199,9 +199,11 @@ class UserRolesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $userRole = $this->UserRoles->get($id);
         $this->Authorization->authorize($userRole, 'delete');
-        $http = new Client();
-        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_USER_ROLES/'.$id); 
-        if ($response->getJson()['Status'] == 0) {
+        // $http = new Client();
+        // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_USER_ROLES/'.$id); 
+        // if ($response->getJson()['Status'] == 0) {
+            
+        if ($this->UserRoles->delete($userRole)) {
             $this->Flash->success(__('The user role has been deleted.'));
             
             $this->Common->dblogger([

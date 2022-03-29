@@ -193,12 +193,12 @@ class CategoriesController extends AppController
         $category = $this->Categories->get($id);
         $this->Authorization->authorize($category, 'delete' );
 
-        $http = new Client();
-        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_CATEGORIES/'.$id);  
+        // $http = new Client();
+        // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_CATEGORIES/'.$id);  
         
-        if ($response->getJson()['Status'] == 0) {
+        // if ($response->getJson()['Status'] == 0) {
 
-        // if ($this->Categories->delete($category)) {
+        if ($this->Categories->delete($category)) {
             $this->Flash->success(__('The category has been deleted.'));
             $this->Common->dblogger([
                 //change depending on action
@@ -206,9 +206,9 @@ class CategoriesController extends AppController
                 'request' => $this->request, 
             ]);
         } else {
-            // $this->Flash->error(__('The category could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The category could not be deleted. Please, try again.'));
             
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to delete category' ,

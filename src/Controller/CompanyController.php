@@ -189,11 +189,12 @@ class CompanyController extends AppController
         $company = $this->Company->get($id);
         $this->Authorization->authorize($company, 'delete' );
 
-        $http = new Client();
-        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_COMPANY/'.$id);  
+        // $http = new Client();
+        // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_COMPANY/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_COMPANY/'.$id);  
-        if ($response->getJson()['Status'] == 0) {
+        // if ($response->getJson()['Status'] == 0) {
  
+        if ($this->Company->delete($company)) {
             $this->Flash->success(__('The company has been deleted.'));
             $this->Common->dblogger([
                 //change depending on action
@@ -202,8 +203,8 @@ class CompanyController extends AppController
             ]);
         }
         else {
-            //$this->Flash->error(__('The company could not be deleted. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The company could not be deleted. Please, try again.'));
+            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to delete company' ,

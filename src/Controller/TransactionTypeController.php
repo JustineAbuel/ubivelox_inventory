@@ -188,10 +188,11 @@ class TransactionTypeController extends AppController
             $this->Flash->error(__('The transaction type could not be deleted. Please, try again.'));
         }
         */
-        $http = new Client();
-        $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_TYPE/'.$id);  
-        // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_TYPE/'.$id);  
-        if ($response->getJson()['Status'] == 0) {
+        // $http = new Client();
+        // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_TRANSACTION_TYPE/'.$id);  
+        // // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_TRANSACTION_TYPE/'.$id);  
+        // if ($response->getJson()['Status'] == 0) {
+        if ($this->TransactionType->delete($transactionType)) {
  
             $this->Flash->success(__('The transaction type has been deleted.'));
             $this->Common->dblogger([
@@ -201,8 +202,8 @@ class TransactionTypeController extends AppController
             ]);
         }
         else {
-            //$this->Flash->error(__('The transaction type could not be deleted. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The transaction type could not be deleted. Please, try again.'));
+            // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to delete transaction type' ,
