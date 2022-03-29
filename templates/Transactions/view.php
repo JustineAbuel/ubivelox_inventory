@@ -323,10 +323,9 @@
   </div>
   <!-- /.content-wrapper -->
 
-<!-- START - This is needed to show image in a popup upon image click -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css">
+<!-- START - This is needed to show image in a popup upon image click --> 
+<?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
+<?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
 <!-- END - This is needed to show image in a popup upon image click -->
 
 <script>
