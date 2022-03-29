@@ -130,61 +130,32 @@
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
+                  
+                <?php foreach($topItems as $topItem):?>
                   <li class="item">
-                    <div class="product-img"> 
-                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
+                    <div class="product-img mr-2">  
+                      <?php 
+                          $imageclass = 'img-size-25'; 
+                          if(!$topItem->image){      
+                            echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $topItem->item_name  ]); 
+
+                          }else{
+                            echo $this->Html->image('uploads/itemimages/'.$topItem->image, ['class' => $imageclass, 'alt'=> $topItem->item_name ]);   
+                          
+                          }
+                        ?>
                     </div>
                     <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title">Samsung TV
-                        <span class="badge badge-warning float-right">$1800</span></a>
+                      <a href="javascript:void(0)" class="product-title"><?= $topItem->item_name?>
+                        <span class="badge badge-warning float-right"><?= $topItem->quantity?></span></a>
                       <span class="product-description">
-                        Samsung 32" 1080p 60Hz LED Smart HDTV.
+                        <?= $topItem->item_description?>
                       </span>
                     </div>
                   </li>
-                  <!-- /.item -->
-                  <li class="item">
-                    <div class="product-img">
-                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
-                    </div>
-                    <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title">Bicycle
-                        <span class="badge badge-info float-right">$700</span></a>
-                      <span class="product-description">
-                        26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                      </span>
-                    </div>
-                  </li>
-                  <!-- /.item -->
-                  <li class="item">
-                    <div class="product-img">
-                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
-                    </div>
-                    <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title">
-                        Xbox One <span class="badge badge-danger float-right">
-                        $350
-                      </span>
-                      </a>
-                      <span class="product-description">
-                        Xbox One Console Bundle with Halo Master Chief Collection.
-                      </span>
-                    </div>
-                  </li>
-                  <!-- /.item -->
-                  <li class="item">
-                    <div class="product-img">
-                      <?= $this->Html->image('item-default.png', ["class"=>"img-size-25", "alt"=>"Item"]); ?> 
-                    </div>
-                    <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title">PlayStation 4
-                        <span class="badge badge-success float-right">$399</span></a>
-                      <span class="product-description">
-                        PlayStation 4 500GB Console (PS4)
-                      </span>
-                    </div>
-                  </li>
-                  <!-- /.item -->
+                  <?php endforeach ?> 
+                  <!-- /.item --> 
+
                 </ul>
               </div>
               <!-- /.card-body -->

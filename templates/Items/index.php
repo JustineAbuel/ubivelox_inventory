@@ -68,13 +68,27 @@
                       $tr_class = "table-danger";
                     }
                     ?>
-                <tr class="<?php echo $tr_class; ?>"> 
+                <tr class="<?php echo $tr_class; ?>">  
                     <td>
-                      
-                      <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
-                       <b><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?> </b></small>
-                      <blockquote class="mt-1  mx-0 bg-transparent"><?= h($item->item_name) ?></blockquote>
-                    </td> 
+                      <div class="media"> 
+                        <?php 
+                          $imageclass = 'rounded-circle align-self-center mr-3';
+                          $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+                          if(!$item->image){      
+                            echo $this->Html->image('item-default.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+
+                          }else{
+                            echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                          
+                          }
+                        ?>
+                        <div class="media-body">
+                          <h6 class="mt-0"> <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
+                          <b><?= $item->has('subcategory') ?  $item->subcategory->subcategory_name  : '' ?> </b></small></h6>
+                          <blockquote class="mt-1  mx-0 bg-transparent"><?= h($item->item_name) ?></blockquote>
+                        </div>
+                      </div> 
+                    </td>
                     <td><?= $item->serial_no ?></td>
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>

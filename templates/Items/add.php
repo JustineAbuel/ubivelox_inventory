@@ -20,19 +20,30 @@
               <!-- /.card-header -->
               <div class="card-body"> 
                 <?= $this->Form->create($item, ['type' => 'file']) ?> 
-                
-                
-                <!-- <div class="row custom-padding">
-                   <div class="col-sm-6"> 
-                       <div class="form-group">
-                            <div class="custom-file">
-                           <? //$this->Form->control('image', ['type' => 'file','class' => 'custom-file-input', 'placeholder' => 'Image', 'label' => 'Choose file']); ?>
-                           <label class="custom-file-label" for="customFile">Choose file</label>
-                         
+                <div class="row custom-padding">
+                    <div class="col-sm-6"> 
+                        <div class="form-group"> 
+                            <?php 
+                            
+                            $imageclass = ' align-self-center mr-3';
+                            $imagestyle = 'height:5rem;width:5rem;object-fit: cover;';
+                            if(!$item->image){      
+                                echo $this->Html->image('item-default.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]); 
+
+                            }else{
+                                echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]);   
+                            
+                            }
+                            ?>
+                            <div class="custom-file mt-3">
+                                <?= $this->Form->control('image_file', ['type' => 'file','class' => 'custom-file-input','id' => 'customFile', 'placeholder' => 'Image', 'label'=> false]); ?> 
+                                <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
-                       </div>
-                   </div> 
-                </div> -->
+                        </div>
+                    </div> 
+                </div>
+                 
+
                 <div class="row custom-padding">
                    <div class="col-sm-6">
                        <!-- text input -->
@@ -232,7 +243,20 @@
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-<script>
+<script> 
+
+document.getElementById("customFile").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("imageRender").src = e.target.result;
+    };
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+}; 
+
 $(document).ready(function(){
     
     $('#category-id').change(() => {

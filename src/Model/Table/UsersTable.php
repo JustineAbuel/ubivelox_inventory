@@ -128,14 +128,14 @@ class UsersTable extends Table
         $validator
             ->allowEmptyFile('image') 
             ->add('image', [
-                'mimeType' => [
-                    'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
-                    'message' => '.PNG, .JPG, .JPEG file extensions only'] 
-                ], 
-                'fileSize' => [
-                    'rule' => ['fileSize', '<=', '10MB' ],
-                    'message' => 'Image size must be less than 1'
-                ]
+                    'mimeType' => [
+                        'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
+                        'message' => '.PNG, .JPG, .JPEG file extensions only'] 
+                    ], 
+                    'fileSize' => [
+                        'rule' => ['fileSize', '<=', '10MB' ],
+                        'message' => 'Image size must be less than 1'
+                    ]
                 ]);
         return $validator;
     }

@@ -124,8 +124,7 @@ class UsersController extends AppController
         $this->Authorization->authorize($user, 'edit');
  
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            $image = $this->request->getData('image_file');
+            $user = $this->Users->patchEntity($user, $this->request->getData()); 
             // debug($image);
             // dd($imageName);
             if (!$user->getErrors()) {
