@@ -12,7 +12,7 @@
           <?= $this->Flash->render() ?>
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"><legend><?= __('Add User') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('Add User') ?> </h3> 
               </div>
               <!-- /.card-header -->
               <div class="card-body">

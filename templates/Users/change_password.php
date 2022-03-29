@@ -12,7 +12,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"><legend><?= __('Change Password') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('Change Password') ?> </h3> 
               </div>
               <!-- /.card-header -->
               <div class="card-body">

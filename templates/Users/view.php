@@ -13,7 +13,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title"><legend><?= __('User Details') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('User Details') ?> </h3> 
                      
  
                 
@@ -44,9 +44,14 @@
                                 echo $this->Html->image('avatar.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
 
                               }else{
-                                echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
-                              
-                              }
+                            ?>
+                                <a data-fancybox="gallery" class="primary-btn" href="/img/uploads/profilepicture/<?= $user->id ?>/<?= $user->image; ?>">
+                                  <?php
+                                    echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                                  ?>
+                                </a>
+                            <?php
+                                }
                             ?>
                             <div class="media-body">
                               <h6 class="mt-0"><?= ucfirst(h($user->lastname)) . ' '. ucfirst(h($user->firstname)) . ' ' .ucfirst(h($user->middlename[0])) . '. ' ?></h6>
@@ -102,3 +107,9 @@
 
   </div>
   <!-- /.content-wrapper -->
+  
+
+<!-- START - This is needed to show image in a popup upon image click --> 
+<?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
+<?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
+<!-- END - This is needed to show image in a popup upon image click -->

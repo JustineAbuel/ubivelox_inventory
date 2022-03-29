@@ -14,7 +14,7 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Edit Item</h3><br><br>
+                <h3 class="card-title">Edit Item</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

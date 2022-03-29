@@ -21,7 +21,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title"><legend><?= __('Audit Trails') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('Audit Trails') ?> </h3> 
                      
                 
               </div>
@@ -30,7 +30,7 @@
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>
-                     
+                      
                     <th><?= ucfirst('channel') ?></th>
                     <th><?= ucfirst('IP Address') ?></th>
                     <th><?= ucfirst('username') ?></th>
@@ -44,11 +44,11 @@
                   </thead> 
                   <tbody>
                     <?php foreach ($auditTrails as $auditTrail): ?>
-                    <tr> 
-                        <td><?= h($auditTrail->channel) ?></td>
+                    <tr>  
+                        <td><?= h($auditTrail->channel == 1 ?'Web': 'Mobile')  ?></td>
                         <td><?= h($auditTrail->ip_address) ?></td>
                         <td><?= h($auditTrail->username) ?></td>
-                        <td><?= h($auditTrail->role) ?></td>
+                        <td><?= h($auditTrail->user_roles['role_name']) ?></td>
                         <td><?= h($auditTrail->directory) ?></td>
                         <td><?= h($auditTrail->action) ?></td>
                         <td><?= h($auditTrail->status) ?></td>
@@ -87,9 +87,9 @@
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
-      "ordering": false,
-      "lengthMenu": [[100, 200, 300, -1],
-        [100, 200, 300, "All"]]
+      "ordering": false, 
+      "lengthChange": true,      
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,

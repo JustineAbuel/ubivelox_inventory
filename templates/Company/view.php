@@ -14,7 +14,7 @@
           
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title"><legend><?= __('Company Details') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('Company Details') ?> </h3> 
                      
  
                 

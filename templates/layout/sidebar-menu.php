@@ -3,7 +3,7 @@
     $dashb = lcfirst($this->request->getParam('action')); 
     $user = $this->request->getAttribute('identity')->getOriginalData(); 
 ?>
-      <nav class="mt-2">
+      <nav class="mt-2 pt-2" style="border-top:1px solid #4f5962">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -113,7 +113,18 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/users'), ['controller' => 'UsersController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'users' ? 'active': '' ?>">
+            <a href="<?php echo $this->Url->build(('/users'), ['controller' => 'UsersController','action' => 'index']); ?>" class="nav-link 
+             
+              <?php
+                $color = '';
+                  $arr = ['profile', 'changePassword'];
+                  if($currentPath == 'users'){
+                    if(!in_array($actionpath, $arr)) { 
+                      echo 'bg-primary rounded-sm';
+                      $color = 'text-white';
+                    }
+                  } 
+              ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Users

@@ -16,7 +16,7 @@
 
           <div class="card">
             <div class="card-header     "> 
-              <h3 class="card-title"><legend><?= __('Add User Role ') ?></legend></h3> 
+              <h3 class="card-title"> <?= __('User Role details ') ?> </h3> 
                    
 
               

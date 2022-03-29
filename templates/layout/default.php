@@ -18,26 +18,46 @@
   <?php include("main-sidebar.php"); ?>
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <?php
-    // $this->Breadcrumbs->add(
-    //     'Home',
-    //     ['controller' => 'Items', 'action' => 'dashboard']
-    // );
-    // echo $this->Breadcrumbs->render();
+    <?php 
+    $currentPath = lcfirst($this->request->getParam('controller'));
+    $actionpath = lcfirst($this->request->getParam('action'));  
+    
+    $wildcard = $this->request->getParam('pass')  ? $this->request->getParam('pass')[0] :null ;
+    $this->Breadcrumbs->add([
+        ['title' => 'Home', 'url'=> ['controller' => 'Items', 'action' => 'dashboard'], 'options' => ['class'=>"breadcrumb-item"]],
+        ['title' => ucfirst($currentPath), 'url' => ['controller' => $currentPath, 'action' => 'index'], 'options' => ['class'=>"breadcrumb-item"]]
+    ]);
+    $withwildcard = $wildcard ?  ' - ' . $wildcard : '';
+    $this->Breadcrumbs->insertAfter(
+        ucfirst($currentPath),
+        ucfirst($actionpath).$withwildcard,  ['controller' => $currentPath, 'action' => $actionpath, $wildcard ], ['class'=>"breadcrumb-item", 'innerAttrs' => [
+          'class' => 'text-dark', 
+      ]]
+    ); 
+    
+    // $options = ['class'=>"breadcrumb-item active"];
+    // if($wildcard){
+    //   $this->Breadcrumbs->insertAfter(
+    //     ucfirst($actionpath),
+    //     $wildcard,  ['controller' => $currentPath, 'action' => $actionpath, $wildcard ], ['class'=>"breadcrumb-item active"]
+    //   ); 
+    // }
+    
+    $this->Breadcrumbs->setTemplates([
+        'wrapper' => '<nav class="col-sm-6"><ol class="breadcrumb float-sm-right" {{attrs}}>{{content}}</ol></nav>',
+        'item' => ' <li  {{attrs}}><a href="{{url}}"{{innerAttrs}}>{{title}}</a></li>{{separator}}',
+        'itemWithoutLink' => '<li {{attrs}}><span{{innerAttrs}}>{{title}}</span></li>{{separator}}',
+    ]);
   
     ?>
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0"></h1>
+            <h1 class="m-0"><?=  ucfirst($currentPath) ?></h1>
           </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-          </div><!-- /.col -->
+          <?= $this->Breadcrumbs->render();?>
+           
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

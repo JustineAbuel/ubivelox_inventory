@@ -104,7 +104,27 @@ class ItemsController extends AppController
         $latestitems = $this->Items->find('all', ['order' => ['id' => 'DESC'], 'limit' => 4])->all();
 
         // dd($latestitems);
-
+// $outgoing = $this->Items->Outgoing; 
+        // $query = $outgoing->find()
+        //     ->select([
+        //         'id',
+        //         'transaction_id',
+        //         'item_id',
+        //         'month' => $query->func()->month([
+        //             'Outgoing.date_added' => 'identifier'
+        //         ]),
+        //         'day' => $query->func()->day([
+        //             'Outgoing.date_added' => 'identifier'
+        //         ]),
+        //         'totalQuantity' => $query->func()->sum('TransactionItems.quantity'),
+        //     ])
+        //     // // ->select($outgoing->TransactionItems)
+        //     // ->select($outgoing->Transactions)
+        //     ->contain(['TransactionItems'])
+        //     // ->where(['Outgoing.transaction_id = TransactionItems.transaction_id'])
+            
+        //     ->group([ 'day'])->all();
+        //     dd($query); 
         $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'outgoing', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem' , 'latestitems'));
  
     }
@@ -359,7 +379,7 @@ class ItemsController extends AppController
         }
         
         
-        $quality =  ['BRAND NEW', 'SECOND HAND']; 
+        $quality =  ['BRAND NEW', 'USED']; 
         $categories = $this->Categories->find('list')->innerJoinWith('Subcategories')->all();
         $subcategories = $this->Items->Subcategories->find('list')->all(); 
         $company = $this->Items->Company->find('list', ['limit' => 200])->all();

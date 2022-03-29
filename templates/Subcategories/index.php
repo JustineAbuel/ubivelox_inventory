@@ -20,7 +20,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                    <h3 class="card-title "><?= $title ?></h3> 
+                    <h3 class="card-title ">List of Subcategories</h3> 
                     
     <?= $this->Html->link(__('New Subcategory'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
@@ -98,7 +98,8 @@
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
-      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+      "lengthChange": true,      
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,

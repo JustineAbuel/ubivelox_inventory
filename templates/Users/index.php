@@ -16,7 +16,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title"><legend><?= __('Add User') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('List of Users') ?> </h3> 
                     
     <?= $this->Html->link(__('Add New User'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
@@ -41,7 +41,7 @@
                     <tr>
                         <td><?= $this->Number->format($user->id) ?></td>
                         <td>
-                          <div class="media"> 
+                          <div class="media">  
                             <?php 
                               $imageclass = 'rounded-circle align-self-center mr-3';
                               $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
@@ -49,9 +49,14 @@
                                 echo $this->Html->image('avatar.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
 
                               }else{
-                                echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
-                              
-                              }
+                            ?>
+                                <a data-fancybox="gallery" class="primary-btn" href="/img/uploads/profilepicture/<?= $user->id ?>/<?= $user->image; ?>">
+                                  <?php
+                                    echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                                  ?>
+                                </a>
+                            <?php
+                                }
                             ?>
                             <div class="media-body">
                               <h6 class="mt-0"><?= ucfirst(h($user->lastname)) . ' '. ucfirst(h($user->firstname)) . ' ' .ucfirst(h($user->middlename[0])) . '. ' ?></h6>
@@ -127,14 +132,21 @@
   <!-- /.content-wrapper -->
 
  
+
+<!-- START - This is needed to show image in a popup upon image click --> 
+<?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
+<?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
+<!-- END - This is needed to show image in a popup upon image click -->
+
 <script>
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
-      // 'order': false,
-      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+      // 'order': false,  
+      "lengthChange": true,      
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
   });
 </script>

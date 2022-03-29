@@ -28,30 +28,39 @@
                    </div>
                    <div class="col-sm-6">
                        <!-- text input -->
-                       <div class="form-group">
-                        <?=  $this->Form->control('address', ['class' => 'form-control', 'placeholder' => 'Address']); ?>
-                       
-                       </div>
-                   </div>
-
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                       <div class="form-group">
-                        <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact No']); ?>
-                       
-                       </div>
-                   </div>
-
-                   <div class="col-sm-6">
-                       <!-- text input -->
                        <?php 
                        $r_options = array('1' => 'Client', '2' => 'Supplier');
                        ?>
                        <strong>Company Type</strong><br>
                        <div class="form-group">
-                        <?=  $this->Form->radio('company_type', $r_options); ?>
+                       <?php 
+                        $this->Form->setTemplates([
+                            'nestingLabel' => '<div class="form-check form-check-inline">{{input}}<label{{attrs}} class="my-auto">{{text}}</label></div>',
+                            'formGroup' => '{{label}}{{input}}',
+                        ]);  
+                        echo  $this->Form->radio('company_type', $r_options ,[ 'type'=>'radio', 'class'=> 'form-check-input',  ] );
+                         ?>     
                        </div>
                    </div>
+                </div>
+                
+                <div class="row custom-padding">
+                   
+                   <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                        <?=  $this->Form->control('contact no', ['class' => 'form-control', 'placeholder' => 'Contact No']); ?>
+                       
+                       </div>
+                   </div>
+ 
+                    <div class="col-sm-6">
+                       <!-- text input -->
+                       <div class="form-group">
+                        <?=  $this->Form->control('address', ['class' => 'form-control', 'placeholder' => 'Address']); ?>
+                       
+                       </div>
+                    </div>
                 </div> 
 
                 <div class="row custom-padding">

@@ -31,7 +31,11 @@ class AuditTrailsController extends AppController
   
          
 
-        $auditTrails = $this->AuditTrails->find()->order(['id' => 'DESC'])->all();
+        $auditTrails = $this->AuditTrails->find('all', ['limit' => 20])
+            ->select(['user_roles.role_name'])
+            ->select($this->AuditTrails)
+            ->innerJoin(['user_roles'])
+            ->where(['AuditTrails.role = user_roles.id'])->order(['AuditTrails.id' => 'DESC'])->all(); 
 
         $this->set(compact('auditTrails'));
     }

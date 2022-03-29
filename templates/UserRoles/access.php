@@ -16,7 +16,7 @@
         <?= $this->Flash->render() ?>
           <div class="card">
             <div class="card-header     "> 
-              <h3 class="card-title"><legend><?= __('Manage User Role Access ') ?></legend></h3> 
+              <h3 class="card-title"> <?= __('Manage User Role Access ') ?> </h3> 
                    
 
               

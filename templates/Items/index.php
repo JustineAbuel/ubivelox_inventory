@@ -78,9 +78,14 @@
                             echo $this->Html->image('item-default.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
 
                           }else{
-                            echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
-                          
-                          }
+                        ?>
+                            <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $item->image; ?>">
+                              <?php
+                                echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                              ?>
+                            </a>
+                        <?php
+                            }
                         ?>
                         <div class="media-body">
                           <h6 class="mt-0"> <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
@@ -169,6 +174,12 @@
  
 
 
+
+<!-- START - This is needed to show image in a popup upon image click --> 
+<?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
+<?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
+<!-- END - This is needed to show image in a popup upon image click -->
+
 <script>
 $( document ).ready(function() {
     $('#addQuantityModal').on('hidden.bs.modal', function () {
@@ -220,7 +231,8 @@ $(function () {
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
     "ordering": false,
     "paging":   true,
-    "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+    "lengthChange": true,      
+    "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
   }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
 
   

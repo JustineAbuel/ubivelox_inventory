@@ -13,7 +13,11 @@
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"><legend><?= __('Edit User') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('Edit Profile') ?> </h3> 
+                
+                <?= $this->Html->link(__('Change passowrd'), ['action' => 'change-password'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+ 
+                
               </div>
               <!-- /.card-header -->
               <div class="card-body">

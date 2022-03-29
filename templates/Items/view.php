@@ -70,16 +70,21 @@
                 <tr class="<?php echo $tr_class; ?>"> 
                     <td>
                       <div class="media"> 
-                        <?php 
-                          $imageclass = '  align-self-center mr-3';
+                      <?php 
+                          $imageclass = 'rounded-circle align-self-center mr-3';
                           $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
                           if(!$item->image){      
                             echo $this->Html->image('item-default.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
 
                           }else{
-                            echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
-                          
-                          }
+                        ?>
+                            <a data-fancybox="gallery" class="primary-btn" href="/img/uploads/itemimages/<?php echo $item->image; ?>">
+                              <?php
+                                echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                              ?>
+                            </a>
+                        <?php
+                            }
                         ?>
                         <div class="media-body">
                           <h6 class="mt-0"> <small> <b><?= $item->has('category') ?  $item->category->category_name  : '' ?></b>  > 
@@ -164,6 +169,11 @@
   </div>
 </div> 
  
+
+<!-- START - This is needed to show image in a popup upon image click --> 
+<?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
+<?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
+<!-- END - This is needed to show image in a popup upon image click -->
 
 
 <script>

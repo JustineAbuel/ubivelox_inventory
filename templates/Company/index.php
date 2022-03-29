@@ -17,7 +17,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                <h3 class="card-title"><legend><?= __('Company') ?></legend></h3> 
+                <h3 class="card-title"> <?= __('List of Company') ?> </h3> 
                     
     <?= $this->Html->link(__('Add New Company'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
@@ -109,8 +109,8 @@
     $("#example1").DataTable({
       "responsive": true, "lengthChange": true, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      "paging":   true,
-      //"lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
+      "paging":   true, 
+      "lengthChange": true,      
       "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({

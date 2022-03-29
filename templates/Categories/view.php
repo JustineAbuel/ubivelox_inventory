@@ -16,7 +16,7 @@
 
             <div class="card">
               <div class="card-header     "> 
-                    <h3 class="card-title ">Category</h3> 
+                    <h3 class="card-title ">Category details</h3> 
                     
     <?= $this->Html->link(__('New Category'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
  
