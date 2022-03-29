@@ -148,7 +148,7 @@ class TransactionStatusController extends AppController
     
             if ($response->getJson()['Status'] == 0) {
             // if ($this->TransactionType->save($transactionStatus)) {
-                $this->Flash->success(__('The transaction type has been saved.'));
+                $this->Flash->success(__('The transaction status has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
                     'message' => 'Successfully updated transaction status with id = '. $transactionStatus->id ,
