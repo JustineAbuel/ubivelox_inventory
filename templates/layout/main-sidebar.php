@@ -46,7 +46,7 @@ $user = $this->request->getAttribute('identity')->getOriginalData();
           ?>
         </div>
         <div class="info">
-          <a href="/users/profile" class="d-block <?= $color ?>"><?= ucfirst($user->firstname) . ' ' . ucfirst($user->lastname)?></a>
+          <a href="users/profile" class="d-block <?= $color ?>"><?= ucfirst($user->firstname) . ' ' . ucfirst($user->lastname)?></a>
         </div>
       </div>
 

@@ -132,7 +132,7 @@
             </a>
           </li>  
           <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'user-roles' ? 'active': '' ?>">
+            <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'userRoles' ? 'active': '' ?>">
               <i class="nav-icon fas fa-user-tag"></i>
               <p>
                 User Roles
