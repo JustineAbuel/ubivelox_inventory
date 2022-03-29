@@ -91,44 +91,21 @@ class ItemsController extends AppController
                 'Outgoing.date_added' => 'identifier'
             ]),
             'totalQuantity' => $query->func()->sum('Outgoing.quantity')
-        ])
-            // ->join([
-            //     'table' => 'transaction_items',
-            //     'alias' => 'TransactionItems',
-            //     'type' => 'INNER',
-            //     'conditions' => 'TransactionItems.transaction_id = Outgoing.transaction_id',
-            //     ])
+        ]) 
         ->group(['day'])->all();
-        // dd($outgoing);
- 
-        // $outgoing = $this->Items->Outgoing; 
-        // $query = $outgoing->find()
-        //     ->select([
-        //         'id',
-        //         'transaction_id',
-        //         'item_id',
-        //         'month' => $query->func()->month([
-        //             'Outgoing.date_added' => 'identifier'
-        //         ]),
-        //         'day' => $query->func()->day([
-        //             'Outgoing.date_added' => 'identifier'
-        //         ]),
-        //         'totalQuantity' => $query->func()->sum('TransactionItems.quantity'),
-        //     ])
-        //     // // ->select($outgoing->TransactionItems)
-        //     // ->select($outgoing->Transactions)
-        //     ->contain(['TransactionItems'])
-        //     // ->where(['Outgoing.transaction_id = TransactionItems.transaction_id'])
-            
-        //     ->group([ 'day'])->all();
-        //     dd($query); 
+        // dd($outgoing); 
         
-        $topItems = $this->Items->find('all',[
-            'quantity' => array('quantity' => 'MAX(Items.quantity)'),
-            'limit' => 4
-         ])->all();  
+        // items that has highest stocks
+        // $topItems = $this->Items->find('all',[
+        //     'quantity' => array('quantity' => 'MAX(Items.quantity)'),
+        //     'limit' => 4
+        //  ])->all();  
 
-        $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'outgoing', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem' , 'topItems'));
+        $latestitems = $this->Items->find('all', ['order' => ['id' => 'DESC'], 'limit' => 4])->all();
+
+        // dd($latestitems);
+
+        $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'outgoing', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem' , 'latestitems'));
  
     }
 

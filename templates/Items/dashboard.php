@@ -95,7 +95,7 @@
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="fas fa-chart-pie mr-1"></i>
-                  Sales
+                  Ins and Outs 
                 </h3>
                 <div class="card-tools"> 
                 </div>
@@ -116,7 +116,7 @@
           <section class="col-lg-5 connectedSortable">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Recently Added Products</h3>
+                <p class="card-title">Recently Added Items</p>
 
                 <!-- <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -125,31 +125,31 @@
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
                   </button>
-                </div> -->
+                </div> --> 
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                   
-                <?php foreach($topItems as $topItem):?>
+                <?php foreach($latestitems as $latestitem):?>
                   <li class="item">
                     <div class="product-img mr-2">  
                       <?php 
                           $imageclass = 'img-size-25'; 
-                          if(!$topItem->image){      
-                            echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $topItem->item_name  ]); 
+                          if(!$latestitem->image){      
+                            echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $latestitem->item_name  ]); 
 
                           }else{
-                            echo $this->Html->image('uploads/itemimages/'.$topItem->image, ['class' => $imageclass, 'alt'=> $topItem->item_name ]);   
+                            echo $this->Html->image('uploads/itemimages/'.$latestitem->image, ['class' => $imageclass, 'alt'=> $latestitem->item_name ]);   
                           
                           }
                         ?>
                     </div>
                     <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title"><?= $topItem->item_name?>
-                        <span class="badge badge-warning float-right"><?= $topItem->quantity?></span></a>
+                      <a href="javascript:void(0)" class="product-title"><?= $latestitem->item_name?>
+                        <span class="badge badge-warning float-right"><?= $latestitem->quantity?></span></a>
                       <span class="product-description">
-                        <?= $topItem->item_description?>
+                        <?= $latestitem->item_description?>
                       </span>
                     </div>
                   </li>
