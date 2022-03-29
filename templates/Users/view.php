@@ -45,7 +45,7 @@
 
                               }else{
                             ?>
-                                <a data-fancybox="gallery" class="primary-btn" href="/img/uploads/profilepicture/<?= $user->id ?>/<?= $user->image; ?>">
+                                <a data-fancybox="gallery" class="primary-btn" href="img/uploads/profilepicture/<?= $user->id ?>/<?= $user->image; ?>">
                                   <?php
                                     echo $this->Html->image('uploads/profilepicture/'.$user->id.'/'.$user->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
                                   ?>
