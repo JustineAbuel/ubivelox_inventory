@@ -84,7 +84,12 @@ class TransactionsController extends AppController
 
         $transactionItems = $this->Transactions->TransactionItems
         ->find()
-        ->select(['id', 'transaction_id','item_id','quantity','internal_warranty','item_name' => 'i.item_name','serial_no' => 'i.serial_no' ])
+        ->select(['id', 'transaction_id','item_id','quantity','internal_warranty',
+            'item_name' => 'i.item_name',
+            'image' => 'i.image',
+            'itemid' => 'i.id',
+            'serial_no' => 'i.serial_no' 
+        ])
         ->join([
         'table' => 'items',
         'alias' => 'i',

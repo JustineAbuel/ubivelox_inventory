@@ -4,7 +4,26 @@
  * @var \App\Model\Entity\Category[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
- 
+<!--- Your modal -->
+<div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p id="name"></p> <!--- name will be shown here-->
+                <input type="image" id="image"  width="31" height="30">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
   <!-- Content Wrapper. Contains page content -->
 
     <!-- Main content -->
@@ -34,7 +53,28 @@
                     <?php foreach ($transactionItems as $transactionItem): ?>
                     <tr>
                         <td><?= $transactionItem->has('transaction') ? $this->Html->link($transactionItem->transaction->transaction_code, ['controller' => 'Transactions', 'action' => 'view?tid='.$transactionItem->transaction->id]) : '' ?></td>
-                        <td><?= h($transactionItem->item->item_name) ?></td>
+                        <td id="<?php echo "name_".$transactionItem->item->id;  ?>">
+                          <?php 
+                              $imageclass = 'rounded-circle align-self-center mr-3';
+                              $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+                              if(!$transactionItem->item->image){      
+                                echo $this->Html->image('uploads/itemimages/product.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+
+                              }else{
+                              ?>
+
+                              <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $transactionItem->item->image; ?>">
+
+                                <?php 
+                                echo $this->Html->image('uploads/itemimages/'.$transactionItem->item->image, ['class' => $imageclass,'id' => $transactionItem->item->id, 'style' => $imagestyle,'alt'=>'User img','data-toggle' => 'modal', 'data-target' => '#myModal' ]);   
+                                ?>
+                              </a>
+
+                              <?php
+                              }
+                          ?>
+                          <?= h($transactionItem->item->item_name) ?>
+                        </td>
                         <td><?= h($transactionItem->quantity) ?></td>
                         <td><?= h($transactionItem->internal_warranty) ?></td>
                         <td class="actions   "> 
@@ -105,6 +145,13 @@
 
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START - This is needed to show image in a popup upon image click -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css">
+<!-- END - This is needed to show image in a popup upon image click -->
+
 <script>
   $(function () {
     $("#example1").DataTable({

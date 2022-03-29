@@ -169,7 +169,25 @@
                     ?>
                     <?php foreach ($transactionItems as $transactionItem): ?>
                     <tr>
-                        <td><?= h($transactionItem->item_name) ?></td>
+                        <td>
+                          <?php 
+                              $imageclass = 'rounded-circle align-self-center mr-3';
+                              $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+                              if(!$transactionItem->image){      
+                                echo $this->Html->image('uploads/itemimages/product.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+
+                              }else{
+                              ?>
+                              <a data-fancybox="gallery" class="primary-btn" href="../img/uploads/itemimages/<?php echo $transactionItem->image; ?>">
+                              <?php
+                                echo $this->Html->image('uploads/itemimages/'.$transactionItem->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                              ?>
+                              </a>
+                              <?php
+                              }
+                          ?>
+                          <?= h($transactionItem->item_name) ?>
+                        </td>
                         <td><?= h($transactionItem->serial_no) ?></td>
                         <td><?= h($transactionItem->quantity) ?></td>
                         <td>
@@ -304,6 +322,13 @@
 
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START - This is needed to show image in a popup upon image click -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css">
+<!-- END - This is needed to show image in a popup upon image click -->
+
 <script>
   $(function () {
     $("#example1").DataTable({

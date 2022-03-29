@@ -36,6 +36,8 @@ class OutgoingController extends AppController
         ->select(['id','transaction_id','item_id','status','notes','date_added',
             'item_name' => 'i.item_name',
             'serial_no' => 'i.serial_no',
+            'image' => 'i.image',
+            'itemid' => 'i.id',
             'transaction_code' => 't.transaction_code' ])
         ->join([
         'table' => 'transactions',

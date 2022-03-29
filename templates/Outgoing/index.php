@@ -39,7 +39,6 @@
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr class="table-primary">
-                    <th>Transaction ID</th>
                     <th>Transaction Code</th>
                     <th>Item Name</th>
                     <th>Serial Number</th>
@@ -74,11 +73,30 @@
                     }
                     ?>
                     <tr class="<?php echo $trclass; ?>">
-                        <td><?= h($outgoing->transaction_id) ?></td>
                         <td><!--<?= h($outgoing->transaction_code) ?>-->
                           <strong><?= $this->Html->link(__($outgoing->transaction_code), ['controller' => 'Transactions', 'action' => 'view?tid='.$outgoing->transaction_id]) ?></strong>
                         </td>
-                        <td><?= h($outgoing->item_name) ?></td>
+                        <td>
+                          <center>
+                          <?= h($outgoing->item_name) ?><br>
+                          <?php 
+                              $imageclass = 'rounded-circle align-self-center mr-3';
+                              $imagestyle = 'height:2.1rem;width:2.1rem;object-fit: cover;';
+                              if(!$outgoing->image){      
+                                echo $this->Html->image('uploads/itemimages/product.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]); 
+
+                              }else{
+                              ?>
+                              <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $outgoing->image; ?>">
+                              <?php
+                                echo $this->Html->image('uploads/itemimages/'.$outgoing->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                              ?>
+                              </a>
+                              <?php
+                              }
+                          ?>
+                          </center>
+                        </td>
                         <td><?= h($outgoing->serial_no) ?></td>
                         <td><?php echo $itemstat; ?></td>
                         <td>
@@ -154,6 +172,13 @@
 
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START - This is needed to show image in a popup upon image click -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.0/jquery.fancybox.min.css">
+<!-- END - This is needed to show image in a popup upon image click -->
+
 <script>
   $(function () {
     $("#example1").DataTable({
