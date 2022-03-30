@@ -89,7 +89,7 @@
         </div>
         <!-- /.row -->
         <!-- Main row -->
-        <div class="row"> 
+        <!-- <div class="row"> 
           <section class="col-lg-7 connectedSortable"> 
             <div class="card">
               <div class="card-header">
@@ -105,68 +105,74 @@
                   <div class="chart tab-pane active" id="revenue-chart"
                        style="position: relative; height: 300px;">
                       <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
-                   </div>
-                  <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
-                  </div>
+                   </div> 
                 </div>
               </div> 
             </div> 
           </section>
+
           <section class="col-lg-5 connectedSortable">
             <div class="card">
               <div class="card-header">
                 <p class="card-title">Recently Added Items</p>
 
-                <!-- <div class="card-tools">
+                <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                   </button>
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
                   </button>
-                </div> --> 
-              </div>
-              <!-- /.card-header -->
+                </div>
+              </div> 
               <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
                   
-                <?php foreach($latestitems as $latestitem):?>
+                <?php //foreach($latestitems as $latestitem):?>
                   <li class="item">
                     <div class="product-img mr-2">  
                       <?php 
-                          $imageclass = 'img-size-25'; 
-                          if(!$latestitem->image){      
-                            echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $latestitem->item_name  ]); 
+                          // $imageclass = 'img-size-25'; 
+                          // if(!$latestitem->image){      
+                          //   echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $latestitem->item_name  ]); 
 
-                          }else{
-                            echo $this->Html->image('uploads/itemimages/'.$latestitem->image, ['class' => $imageclass, 'alt'=> $latestitem->item_name ]);   
+                          // }else{
+                          //   echo $this->Html->image('uploads/itemimages/'.$latestitem->id.'/'.$latestitem->image, ['class' => $imageclass, 'alt'=> $latestitem->item_name ]);   
                           
-                          }
+                          // }
                         ?>
                     </div>
-                    <div class="product-info">
-                      <a href="javascript:void(0)" class="product-title"><?= $latestitem->item_name?>
-                        <span class="badge badge-warning float-right"><?= $latestitem->quantity?></span></a>
+                    <div class="product-info"> 
+                      <?php
+                      // echo $this->Html->link(
+                      //   $latestitem->item_name ,
+                      //   [ 'Controller' => 'ItemsController', 'action' => 'view', $latestitem->id ],
+                      //   ['escape' => false, 'class'=>"product-title" ]
+                      //   ); 
+                      ?>
+                        <span class="badge badge-warning float-right"><?= $latestitem->quantity?></span>
                       <span class="product-description">
                         <?= $latestitem->item_description?>
                       </span>
                     </div>
                   </li>
-                  <?php endforeach ?> 
-                  <!-- /.item --> 
+                  <?php //endforeach ?>  
 
                 </ul>
-              </div>
-              <!-- /.card-body -->
+              </div> 
               <div class="card-footer text-center">
-                <a href="javascript:void(0)" class="uppercase">View All Products</a>
-              </div>
-              <!-- /.card-footer -->
+                <a href="javascript:void(0)" class="uppercase"></a>
+                <?php// echo $this->Html->link(
+                  // "View All Items", 
+                  // [ 'Controller' => 'ItemsController', 'action' => 'index' ],
+                  // ['escape' => false, 'class'=>"uppercase" ]
+                  // ); 
+                ?>
+              </div> 
             </div>
           </section>
-        </div>
-        <!-- <div class="row">
+        </div> -->
+        <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
@@ -177,7 +183,7 @@
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                   </button>
-                  <div class="btn-group">
+                  <!-- <div class="btn-group">
                     <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
                       <i class="fas fa-wrench"></i>
                     </button>
@@ -188,7 +194,7 @@
                       <a class="dropdown-divider"></a>
                       <a href="#" class="dropdown-item">Separated link</a>
                     </div>
-                  </div>
+                  </div> -->
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
                   </button>
@@ -198,83 +204,79 @@
                 <div class="row">
                   <div class="col-md-8">
                     <p class="text-center">
-                      <strong>In and Outs for month of <?= date('MM')?></strong>
+                      <strong>In and Outs for month of <?= date('F')?></strong>
                     </p>
  
                     <div class="chart tab-pane active" id="revenue-chart"  >
-                      <canvas id="revenue-chart-canvas" height="180" style="height: 180px;"></canvas>
+                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px"></canvas>
                     </div>  
                     
                   </div> 
                   <div class="col-md-4">
                     <p class="text-center">
-                      <strong>Goal Completion</strong>
+                      <strong>Recently Added Items</strong>
                     </p>
 
-                    <div class="progress-group">
-                      Add Products to Cart
-                      <span class="float-right"><b>160</b>/200</span>
-                      <div class="progress progress-sm">
-                        <div class="progress-bar bg-primary" style="width: 80%"></div>
-                      </div>
-                    </div> 
+                    <ul class="products-list product-list-in-card pl-2 pr-2">
+                  
+                      <?php foreach($latestitems as $latestitem):?>
+                        <li class="item">
+                          <div class="product-img mr-2">  
+                            <?php 
+                                $imageclass = 'img-size-25'; 
+                                if(!$latestitem->image){      
+                                  echo $this->Html->image('item-default.png', ['class' => $imageclass, 'alt'=> $latestitem->item_name  ]); 
 
-                    <div class="progress-group">
-                      Complete Purchase
-                      <span class="float-right"><b>310</b>/400</span>
-                      <div class="progress progress-sm">
-                        <div class="progress-bar bg-danger" style="width: 75%"></div>
-                      </div>
-                    </div>
- 
-                    <div class="progress-group">
-                      <span class="progress-text">Visit Premium Page</span>
-                      <span class="float-right"><b>480</b>/800</span>
-                      <div class="progress progress-sm">
-                        <div class="progress-bar bg-success" style="width: 60%"></div>
-                      </div>
-                    </div> 
-                    <div class="progress-group">
-                      Send Inquiries
-                      <span class="float-right"><b>250</b>/500</span>
-                      <div class="progress progress-sm">
-                        <div class="progress-bar bg-warning" style="width: 50%"></div>
-                      </div>
-                    </div>  
+                                }else{
+                                  echo $this->Html->image('uploads/itemimages/'.$latestitem->id.'/'.$latestitem->image, ['class' => $imageclass, 'alt'=> $latestitem->item_name ]);   
+                                
+                                }
+                              ?>
+                          </div>
+                            <div class="product-info"> 
+                              <?php echo $this->Html->link(
+                                $latestitem->item_name ,
+                                [ 'Controller' => 'ItemsController', 'action' => 'view', $latestitem->id ],
+                                ['escape' => false, 'class'=>"product-title" ]
+                                ); 
+                              ?>
+                              <span class="badge badge-warning float-right"><?= $latestitem->quantity?></span> 
+                            <span class="product-description">
+                              <?= $latestitem->item_description?>
+                            </span>
+                          </div>
+                        </li>
+                        <?php endforeach ?> 
+                        <!-- /.item --> 
+
+                    </ul>
                   </div> 
                 </div> 
               </div> 
               <div class="card-footer">
+                <p class="text-center">
+                  <strong>Low on stocks items</strong>
+                </p>
                 <div class="row">
+                  <?php foreach($lowstocksitems as $item): ?>
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right"> 
-                      <h5 class="description-header">$35,210.43</h5>
-                      <span class="description-text">TOTAL REVENUE</span>
+                      <h5 class="description-header text-danger"><?= $item->quantity?></h5> 
+                      <?php echo $this->Html->link(
+                        $item->item_name ,
+                        [ 'Controller' => 'ItemsController', 'action' => 'view', $item->id ],
+                        ['escape' => false, 'class'=>"description-text text-danger" ]
+                        ); 
+                      ?>
                     </div> 
-                  </div> 
-                  <div class="col-sm-3 col-6">
-                    <div class="description-block border-right"> 
-                      <h5 class="description-header">$10,390.90</h5>
-                      <span class="description-text">TOTAL COST</span>
-                    </div> 
-                  </div> 
-                  <div class="col-sm-3 col-6">
-                    <div class="description-block border-right"> 
-                      <h5 class="description-header">$24,813.53</h5>
-                      <span class="description-text">TOTAL PROFIT</span>
-                    </div> 
-                  </div> 
-                  <div class="col-sm-3 col-6">
-                    <div class="description-block"> 
-                      <h5 class="description-header">1200</h5>
-                      <span class="description-text">GOAL COMPLETIONS</span>
-                    </div> 
-                  </div>
+                  </div>  
+                  
+                  <?php endforeach; ?>
                 </div> 
               </div> 
             </div>  
           </div> 
-        </div> -->
+        </div>
        
        
         <!-- /.row (main row) -->

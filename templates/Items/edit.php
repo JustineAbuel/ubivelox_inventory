@@ -30,8 +30,10 @@
                                 echo $this->Html->image('item-default.png', ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]); 
 
                             }else{
-                                echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]);   
-                            
+                                // $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]);   
+                                 
+                                  echo $this->Html->image('uploads/itemimages/'.$item->id.'/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img', 'id' => 'imageRender' ]);   
+                                
                             }
                             ?>
                             <div class="custom-file mt-3">

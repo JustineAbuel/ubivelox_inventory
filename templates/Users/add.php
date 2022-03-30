@@ -57,16 +57,7 @@
                        
                        </div>
                    </div>
-                </div> 
-                <div class="row custom-padding"> 
-                   <div class="col-sm-4">
-                       <!-- text input -->
-                       <div class="form-group"> 
-                            <?=  $this->Form->password('password', ['class' => 'form-control', 'placeholder' => 'Password']); ?>
-                       
-                       </div>
-                   </div>
-                </div> 
+                </div>  
                 <div class="row custom-padding"> 
                    <div class="col-sm-4">
                        <!-- text input -->

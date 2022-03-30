@@ -281,24 +281,24 @@ class UsersController extends AppController
             // $user->added_by =  $this->request->getAttribute('identity')->getIdentifier() ;
             // $user->updated_by =  $this->request->getAttribute('identity')->getIdentifier() ; 
  
-            // $http = new Client();
-            // $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USERS', [           
+            $http = new Client();
+            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_USERS', [           
 
             
-            //     'username' => $user->username, 
-            //     'email' => $user->email, 
-            //     'firstname' => $user->firstname,
-            //     'middlename' => $user->middlename,
-            //     'lastname' => $user->lastname,
-            //     'contactno' => $user->contactno,
-            //     'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
-            //     'role_id' => $user->role_id,
-            //     'password' => $this->request->getData('password') 
-            // ]); 
-            // // dd($response->getJson());
-            // if ($response->getJson()['Status'] == 0) {
+                'username' => $user->username, 
+                'email' => $user->email, 
+                'firstname' => $user->firstname,
+                'middlename' => $user->middlename,
+                'lastname' => $user->lastname,
+                'contactno' => $user->contactno,
+                'added_by' => $this->request->getAttribute('identity')->getIdentifier(),
+                'role_id' => $user->role_id,
+                'password' => $this->request->getData('password') 
+            ]); 
+            // dd($response->getJson());
+            if ($response->getJson()['Status'] == 0) {
                 
-            if ($this->Users->save($user)) {
+            // if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action

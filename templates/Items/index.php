@@ -79,9 +79,9 @@
 
                           }else{
                         ?>
-                            <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $item->image; ?>">
+                            <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?= $item->id ?>/<?= $item->image; ?>">
                               <?php
-                                echo $this->Html->image('uploads/itemimages/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
+                                echo $this->Html->image('uploads/itemimages/'.$item->id.'/'.$item->image, ['class' => $imageclass, 'style' => $imagestyle,'alt'=>'User img' ]);   
                               ?>
                             </a>
                         <?php

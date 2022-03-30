@@ -102,7 +102,10 @@ class ItemsController extends AppController
         //  ])->all();  
 
         $latestitems = $this->Items->find('all', ['order' => ['id' => 'DESC'], 'limit' => 4])->all();
-
+        //items that has highest stocks
+        $lowstocksitems = $this->Items->find('all',[ 
+            'limit' => 4
+         ])->order(['quantity ASC'])->all();   
         // dd($latestitems);
 // $outgoing = $this->Items->Outgoing; 
         // $query = $outgoing->find()
@@ -125,7 +128,7 @@ class ItemsController extends AppController
             
         //     ->group([ 'day'])->all();
         //     dd($query); 
-        $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'outgoing', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem' , 'latestitems'));
+        $this->set(compact('items', 'users', 'categories', 'stocklevel', 'incoming', 'outgoing', 'addedThisMonth', 'returnedItems', 'returnedWithoutDamage','damagedItem' , 'latestitems', 'lowstocksitems'));
  
     }
 
@@ -186,8 +189,8 @@ class ItemsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    { 
+    public function add(){ 
+
         $item = $this->Items->newEmptyEntity(); 
         $this->Authorization->authorize($item, 'add');
 
@@ -202,21 +205,22 @@ class ItemsController extends AppController
             $identity = $this->request->getAttribute('identity')->getIdentifier(); 
             $item->added_by = $identity;
             // dd($item);
-            if (!$item->getErrors()) {
-                // never trust anything in `$image` if you haven't properly validated it!!!
-                $image = $this->request->getData('image_file');
-                $fileName = $image->getClientFilename(); 
-
-                if(!is_dir(WWW_ROOT.'img/uploads/itemimages'))
-                mkdir(WWW_ROOT.'img/uploads/itemimages'); 
-                if($fileName){
-                    $image->moveTo(WWW_ROOT . 'img/uploads/itemimages'. DS . $fileName);
-                
-                    $item->image = $fileName;
-                }
-            }
-
+             
             if ($item = $this->Items->save($item)) {
+                //upload image to webroot
+                if (!$item->getErrors()) {
+                    // never trust anything in `$image` if you haven't properly validated it!!!
+                    $image = $this->request->getData('image_file');
+                    $fileName = $image->getClientFilename(); 
+    
+                    if(!is_dir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id))
+                    mkdir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id); 
+                    if($fileName){
+                        $image->moveTo(WWW_ROOT . 'img/uploads/itemimages'.DS.$item->id. DS . $fileName);
+                    
+                        $item->image = $fileName;
+                    }
+                }
                 $this->Flash->success(__('The item has been saved.'));
 
                 $incomingTable = $this->Items->Incoming;
@@ -342,17 +346,16 @@ class ItemsController extends AppController
                 
             $item->updated_by = $this->request->getAttribute('identity')->getIdentifier();
             $this->Items->touch($item, 'Items.updated');
-            
+             
             if (!$item->getErrors()) {
                 // never trust anything in `$image` if you haven't properly validated it!!!
                 $image = $this->request->getData('image_file');
                 $fileName = $image->getClientFilename(); 
 
-                if(!is_dir(WWW_ROOT.'img/uploads/itemimages'))
-                mkdir(WWW_ROOT.'img/uploads/itemimages');
-
+                if(!is_dir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id))
+                mkdir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id); 
                 if($fileName){
-                    $image->moveTo(WWW_ROOT . 'img/uploads/itemimages'. DS . $fileName);
+                    $image->moveTo(WWW_ROOT . 'img/uploads/itemimages'.DS.$item->id. DS . $fileName);
                 
                     $item->image = $fileName;
                 }
