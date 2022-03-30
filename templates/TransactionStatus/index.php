@@ -43,20 +43,20 @@
                               [ 'escape' => false]  //'escape' => false - convert plain text to html 
                             ); 
                             ?>
-                            <?php echo $this->Html->link(
+                            <?php /*echo $this->Html->link(
                               "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                               [ 'Controller' => 'TransactionStatusController', 'action' => 'edit',  $transactionStatus->id ],
                               [ 'escape' => false ]  //'escape' => false - convert plain text to html
-                            ); 
+                            ); */
                             ?>
-                            <?php echo $this->Form->postLink(
+                            <?php /*echo $this->Form->postLink(
                               "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                               [ 'Controller' => 'TransactionStatusController', 'action' => 'delete', $transactionStatus->id ],
                               [
                                   'confirm' => __('Are you sure you want to delete # {0}?', $transactionStatus->id),
                                   'escape' => false //'escape' => false - convert plain text to html
                               ], 
-                            ); 
+                            ); */
                             ?> 
                         </td>
                     </tr>
