@@ -63,10 +63,10 @@
                               }else{
                               ?>
 
-                              <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $transactionItem->item->image; ?>">
+                              <a data-fancybox="gallery" class="primary-btn" href="img/uploads/itemimages/<?php echo $transactionItem->item->id.'/'.$transactionItem->item->image; ?>">
 
                                 <?php 
-                                echo $this->Html->image('uploads/itemimages/'.$transactionItem->item->image, ['class' => $imageclass,'id' => $transactionItem->item->id, 'style' => $imagestyle,'alt'=>'User img','data-toggle' => 'modal', 'data-target' => '#myModal' ]);   
+                                echo $this->Html->image('uploads/itemimages/'.$transactionItem->item->id.'/'.$transactionItem->item->image, ['class' => $imageclass,'id' => $transactionItem->item->id, 'style' => $imagestyle,'alt'=>'User img','data-toggle' => 'modal', 'data-target' => '#myModal' ]);   
                                 ?>
                               </a>
 
