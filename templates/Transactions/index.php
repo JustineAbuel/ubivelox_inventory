@@ -4,34 +4,7 @@
  * @var \App\Model\Entity\Category[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
-<style type="text/css">
-dl dt{
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    /*
-    border-style: solid;
-    border-color: black;
-    */
-}
-dl dd{
-    display: inline-block;
-    margin: 0px 2px;
-    padding-bottom: 0;
-    vertical-align: middle;
-}
-dl dt.blue{
-    background: #B8DAFF;
-}
-dl dt.orange{
-    background: #FFEEBA;
-}
-dl dt.red{
-    background: #F5C6CB;
-}
-</style>
- 
+
   <!-- Content Wrapper. Contains page content -->
 
     <!-- Main content -->
@@ -171,6 +144,8 @@ dl dt.red{
 
   </div>
   <!-- /.content-wrapper -->
+
+<?= $this->Html->css('plugins/legend.css'); ?>
 <script>
   $(function () {
     $("#example1").DataTable({
