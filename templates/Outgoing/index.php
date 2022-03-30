@@ -4,6 +4,36 @@
  * @var \App\Model\Entity\Outgoing[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
+<style type="text/css">
+dl dt{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+
+    /*border-style: solid;
+    border-color: black;
+    */
+}
+dl dd{
+    display: inline-block;
+    margin: 0px 2px;
+    padding-bottom: 0;
+    vertical-align: middle;
+}
+dl dt.blue{
+    background: #B8DAFF;
+}
+dl dt.orange{
+    background: #FFEEBA;
+}
+dl dt.green{
+    background: #C3E6CB;
+}
+dl dt.red{
+    background: #F5C6CB;
+}
+</style>
  
   <!-- Content Wrapper. Contains page content -->
 
@@ -31,14 +61,30 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                <!--
                 <label>Legend:</label>
                 <button type="button" class="table-light">Delivered</button>
                 <button type="button" class="table-warning">For Repair</button>
                 <button type="button" class="table-success">Repaired</button>
                 <button type="button" class="table-danger">For Disposal</button>
+                -->
+                <dl>
+                  <dt class="blue"></dt>
+                  <dd>Delivered</dd>
+
+                  <dt class="orange"></dt>
+                  <dd>For Repair</dd>
+
+                  <dt class="green"></dt>
+                  <dd>Repaired</dd>
+
+                  <dt class="red"></dt>
+                  <dd>For Disposal</dd>
+                </dl>
+
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
-                  <tr class="table-primary">
+                  <tr class="table-light">
                     <th>Transaction Code</th>
                     <th>Item Name</th>
                     <th>Serial Number</th>
@@ -54,7 +100,7 @@
                     <?php
                         if($outgoing->status == 2){ //delivered
                         $itemstat  = "Delivered";
-                        $trclass = "table-light";
+                        $trclass = "table-primary";
                     }
                     elseif($outgoing->status == 4){ //for repair
                         $itemstat  = "For Repair";

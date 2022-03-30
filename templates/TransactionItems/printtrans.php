@@ -7,7 +7,7 @@
 
   today = mm + '/' + dd + '/' + yyyy;
 
-  document.title = "UBP-Inventory Transaction Slip"; //set file name
+  document.title = "<?php Print('UBP-'.$trans_code.'-'.date('Y-m-d H:i:s')); ?>"; //set file name
 
   document.write(today);
 

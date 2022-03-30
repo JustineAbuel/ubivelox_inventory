@@ -4,6 +4,33 @@
  * @var \App\Model\Entity\Category[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
+<style type="text/css">
+dl dt{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    /*
+    border-style: solid;
+    border-color: black;
+    */
+}
+dl dd{
+    display: inline-block;
+    margin: 0px 2px;
+    padding-bottom: 0;
+    vertical-align: middle;
+}
+dl dt.blue{
+    background: #B8DAFF;
+}
+dl dt.orange{
+    background: #FFEEBA;
+}
+dl dt.red{
+    background: #F5C6CB;
+}
+</style>
  
   <!-- Content Wrapper. Contains page content -->
 
@@ -20,11 +47,24 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                <!--
                 <strong>Legend:</strong>
                 <button type="button" class="table-primary">Delivered</button>
                 <button type="button" class="table-warning">For Delivery</button>
                 <button type="button" class="table-danger">Cancelled</button>
                 <br><br>
+                -->
+                <dl>
+                  <dt class="blue"></dt>
+                  <dd>Delivered</dd>
+
+                  <dt class="orange"></dt>
+                  <dd>For Delivery</dd>
+
+                  <dt class="red"></dt>
+                  <dd>Cancelled</dd>
+                </dl>
+
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>
