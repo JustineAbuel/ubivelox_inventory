@@ -94,8 +94,8 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/transactionType'), ['controller' => 'TransactionTypeController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'transactionType' ? 'active': '' ?>">
+          <!-- <li class="nav-item">
+            <a href="<?php //echo $this->Url->build(('/transactionType'), ['controller' => 'TransactionTypeController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'transactionType' ? 'active': '' ?>">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Transaction Type
@@ -104,13 +104,13 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/transactionStatus'), ['controller' => 'TransactionStatusController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'transactionStatus' ? 'active': '' ?>">
+            <a href="<?php //echo $this->Url->build(('/transactionStatus'), ['controller' => 'TransactionStatusController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'transactionStatus' ? 'active': '' ?>">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Transaction Status
               </p>
             </a>
-          </li>
+          </li> -->
 
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/users'), ['controller' => 'UsersController','action' => 'index']); ?>" class="nav-link 
@@ -131,14 +131,14 @@
               </p>
             </a>
           </li>  
-          <li class="nav-item">
-            <a href="<?php echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'userRoles' ? 'active': '' ?>">
+          <!-- <li class="nav-item">
+            <a href="<?php// echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'userRoles' ? 'active': '' ?>">
               <i class="nav-icon fas fa-user-tag"></i>
               <p>
                 User Roles
               </p>
             </a>
-          </li>  
+          </li>   -->
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/auditTrails'), ['controller' => 'AuditTrails','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'auditTrails' ? 'active': '' ?>">
   
