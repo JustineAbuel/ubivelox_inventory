@@ -210,19 +210,20 @@ class ItemsController extends AppController
             $item->added_by = $identity;
             // dd($item);
              
+            $image = $this->request->getData('image_file');
+            $fileName = $image->getClientFilename(); 
+            $item->image = $fileName;
+            
             if ($item = $this->Items->save($item)) {
                 //upload image to webroot
                 if (!$item->getErrors()) {
                     // never trust anything in `$image` if you haven't properly validated it!!!
-                    $image = $this->request->getData('image_file');
-                    $fileName = $image->getClientFilename(); 
     
                     if(!is_dir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id))
                     mkdir(WWW_ROOT.'img/uploads/itemimages'.DS.$item->id); 
                     if($fileName){
                         $image->moveTo(WWW_ROOT . 'img/uploads/itemimages'.DS.$item->id. DS . $fileName);
                     
-                        $item->image = $fileName;
                     }
                 }
                 $this->Flash->success(__('The item has been saved.'));
