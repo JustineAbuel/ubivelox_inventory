@@ -179,7 +179,7 @@ class UsersController extends AppController
             $user->password = 'qwerty123';
             
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user\'s password has been reset to default password.'));
+                $this->Flash->success(__('The user\'s password has been reset to default password: qwerty123 '));
                 $this->Common->dblogger([
                     //change depending on action
                     'message' => 'Successfully updated user profile picture with id = '. $user->id ,

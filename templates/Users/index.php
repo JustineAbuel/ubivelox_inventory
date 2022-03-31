@@ -109,7 +109,7 @@
                               echo $this->Form->postLink(
                                 "<font color='#ffc107 ' size='3px'><i class='fa fa-lock'></i></font>", 
                                 [ 'Controller' => 'UsersController', 'action' => 'resetPassword', $user['id'] ],
-                                [ 'confirm' => 'Are you sure you want to reset this user\'s passowrd?', 'escape' => false ]
+                                [ 'confirm' => 'Are you sure you want to reset this user\'s password?', 'escape' => false ]
                               ); 
                               
                             }
