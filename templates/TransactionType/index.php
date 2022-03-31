@@ -19,7 +19,7 @@
               <div class="card-header     "> 
                 <h3 class="card-title"><legend><?= __('Transaction Type') ?></legend></h3> 
                     
-    <?= $this->Html->link(__('Add New Transaction Type'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    <!--<?= $this->Html->link(__('Add New Transaction Type'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>-->
  
                 
               </div>
