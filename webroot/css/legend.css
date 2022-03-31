@@ -1,0 +1,28 @@
+dl dt{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    /*
+    border-style: solid;
+    border-color: black;
+    */
+}
+dl dd{
+    display: inline-block;
+    margin: 0px 2px;
+    padding-bottom: 0;
+    vertical-align: middle;
+}
+dl dt.blue{
+    background: #B8DAFF;
+}
+dl dt.orange{
+    background: #FFEEBA;
+}
+dl dt.red{
+    background: #F5C6CB;
+}
+dl dt.green{
+    background: #C3E6CB;
+}

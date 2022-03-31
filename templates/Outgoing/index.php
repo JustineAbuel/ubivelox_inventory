@@ -4,39 +4,8 @@
  * @var \App\Model\Entity\Outgoing[]|\Cake\Collection\CollectionInterface $categories
  */
 ?>
-<style type="text/css">
-dl dt{
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
 
-    /*border-style: solid;
-    border-color: black;
-    */
-}
-dl dd{
-    display: inline-block;
-    margin: 0px 2px;
-    padding-bottom: 0;
-    vertical-align: middle;
-}
-dl dt.blue{
-    background: #B8DAFF;
-}
-dl dt.orange{
-    background: #FFEEBA;
-}
-dl dt.green{
-    background: #C3E6CB;
-}
-dl dt.red{
-    background: #F5C6CB;
-}
-</style>
- 
   <!-- Content Wrapper. Contains page content -->
-
 
     <!-- Main content -->
     <section class="content">
@@ -219,6 +188,7 @@ dl dt.red{
   </div>
   <!-- /.content-wrapper -->
 
+<?= $this->Html->css('plugins/legend.css'); ?>
 <!-- START - This is needed to show image in a popup upon image click --> 
 <?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
 <?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>

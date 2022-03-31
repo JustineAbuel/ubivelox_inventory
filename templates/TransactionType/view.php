@@ -24,30 +24,30 @@
                   <tr>
                     <th><?= ucfirst('id') ?></th>
                     <th><?= ucfirst('Transaction Type Name') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <!--<th class="actions"><?= __('Actions') ?></th>-->
                   </tr>
                   </thead> 
                   <tbody> 
                     <tr>
                         <td><?= $this->Number->format($transactionType->id) ?></td>
                         <td><?= h($transactionType->transaction_name) ?></td> 
-                        <td class="actions   ">  
-                            <?php echo $this->Html->link(
+                        <!--<td class="actions   ">  -->
+                            <?php /*echo $this->Html->link(
                               "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                               [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $transactionType->id ],
                               [ 'escape' => false ]  //'escape' => false - convert plain text to html
-                            ); 
+                            ); */
                             ?>
-                            <?php echo $this->Form->postLink(
+                            <?php /*echo $this->Form->postLink(
                               "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                               [ 'Controller' => 'CategoriesController', 'action' => 'delete', $transactionType->id ],
                               [
                                   'confirm' => __('Are you sure you want to delete # {0}?', $transactionType->id),
                                   'escape' => false //'escape' => false - convert plain text to html
                               ], 
-                            ); 
+                            ); */
                             ?> 
-                        </td>
+                        <!--</td>-->
                     </tr> 
                   </tbody>
                   <!--
