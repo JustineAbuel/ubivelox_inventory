@@ -104,6 +104,10 @@ class ItemsController extends AppController
         $latestitems = $this->Items->find('all', ['order' => ['id' => 'DESC'], 'limit' => 4])->all();
         //items that has highest stocks
         $lowstocksitems = $this->Items->find('all',[ 
+            'conditions' => [
+                'category_id' => 3,
+                'item_type_id IS ' => 2 
+            ], 
             'limit' => 4
          ])->order(['quantity ASC'])->all();   
         // dd($latestitems);
@@ -171,7 +175,7 @@ class ItemsController extends AppController
 
         $item = $this->Items->get($id, [
             // 'contain' => ['Categories', 'Suppliers', 'ItemTypes', 'Transactions'],
-            'contain' => ['Categories', 'Company', 'ItemType' ],
+            'contain' => ['Categories', 'Subcategories', 'Company', 'ItemType' ],
         ]);
 
         $this->Authorization->authorize($item, 'view');

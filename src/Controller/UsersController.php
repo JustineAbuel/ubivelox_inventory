@@ -43,7 +43,14 @@ class UsersController extends AppController
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         // regardless of POST or GET, redirect if user is logged in
-        if ($result->isValid()) { 
+ 
+        if ($result->isValid()) {  
+            if($this->Authentication->getIdentity()->status == 1){
+               
+                $this->Flash->error(__('Sorry, your account is inactive. '));
+                $this->Authentication->logout();
+            }
+
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'Items',
                 'action' => 'index',
@@ -108,7 +115,7 @@ class UsersController extends AppController
                 }
 
             }else{ 
-                $this->Flash->error(__('Incorrect password'));
+                $this->Flash->error(__('Entered old password doesn\'t matched old password from the database'));
             } 
         } 
         $this->set(compact('user'));
@@ -359,8 +366,9 @@ class UsersController extends AppController
                 'request' => $this->request, 
             ]);
         }
+        $status = [0 => 'Active', 1 => 'Inactive'];
         $userRole = $this->Users->UserRoles->find('list', ['limit' => 200])->all();
-        $this->set(compact('user', 'userRole'));
+        $this->set(compact('user', 'userRole', 'status'));
     }
 
     /**

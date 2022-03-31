@@ -22,21 +22,21 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('firstname', ['class' => 'form-control', 'placeholder' => 'First name', 'label' => false]); ?>
+                           <?=  $this->Form->control('firstname', ['class' => 'form-control', 'placeholder' => 'First name']); ?>
                           
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('middlename', ['class' => 'form-control', 'placeholder' => 'Middle name', 'label' => false]); ?>
+                            <?=  $this->Form->control('middlename', ['class' => 'form-control', 'placeholder' => 'Middle name']); ?>
                        
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('lastname', ['class' => 'form-control', 'placeholder' => 'Last name', 'label' => false]); ?>
+                            <?=  $this->Form->control('lastname', ['class' => 'form-control', 'placeholder' => 'Last name']); ?>
                        
                        </div>
                    </div>
@@ -46,14 +46,14 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', 'label' => false, "pattern"=>"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" , 'required']); ?>
+                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', "pattern"=>"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" , 'required']); ?>
                           
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username', 'label' => false]); ?> 
+                            <?=  $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username']); ?> 
                        
                        </div>
                    </div>
@@ -62,14 +62,14 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact no', 'label' => false]); ?>
+                            <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact no']); ?>
                        
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->control('role_id', ['options' => $userRole, 'class' => 'form-control', 'placeholder' => 'Contact no', 'label' => false]); ?>
+                            <?=  $this->Form->control('role_id', ['options' => $userRole, 'class' => 'form-control', 'placeholder' => 'Contact no']); ?>
  
                        </div>
                    </div>

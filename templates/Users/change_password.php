@@ -22,7 +22,7 @@
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->password('currentpassword', ['class' => 'form-control', 'placeholder' => 'Old Password']); ?> 
+                            <?=  $this->Form->password('currentpassword', ['class' => 'form-control', 'placeholder' => 'Old Password', 'required']); ?> 
                        </div>
                    </div>
                 </div>   
@@ -30,14 +30,14 @@
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->password('newpassword', ['class' => 'form-control', 'placeholder' => 'New Password']); ?>
+                            <?=  $this->Form->password('newpassword', ['class' => 'form-control', 'placeholder' => 'New Password', 'required']); ?>
                        
                        </div>
                    </div>
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->password('retypepassword', ['class' => 'form-control', 'placeholder' => 'Confirm Password']); ?>
+                            <?=  $this->Form->password('retypepassword', ['class' => 'form-control', 'placeholder' => 'Confirm Password', 'required']); ?>
                        
                        </div>
                    </div>

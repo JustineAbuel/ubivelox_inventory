@@ -34,7 +34,7 @@
                 <p>Newly added item</p>
               </div>
               <div class="icon">
-                <i class="fa fa-users"></i>
+                <i class="fa fa-truck-loading"></i>
               </div>
               <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -64,7 +64,7 @@
                 <p>Returned Items</p>
               </div>
               <div class="icon">
-                <i class="fa fa-table"></i>
+                <i class="fa fa-truck-moving"></i>
               </div>
               <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -255,17 +255,26 @@
               </div> 
               <div class="card-footer">
                 <p class="text-center">
-                  <strong>Low on stocks items</strong>
+                  <strong>Low on stocks cards</strong>
                 </p>
                 <div class="row">
-                  <?php foreach($lowstocksitems as $item): ?>
+                  <?php foreach($lowstocksitems as $item):
+                    
+                    if($item->quantity <= 500){
+                      $class = ' text-danger';
+                    }elseif($item->quantity > 500 && $item->quantity <= 1000){
+                      $class = ' text-warning';
+                    } 
+                  ?>
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right"> 
-                      <h5 class="description-header text-danger"><?= $item->quantity?></h5> 
-                      <?php echo $this->Html->link(
-                        $item->item_name ,
-                        [ 'Controller' => 'ItemsController', 'action' => 'view', $item->id ],
-                        ['escape' => false, 'class'=>"description-text text-danger" ]
+                      <h5 class="description-header <?= $class?>"><?= $item->quantity?></h5> 
+                      <?php  
+                        
+                        echo $this->Html->link(
+                          $item->item_name ,
+                          [ 'Controller' => 'ItemsController', 'action' => 'view', $item->id ],
+                          ['escape' => false, 'class'=> 'description-text '.$class ]
                         ); 
                       ?>
                     </div> 

@@ -19,7 +19,7 @@
               <div class="card-header     "> 
                     <h3 class="card-title "><?= __('Item Types') ?></h3> 
                     
-    <?= $this->Html->link(__('New item type'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    <!-- <?//= $this->Html->link(__('New item type'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?> -->
  
                 
               </div>
@@ -30,7 +30,7 @@
                   <tr>
                     <th><?= ucfirst('id') ?></th>
                     <th><?= ucfirst('type name') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th> 
+                    <th class="actions"> Actions </th> 
                   </tr>
                   </thead> 
                   <tbody>
@@ -40,12 +40,12 @@
                         <td><?= $this->Number->format($itemType->id) ?></td>
                         <td><?= h($itemType->type_name) ?></td>
                         <td class="actions">
-                                <?php echo $this->Html->link(
+                              <?php   echo $this->Html->link(
                                     "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
                                     [ 'Controller' => 'CategoriesController', 'action' => 'view',  $itemType->id ],
                                     [ 'escape' => false ]//'escape' => false - convert plain text to html
                                 );?>
-                                <?php echo $this->Html->link(
+                                <?php /* echo $this->Html->link(
                                     "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                                     [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $itemType->id ],
                                     [ 'escape' => false ]//'escape' => false - convert plain text to html 
@@ -54,7 +54,7 @@
                                     "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                                     [ 'Controller' => 'CategoriesController', 'action' => 'delete',   $itemType->id ],
                                     [ 'confirm' => __('Are you sure you want to delete # {0}?', $itemType->id), 'escape' => false ]//'escape' => false - convert plain text to html],   
-                                );  ?>  
+                                );  */ ?> 
                         </td>
                     </tr> 
                     <?php endforeach; ?> 

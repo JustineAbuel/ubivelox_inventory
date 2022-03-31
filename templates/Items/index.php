@@ -1,4 +1,6 @@
 <?php
+
+use Cake\I18n\FrozenTime;
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Item[]|\Cake\Collection\CollectionInterface $items
@@ -37,10 +39,21 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <label>Legend:</label>
+                <!-- <label>Legend:</label>
                 <button type="button" class="table-primary">Available</button>
                 <button type="button" class="table-warning">Re-Stock</button>
-                <button type="button" class="table-danger">Out of Stock</button><br><br>
+                <button type="button" class="table-danger">Out of Stock</button><br><br> -->
+
+                <dl>
+                  <dt class="blue"></dt>
+                  <dd>Delivered</dd>
+
+                  <dt class="orange"></dt>
+                  <dd>For Delivery</dd>
+
+                  <dt class="red"></dt>
+                  <dd>Cancelled</dd>
+                </dl>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>  
@@ -49,7 +62,7 @@
                     <th><?= ucfirst('quantity') ?></th>
                     <th><?= ucfirst('supplier') ?></th>
                     <th><?= ucfirst('item type') ?></th>
-                    <th><?= ucfirst('quality') ?></th>
+                    <th><?= ucfirst('quality') ?></th> 
                      
                     <th>QR Code</th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -68,7 +81,7 @@
                       $tr_class = "table-danger";
                     }
                     ?>
-                <tr class="<?php echo $tr_class; ?>">  
+                <tr class="<?php echo $tr_class; ?>">   
                     <td>
                       <div class="media"> 
                         <?php 
@@ -98,7 +111,7 @@
                     <td><?= $this->Number->format($item->quantity) ?></td>
                     <td><?= $item->company->company_name ?></td>
                     <td><?= $item->item_type->type_name ?></td>
-                    <td><?= $item->quality == 0 ? 'Brand New' : 'Second Hand' ?></td>
+                    <td><?= $item->quality == 0 ? 'Brand New' : 'Second Hand' ?></td> 
                      
                     <td>
                           <?php
@@ -174,6 +187,7 @@
  
 
 
+<?= $this->Html->css('plugins/legend.css'); ?>
 
 <!-- START - This is needed to show image in a popup upon image click --> 
 <?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
@@ -227,17 +241,19 @@ $( document ).ready(function() {
 });
 $(function () {
   $("#example1").DataTable({
-    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "responsive": true, "autoWidth": false,
     "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-    "ordering": false,
+    "order": [],
     "paging":   true,
     "lengthChange": true,      
-    "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
+    "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]], 
+    
   }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)'); 
 
   
   
 }); 
+
         
  
 </script>

@@ -41,7 +41,7 @@
                                     ]); ?> 
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
-                            <span><small>Only accepts .png, .jpg, .jpeg. File size must not exceed 5MB</small></span>
+                            <span class="text-danger"><small><b> Only accepts .png, .jpg, .jpeg. File size must not exceed 5MB</b> </small></span>
                         </div>
                     </div> 
                 </div>

@@ -31,7 +31,7 @@ class AuditTrailsController extends AppController
   
          
 
-        $auditTrails = $this->AuditTrails->find('all', ['limit' => 20])
+        $auditTrails = $this->AuditTrails->find('all')
             ->select(['user_roles.role_name'])
             ->select($this->AuditTrails)
             ->innerJoin(['user_roles'])

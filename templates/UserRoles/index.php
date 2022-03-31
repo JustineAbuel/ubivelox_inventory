@@ -18,7 +18,7 @@
               <div class="card-header     "> 
                 <h3 class="card-title" ><?= __('List of  User Roles ') ?> </h3> 
                     
-    <?= $this->Html->link(__('Add New User role'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    <!-- <?/*= $this->Html->link(__('Add New User role'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  '])*/?> -->
  
                 
               </div>
@@ -46,20 +46,20 @@
                               [ 'escape' => false]  //'escape' => false - convert plain text to html 
                             ); 
                             ?>
-                            <?php echo $this->Html->link(
+                            <?php /*echo $this->Html->link(
                               "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
                               [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $userRole->id ],
                               [ 'escape' => false ]  //'escape' => false - convert plain text to html
-                            ); 
+                            );  */
                             ?>
-                            <?php echo $this->Form->postLink(
+                            <?php /*echo $this->Form->postLink(
                               "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
                               [ 'Controller' => 'CategoriesController', 'action' => 'delete', $userRole->id ],
                               [
                                   'confirm' => __('Are you sure you want to delete # {0}?', $userRole->id),
                                   'escape' => false //'escape' => false - convert plain text to html
                               ], 
-                            ); 
+                            ); */
                             ?> 
                         </td>
                     </tr>

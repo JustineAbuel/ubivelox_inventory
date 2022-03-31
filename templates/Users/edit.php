@@ -17,26 +17,34 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <?= $this->Form->create($user) ?> 
-
                 <div class="row custom-padding">
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('firstname', ['class' => 'form-control', 'placeholder' => 'First name', 'label' => false]); ?>
+                           <?=  $this->Form->control('status', ['options'=> $status, 'class' => 'form-control', 'placeholder' => 'First name',]); ?>
+                          
+                       </div>
+                   </div> 
+                </div> 
+                <div class="row custom-padding">
+                   <div class="col-sm-4">
+                       <!-- text input -->
+                       <div class="form-group"> 
+                           <?=  $this->Form->control('firstname', ['class' => 'form-control', 'placeholder' => 'First name',]); ?>
                           
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('middlename', ['class' => 'form-control', 'placeholder' => 'Middle name', 'label' => false]); ?>
+                            <?=  $this->Form->control('middlename', ['class' => 'form-control', 'placeholder' => 'Middle name',]); ?>
                        
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('lastname', ['class' => 'form-control', 'placeholder' => 'Last name', 'label' => false]); ?>
+                            <?=  $this->Form->control('lastname', ['class' => 'form-control', 'placeholder' => 'Last name',]); ?>
                        
                        </div>
                    </div>
@@ -46,14 +54,14 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', 'label' => false]); ?>
+                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email',]); ?>
                           
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group">
-                            <?=  $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username', 'label' => false]); ?> 
+                            <?=  $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username',]); ?> 
                        
                        </div>
                    </div>
@@ -62,14 +70,14 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact no', 'label' => false]); ?>
+                            <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact no',]); ?>
                        
                        </div>
                    </div>
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                            <?=  $this->Form->control('role_id', ['options' => $userRole, 'class' => 'form-control', 'placeholder' => 'Contact no', 'label' => false]); ?>
+                            <?=  $this->Form->control('role_id', ['options' => $userRole, 'class' => 'form-control', 'placeholder' => 'Contact no',]); ?>
  
                        </div>
                    </div>

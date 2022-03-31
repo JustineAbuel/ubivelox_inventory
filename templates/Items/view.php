@@ -37,10 +37,22 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <label>Legend:</label>
+                
+                <!-- <label>Legend:</label>
                 <button type="button" class="table-primary">Available</button>
                 <button type="button" class="table-warning">Re-Stock</button>
-                <button type="button" class="table-danger">Out of Stock</button><br><br>
+                <button type="button" class="table-danger">Out of Stock</button><br><br> -->
+
+                <dl>
+                  <dt class="blue"></dt>
+                  <dd>Delivered</dd>
+
+                  <dt class="orange"></dt>
+                  <dd>For Delivery</dd>
+
+                  <dt class="red"></dt>
+                  <dd>Cancelled</dd>
+                </dl>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
                   <tr>  
@@ -170,6 +182,7 @@
 </div> 
  
 
+<?= $this->Html->css('plugins/legend.css'); ?>
 <!-- START - This is needed to show image in a popup upon image click --> 
 <?= $this->Html->css('plugins/fancybox/fancybox.min.css'); ?>
 <?= $this->Html->script('plugins/fancybox/fancybox.min.js'); ?>
