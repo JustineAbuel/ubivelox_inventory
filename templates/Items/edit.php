@@ -37,9 +37,12 @@
                             }
                             ?>
                             <div class="custom-file mt-3">
-                                <?= $this->Form->control('image_file', ['type' => 'file','class' => 'custom-file-input','id' => 'customFile', 'placeholder' => 'Image', 'label'=> false]); ?> 
+                                <?= $this->Form->control('image_file', ['type' => 'file','class' => 'custom-file-input','id' => 'customFile', 'placeholder' => 'Image', 'label'=> false, 
+                                    "accept"=>"image/png, image/gif, image/jpeg"
+                                    ]); ?> 
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
+                            <span><small>Only accepts .png, .jpg, .jpeg. File size must not exceed 5MB</small></span>
                         </div>
                     </div> 
                 </div>

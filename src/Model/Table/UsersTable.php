@@ -51,6 +51,9 @@ class UsersTable extends Table
         $this->hasMany('Transactions', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('Incoming', [
+            'foreignKey' => 'added_by',
+        ]);
     }
 
     /**
@@ -125,61 +128,43 @@ class UsersTable extends Table
         $validator
             ->integer('updated_by')
             ->allowEmptyString('updated_by'); 
+ 
+        $validator
+            ->integer('status')
+            ->notEmptyString('status');
+
+        $validator
+            ->date('password_expiration')
+            ->allowEmptyDate('password_expiration');
+
+        $validator
+            ->dateTime('trashed')
+            ->allowEmptyDateTime('trashed');
+
         $validator
             ->allowEmptyFile('image') 
-            ->add('image', [
-                    'mimeType' => [
-                        'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
-                        'message' => '.PNG, .JPG, .JPEG file extensions only'] 
-                    ], 
-                    'fileSize' => [
-                        'rule' => ['fileSize', '<=', '10MB' ],
-                        'message' => 'Image size must be less than 1'
-                    ]
+            // ->uploadedFile('image', [
+            //     'types' => ['image/png'], // only PNG image files
+            //     'minSize' => 1024, // Min 1 KB
+            //     'maxSize' => 1024 * 1024 // Max 1 MB
+            // ])
+            ->add('image','file', [
+                'rule' => ['uploadedFile', ['types' => ['image/png', 'image/jpeg', 'application/pdf']]], // It's what I expect to check
+                'message' => __(".PNG, .JPG, .JPEG file extensions only")
                 ]);
+            // ->add('image', 'file',[
+            //         [
+            //             'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
+            //             'message' => '.PNG, .JPG, .JPEG file extensions only'] 
+            //         ], 
+            //         [
+            //             'rule' => ['fileSize', '<=', '1KB' ],
+            //             'message' => 'Image size must be less than 1'
+            //         ]
+            //     ]);
         return $validator;
     }
-    public function validationImage(Validator $validator): Validator
-    {
-        $validator
-            ->notEmptyFile('image_file')
-            ->uploadedFile('image_file', [
-                'types' => ['image/png'], // only PNG image files
-                'minSize' => 1024, // Min 1 KB
-                'maxSize' => 1024 * 1024 // Max 1 MB
-            ])
-            ->add('image_file', 'minImageSize', [
-                'rule' => ['imageSize', [
-                    // Min 10x10 pixel
-                    'width' => [Validation::COMPARE_GREATER_OR_EQUAL, 10],
-                    'height' => [Validation::COMPARE_GREATER_OR_EQUAL, 10],
-                ]]
-            ])
-            ->add('image_file', 'maxImageSize', [
-                'rule' => ['imageSize', [
-                    // Max 100x100 pixel
-                    'width' => [Validation::COMPARE_LESS_OR_EQUAL, 100],
-                    'height' => [Validation::COMPARE_LESS_OR_EQUAL, 100],
-                ]]
-            ])
-            ->add('image_file', 'filename', [
-                'rule' => function (UploadedFile $file) {
-                    // filename must not be a path
-                    $filename = $file->getClientFilename();
-                    if (strcmp(basename($filename), $filename) === 0) {
-                        return true;
-                    }
-
-                    return false;
-                }
-            ])
-            ->add('image_file', 'extension', [
-                'rule' => ['extension', ['png','jpg','jpeg'],
-                            'message' => '.PNG, .JPG, .JPEG file extensions only'] // .png file extension only
-            ]);
-        return $validator;
-
-    }
+ 
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.

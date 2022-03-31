@@ -46,7 +46,7 @@
                    <div class="col-sm-4">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', 'label' => false]); ?>
+                           <?=  $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', 'label' => false, "pattern"=>"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" , 'required']); ?>
                           
                        </div>
                    </div>

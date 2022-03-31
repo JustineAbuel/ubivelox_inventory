@@ -194,7 +194,7 @@ class ItemsTable extends Table
                         'message' => '.PNG, .JPG, .JPEG file extensions only'] 
                     ], 
                     'fileSize' => [
-                        'rule' => ['fileSize', '<=', '10MB' ],
+                        'rule' => ['fileSize', '<=', '1MB' ],
                         'message' => 'Image size must be less than 1'
                     ]
                 ]);

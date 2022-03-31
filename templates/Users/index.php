@@ -32,6 +32,7 @@
                     <th><?= ucfirst('username') ?></th>  
                     <th><?= ucfirst('contact no') ?></th>   
                     <th><?= ucfirst('role_id') ?></th>
+                    <th><?= ucfirst('status') ?></th>   
                     <th><?= ucfirst('date added') ?></th>   
                     <th class="actions"><?= __('Actions') ?></th>
                   </tr>
@@ -69,13 +70,14 @@
                         <td><?= h($user->username) ?></td> 
                         <td><?= h($user->contactno) ?></td>  
                         <td><?= h($user->user_role->role_name) ?></td>
+                        <td><?= h($user->status == 0 ?'Active': 'Inactive') ?></td>
                         <td><?= h($user->date_added) ?></td>
                         <td class="actions   "> 
                             <?php  
                             if($this->request->getAttribute('identity')->can('view', $user)){
                               echo $this->Html->link(
                                   "<font color='blue' size='3px'><i class='fa fa-eye'></i></font>", 
-                                  [ 'Controller' => 'CategoriesController', 'action' => 'view', $user->id ],
+                                  [ 'Controller' => 'UsersController', 'action' => 'view', $user->id ],
                                   [ 'escape' => false]  //'escape' => false - convert plain text to html 
                                 );  
                               }
@@ -85,24 +87,35 @@
                             if($this->request->getAttribute('identity')->can('edit', $user)){
                               echo $this->Html->link(
                                 "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
-                                [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $user->id ],
+                                [ 'Controller' => 'UsersController', 'action' => 'edit',  $user->id ],
                                 [ 'escape' => false ]  //'escape' => false - convert plain text to html
                               ); 
                             }
                             ?>
-                            <?php 
+                            <?php  
                             
-                            if($this->request->getAttribute('identity')->can('edit', $user)){
+                            if($this->request->getAttribute('identity')->can('delete', $user)){
                               echo $this->Form->postLink(
                                 "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
-                                [ 'Controller' => 'CategoriesController', 'action' => 'delete', $user->id ],
-                                [
-                                    'confirm' => __('Are you sure you want to delete # {0}?', $user->id),
-                                    'escape' => false //'escape' => false - convert plain text to html
-                                ], 
+                                [ 'Controller' => 'UsersController', 'action' => 'delete', $user['id'] ],
+                                [ 'confirm' => 'Are you sure you want to delete this record?', 'escape' => false ]
                               ); 
+                              
                             }
-                            ?> 
+                            ?>  
+                            <?php  
+                            
+                            if($this->request->getAttribute('identity')->can('delete', $user)){
+                              echo $this->Form->postLink(
+                                "<font color='#ffc107 ' size='3px'><i class='fa fa-lock'></i></font>", 
+                                [ 'Controller' => 'UsersController', 'action' => 'resetPassword', $user['id'] ],
+                                [ 'confirm' => 'Are you sure you want to reset this user\'s passowrd?', 'escape' => false ]
+                              ); 
+                              
+                            }
+                            ?>  
+                            
+                            
                         </td>
                     </tr>
                     <?php endforeach; ?> 

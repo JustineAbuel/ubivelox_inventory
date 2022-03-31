@@ -26,10 +26,10 @@ class IncomingController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Items'],
+            'contain' => ['Items', 'Users'],
             'order' => ['date_added' => 'DESC']
         ];
-        $incoming = $this->paginate($this->Incoming);
+        $incoming = $this->paginate($this->Incoming); 
 
         $this->set(compact('incoming'));
     }

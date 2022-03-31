@@ -22,6 +22,15 @@ class UserPolicy
     {
         return $this->isAllowed($user, 'change-password');
     }
+    public function canResetPassword(IdentityInterface $user, User $resource)
+    {
+        return $this->isAllowed($user, 'reset-password');
+    }
+    
+    public function canProfile(IdentityInterface $user, User $resource)
+    {
+        return $this->isAllowed($user, 'profile');
+    }
     public function canIndex(IdentityInterface $user, User $resource)
     {
         return $this->isAllowed($user, 'index');
@@ -86,11 +95,11 @@ class UserPolicy
                 $allowed = true;
                 break; 
             case 2:
-                // $allowedView = ['index', 'view']; 
-                // if(in_array($action, $allowedView)){ 
-                //     $allowed = true;
-                // }  
-                $allowed = true;
+                $allowedView = ['change-password', 'reset-password']; 
+                if(in_array($action, $allowedView)){ 
+                    $allowed = true;
+                }  
+                // $allowed = true;
                 
                 break;
                 
@@ -104,7 +113,10 @@ class UserPolicy
             
             case 4:
                 //Sales
-                $allowed = false;
+                $allowedView = ['change-password', 'profile']; 
+                if(in_array($action, $allowedView)){ 
+                    $allowed = true;
+                }  
                 break;
 
             case 5:

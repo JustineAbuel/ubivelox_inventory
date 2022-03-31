@@ -100,6 +100,10 @@ class User extends Entity implements IdentityInterface
         'role_id' => true,
         'user_role' => true,
         'transactions' => true,
+        'image' => true,
+        'status' => true,
+        'password_expiration' => true,
+        'trashed' => true,
     ];
 
     /**
@@ -122,38 +126,5 @@ class User extends Entity implements IdentityInterface
     {
         return true;
     }
-
-    // public function isAllowed($action)
-    // { 
-    //     //1=Dev, 2=HR, 3=ITSupport, 4=Sales 
-    //     $allowed = false;
-    //     switch ($this->role_id) {
-    //         case 1:
-    //             //Dev 
-    //             $allowed = true;
-    //             break; 
-    //         case 2:
-    //             //HR 
-
-    //             if(in_array($action, ['index', 'view'])){
-    //                 return true;
-    //             }
-    //             break;
-                
-    //         case 3:
-    //             //IT Support
-    //             $allowed = true;
-    //             break;
-            
-    //         case 4:
-    //             //Sales
-                
-    //             $allowed = false;
-    //             break;
-    //         default:
-    //             $allowed = false;
-    //             break;
-    //     }
-    //     return $allowed;
-    // }
+ 
 }

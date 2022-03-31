@@ -65,7 +65,7 @@ class CommonComponent extends Component
         $this->log($param['message'], 'info', [
             'channel' => 1,
             'ip_address' =>  $this->getUserIP(),
-            'username' => $loggedinuser->username,
+            'username' => $loggedinuser->firstname .' '.$loggedinuser->lastname,
             'role' => $loggedinuser->role_id,
             'directory' => '>'. $param['request']->getParam('controller') . '>'.$param['request']->getParam('action'), 
             'action' => $param['request']->getParam('action'),

@@ -47,6 +47,11 @@ class IncomingTable extends Table
             'foreignKey' => 'item_id',
             'joinType' => 'INNER',
         ]);
+        
+        $this->belongsTo('Users', [
+            'foreignKey' => 'id',
+            'joinType' => 'INNER',
+        ]);
     }
 
     /**

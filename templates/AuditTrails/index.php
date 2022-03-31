@@ -33,7 +33,7 @@
                       
                     <th><?= ucfirst('channel') ?></th>
                     <th><?= ucfirst('IP Address') ?></th>
-                    <th><?= ucfirst('username') ?></th>
+                    <th><?= ucfirst('user') ?></th>
                     <th><?= ucfirst('role') ?></th>
                     <th><?= ucfirst('directory') ?></th>
                     <th><?= ucfirst('action') ?></th>
@@ -88,8 +88,8 @@
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
       "paging":   true,
       "ordering": false, 
-      "lengthChange": true,      
-      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 500]]
+      // "lengthChange": true,      
+      "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, 'All']]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,

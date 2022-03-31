@@ -68,13 +68,13 @@
                         <td class="actions   ">  
                             <?php echo $this->Html->link(
                               "<font color='green' size='3px'><i class='fa fa-edit'></i></font>", 
-                              [ 'Controller' => 'CategoriesController', 'action' => 'edit',  $user->id ],
+                              [ 'Controller' => 'Users', 'action' => 'edit',  $user->id ],
                               [ 'escape' => false ]  //'escape' => false - convert plain text to html
                             ); 
                             ?>
                             <?php echo $this->Form->postLink(
                               "<font color='red' size='3px'><i class='fa fa-trash'></i></font>", 
-                              [ 'Controller' => 'CategoriesController', 'action' => 'delete', $user->id ],
+                              [ 'Controller' => 'Users', 'action' => 'delete', $user->id ],
                               [
                                   'confirm' => __('Are you sure you want to delete # {0}?', $user->id),
                                   'escape' => false //'escape' => false - convert plain text to html
