@@ -18,7 +18,17 @@
               <div class="card-header     "> 
                 <h3 class="card-title"> <?= __('List of Users') ?> </h3> 
                     
-    <?= $this->Html->link(__('Add New User'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    <?php 
+    // $allowedUser = [
+    //   1, //Dev
+    //   2, //HR
+    //   3, //IT
+    // ];
+      // if( in_array($this->request->getAttribute('identity')->role_id, $allowedUser) ){
+        echo $this->Html->link(__('Add New User'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']);
+      // }
+     
+     ?>
  
                 
               </div>
@@ -105,7 +115,7 @@
                             ?>  
                             <?php  
                             
-                            if($this->request->getAttribute('identity')->can('delete', $user)){
+                            if($this->request->getAttribute('identity')->can('resetPassword', $user)){
                               echo $this->Form->postLink(
                                 "<font color='#ffc107 ' size='3px'><i class='fa fa-lock'></i></font>", 
                                 [ 'Controller' => 'UsersController', 'action' => 'resetPassword', $user['id'] ],

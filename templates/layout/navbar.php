@@ -4,8 +4,20 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li> 
+      
+      <li class="nav-item dropdown">
+        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Forms</a>
+        <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+          <li><?= $this->Html->link('Items form', ['controller' => 'Items', 'action' => 'downloaditemform'])?></li>
+
+          <li><a href="#" class="dropdown-item">Some other action</a></li> 
+       
+        </ul>
       </li>
+
     </ul>
+    
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -39,7 +51,7 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
-
+       
       <li class="nav-item">
         <a class="nav-link" <?php echo $this->Html->link("
         <i class='fas fa-sign-out-alt' title='Logout'></i>", 

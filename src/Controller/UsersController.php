@@ -128,8 +128,7 @@ class UsersController extends AppController
         // $user = $this->Users->get($id, [
         //     'contain' => [],
         // ]); 
-        $user = $this->Users->get($this->Authentication->getIdentity()->getIdentifier() );
-        $this->Authorization->authorize($user, 'edit');
+        $user = $this->Users->get($this->Authentication->getIdentity()->getIdentifier() ); 
  
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());  
@@ -179,7 +178,7 @@ class UsersController extends AppController
     {
            
         $user = $this->Users->get($this->Authentication->getIdentity()->getIdentifier() );
-        $this->Authorization->authorize($user, 'edit');
+        $this->Authorization->authorize($user, 'reset-password');
  
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData() );

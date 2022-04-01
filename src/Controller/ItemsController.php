@@ -32,10 +32,8 @@ class ItemsController extends AppController
         $this->loadModel('Incoming'); 
         $this->loadModel('Outgoing');  
 
-        // $this->Authorization->skipAuthorization();
-        
-    }
-
+        // $this->Authorization->skipAuthorization(); 
+    } 
     
     public function dashboard(){ 
         $this->Authorization->skipAuthorization();
@@ -136,6 +134,21 @@ class ItemsController extends AppController
  
     }
 
+    public function downloaditemform(){
+        // $path = WWW_ROOT.DS.'forms'.DS.'itemsupload.csv';
+        // $this->response->f(function() use($path){
+        //     return file_get_contents($path);
+        // }); 
+        // $filePath = WWW_ROOT .'forms'.DS.'itemsupload.csv';
+        // $this->response->file($path ,
+        //     ['download'=> true, 'name'=> 'file name']);
+        $file_path = WWW_ROOT.DS.'forms'.DS.'itemsupload.csv';
+        $this->response->file($file_path, array(
+            'download' => true,
+            'name' => 'asd.csv',
+        ));
+        return $this->response;
+    }
 
     public function index()
     {   

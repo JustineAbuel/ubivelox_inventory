@@ -95,25 +95,26 @@ class UserPolicy
                 $allowed = true;
                 break; 
             case 2:
-                $allowedView = ['change-password', 'reset-password']; 
-                if(in_array($action, $allowedView)){ 
-                    $allowed = true;
-                }  
-                // $allowed = true;
+                // $allowedView = ['change-password', 'reset-password']; 
+                // if(in_array($action, $allowedView)){ 
+                //     $allowed = true;
+                // }  
+                $allowed = true;
                 
                 break;
                 
             case 3:
                 //IT Support
-                $allowedView = ['index', 'view']; 
-                if(in_array($action, $allowedView)){ 
-                    $allowed = true;
-                }  
+                // $allowedView = ['index', 'view']; 
+                // if(in_array($action, $allowedView)){ 
+                //     $allowed = true;
+                // }  
+                $allowed = true;
                 break;
             
             case 4:
                 //Sales
-                $allowedView = ['change-password', 'profile']; 
+                $allowedView = ['change-password' ]; 
                 if(in_array($action, $allowedView)){ 
                     $allowed = true;
                 }  

@@ -45,13 +45,13 @@
 
                 <dl>
                   <dt class="blue"></dt>
-                  <dd>Delivered</dd>
+                  <dd>Available</dd>
 
                   <dt class="orange"></dt>
-                  <dd>For Delivery</dd>
+                  <dd>Re-Stock</dd>
 
                   <dt class="red"></dt>
-                  <dd>Cancelled</dd>
+                  <dd>Out of Stock</dd>
                 </dl>
                 <table id="example1" class="table table-bordered table-striped table hover">
                   <thead>
