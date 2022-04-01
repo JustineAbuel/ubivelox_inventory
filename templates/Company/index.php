@@ -5,6 +5,29 @@
  */
 ?> 
   <!-- Content Wrapper. Contains page content -->
+<!-- Modal -->
+<?= $this->Form->create($company,['method' => 'post','enctype' => 'multipart/form-data']) ?>
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload CSV Data (Company)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="file" name="file" accept=".csv" class="form-control" required="">
+        <small><strong><font color="red">Only .csv file type is allowed</font></strong></small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="submit">Import/Upload Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <?= $this->Form->end() ?>
 
 
     <!-- Main content -->
@@ -16,11 +39,12 @@
           
 
             <div class="card">
-              <div class="card-header     "> 
+              <div class="card-header"> 
                 <h3 class="card-title"> <?= __('List of Company') ?> </h3> 
-                    
+
+    <?= $this->Html->link(__(' Upload CSV Data (Company)'), ['action' => 'uploadcsv'], ['class' => 'button float-right btn btn-success float-right fa fa-file-excel','data-toggle' => 'modal','data-target' => '#uploadModal']) ?>
+
     <?= $this->Html->link(__('Add New Company'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
- 
                 
               </div>
               <!-- /.card-header -->
