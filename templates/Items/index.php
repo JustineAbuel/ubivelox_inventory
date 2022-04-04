@@ -12,8 +12,32 @@ use Cake\I18n\FrozenTime;
    }
  </style>
   <!-- Content Wrapper. Contains page content -->
-
-
+ 
+<div class="modal fade" id="uploadItemsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload CSV Data (Items)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      <?= $this->Form->create($items, ['type' => 'file' ]) ?> 
+        <input type="file" name="file" accept=".csv" class="form-control" required="">
+        <small><strong><font color="red">Only .csv file type is allowed</font></strong></small>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="submit">Import/Upload Data</button>
+      </div>
+      
+      <?= $this->Form->end() ?>
+    </div>
+  </div>
+</div> 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -24,18 +48,20 @@ use Cake\I18n\FrozenTime;
             <div class="card">
               <div class="card-header     "> 
                     <h3 class="card-title ">List of Items</h3> 
-                    <?php echo $this->Html->link((
-                    ' Add New Item '
-                    ),[
-                        'Controller' => 'ItemsController',
-                        'action' => 'add',
-                       
-                    ],  [ 'class' => 'btn btn-primary float-right justify-content-end'],
-                        
-                        [
-                            'escape' => false //'escape' => false - convert plain text to html
-                        ]); ?> 
-                
+              <div class="card-tools"> 
+                  
+                  <?= $this->Html->link( 
+                    ' Add New Item ' ,
+                    [ 'Controller' => 'ItemsController',   'action' => 'add',  ],  
+                    [ 'class' => 'btn btn-primary float-right '], [ 'escape' => false  ]); ?> 
+                    <?= $this->Html->link(
+                      "<font color='white' size='3px'><i class='fa fa-file-excel'></i></font> Mass upload Items", 
+                      ['action' => 'uploadcsv'], 
+                      ['class' => 'float-right btn btn-success float-right mr-2 ',
+                      'data-toggle' => 'modal','data-target' => '#uploadItemsModal', 'escape' => false ]) 
+                    ?>
+ 
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

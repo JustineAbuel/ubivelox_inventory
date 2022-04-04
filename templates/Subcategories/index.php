@@ -8,6 +8,31 @@
  
   <!-- Content Wrapper. Contains page content -->
 
+  <div class="modal fade" id="uploadCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload CSV Data ($subcategories)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      <?= $this->Form->create($subcategories, ['type' => 'file' ]) ?> 
+        <input type="file" name="file" accept=".csv" class="form-control" required="">
+        <small><strong><font color="red">Only .csv file type is allowed</font></strong></small>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" name="submit">Import/Upload Data</button>
+      </div>
+      
+      <?= $this->Form->end() ?>
+    </div>
+  </div>
+</div> 
 
     <!-- Main content -->
     <section class="content">
@@ -22,8 +47,17 @@
               <div class="card-header     "> 
                     <h3 class="card-title ">List of Subcategories</h3> 
                     
-    <?= $this->Html->link(__('New Subcategory'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+    
+                <div class="card-tools">  
+                <?= $this->Html->link(__('New Subcategory'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+                    <?= $this->Html->link(
+                      "<font color='white' size='3px'><i class='fa fa-file-excel'></i></font> Mass upload Subcategory", 
+                      ['action' => 'uploadcsv'], 
+                      ['class' => 'float-right btn btn-success float-right mr-2 ',
+                      'data-toggle' => 'modal','data-target' => '#uploadCategoryModal', 'escape' => false ]) 
+                    ?>
  
+                </div>
                 
               </div>
               <!-- /.card-header -->

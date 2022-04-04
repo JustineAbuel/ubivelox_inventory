@@ -24,6 +24,18 @@ class SubcategoriesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+
+    
+    public function downloadsubcategoriesform(){
+        $this->Authorization->skipAuthorization();  
+        $file_path = WWW_ROOT.'forms'.DS.'UBP_MASS_SUBCATEGORY_FORM.csv'; 
+        $response = $this->response->withFile(
+              $file_path,
+            ['download' => true, 'name' =>'UBP_MASS_SUBCATEGORY_FORM.csv']
+        );
+        return $response;
+    }
+
     public function index()
     {
         $subcategory = $this->Subcategories->newEmptyEntity();
@@ -39,7 +51,51 @@ class SubcategoriesController extends AppController
             'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
             'request' => $this->request, 
         ]);
+        $identity = $this->request->getAttribute('identity')->getIdentifier(); 
+        if(isset($_POST["submit"])){
+        
+            $filename=$_FILES["file"]["tmp_name"];
 
+            if($_FILES["file"]["size"] > 0){
+    
+                $file = fopen($filename, "r");
+                $num = 0;
+                $counter = 0;
+                while ($data = fgetcsv($file)){
+                    if($num == 0){ //skip header names in CSV file
+                        $num++;
+                    } 
+                    else{  
+                        $subcategory = $this->Subcategories->newEmptyEntity();  
+                        $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData()); 
+
+                        $subcategory->category_id = $data[0];
+                        $subcategory->subcategory_name = $data[1];
+                        $subcategory->subcategory_description = $data[2]; 
+                        $subcategory->date_added = date('Y-m-d H:i:s'); 
+                        $subcategory->added_by = $identity; 
+
+                        $subcategory = $this->Subcategories->save($subcategory);
+
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = '. $subcategory->subcategory_name ,
+                            'request' => $this->request, 
+                        ]);
+
+                        $counter++;
+                    }
+                }
+                    if($counter > 0) {
+                        $this->Flash->success(__('Subcategory CSV has been uploaded. {0} category saved.', $counter));
+                        return $this->redirect(['controller' => 'Subcategories','action' => 'index']);//redirect to company main
+                    } else{
+                        $this->Flash->error(__('Subcategory CSV data could not be saved. Please, try again.'));
+                    }
+
+                fclose($file);
+            }
+        }
         $title = "Sub Categories";
         $this->set(compact('title', 'subcategories'));
     }

@@ -42,10 +42,15 @@
               <div class="card-header"> 
                 <h3 class="card-title"> <?= __('List of Company') ?> </h3> 
 
-    <?= $this->Html->link(__(' Upload CSV Data (Company)'), ['action' => 'uploadcsv'], ['class' => 'button float-right btn btn-success float-right fa fa-file-excel','data-toggle' => 'modal','data-target' => '#uploadModal']) ?>
-
-    <?= $this->Html->link(__('Add New Company'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
-                
+                <div class="card-tools">  
+                    <?= $this->Html->link(__('Add New Company'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
+                    <?= $this->Html->link(
+                      "<font color='white' size='3px'><i class='fa fa-file-excel'></i></font> Upload CSV Data (Company)", 
+                      ['action' => 'uploadcsv'], 
+                      ['class' => 'float-right btn btn-success float-right mr-2 ',
+                      'data-toggle' => 'modal','data-target' => '#uploadModal', 'escape' => false ]) 
+                    ?>
+              </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body">

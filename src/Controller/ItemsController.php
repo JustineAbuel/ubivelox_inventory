@@ -135,19 +135,13 @@ class ItemsController extends AppController
     }
 
     public function downloaditemform(){
-        // $path = WWW_ROOT.DS.'forms'.DS.'itemsupload.csv';
-        // $this->response->f(function() use($path){
-        //     return file_get_contents($path);
-        // }); 
-        // $filePath = WWW_ROOT .'forms'.DS.'itemsupload.csv';
-        // $this->response->file($path ,
-        //     ['download'=> true, 'name'=> 'file name']);
-        $file_path = WWW_ROOT.DS.'forms'.DS.'itemsupload.csv';
-        $this->response->file($file_path, array(
-            'download' => true,
-            'name' => 'asd.csv',
-        ));
-        return $this->response;
+        $this->Authorization->skipAuthorization();  
+        $file_path = WWW_ROOT.'forms'.DS.'UBP_MASS_ITEMS_FORM.csv'; 
+        $response = $this->response->withFile(
+              $file_path,
+            ['download' => true, 'name' =>'UBP_MASS_ITEMS_FORM.csv']
+        );
+        return $response;
     }
 
     public function index()
@@ -169,7 +163,79 @@ class ItemsController extends AppController
             'order' => ['id' => 'DESC']
         ];   
         $items = $this->paginate($this->Items);   
-        $qrCode = new QrCode();
+        $qrCode = new QrCode(); 
+
+        $identity = $this->request->getAttribute('identity')->getIdentifier(); 
+        if(isset($_POST["submit"])){
+        
+            $filename=$_FILES["file"]["tmp_name"];
+
+            if($_FILES["file"]["size"] > 0){
+    
+                $file = fopen($filename, "r");
+                $num = 0;
+                $counter = 0;
+                while ($data = fgetcsv($file)){
+                    if($num == 0){ //skip header names in CSV file
+                        $num++;
+                    } 
+                    else{  
+                        $item = $this->Items->newEmptyEntity();  
+                        $item = $this->Items->patchEntity($item, $this->request->getData()); 
+
+                        $item->category_id = $data[0];
+                        $item->subcategory_id = $data[1];
+                        $item->item_name = $data[2];
+                        $item->serial_no = $data[3];
+                        $item->item_description = $data[4];
+                        $item->issued_date = date('Y-m-d H:i:s', strtotime($data[5]));
+                        $item->manufacturer_warranty = date('Y-m-d', strtotime($data[6]));
+                        $item->quantity = $data[7];
+                        $item->supplier_id = $data[8];
+                        $item->item_type_id = $data[9];
+                        $item->quality = $data[10];
+                        $item->remarks = $data[11];
+                        $item->part_no = $data[12];
+                        $item->operating_system = $data[13];
+                        $item->kernel = $data[14];
+                        $item->header_type = $data[15];
+                        $item->firmware = $data[16];
+                        $item->features = $data[17]; 
+                        $item->date_added = date('Y-m-d H:i:s'); 
+                        $item->added_by = $identity; 
+                        
+
+                        if($item = $this->Items->save($item)){
+                            $incomingTable = $this->Items->Incoming;
+                            $incoming = $incomingTable->newEmptyEntity();  
+
+                            $incoming->item_id = $item->id;
+                            $incoming->quantity = $data[10];
+                            $incoming->added_by = $identity;
+                            $incoming->date_added = date('Y-m-d H:i:s');
+                            $incomingTable->save($incoming);
+                        }
+                        
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload - Successfully added item with id = '. $item->item_name ,
+                            'request' => $this->request, 
+                        ]);
+
+                        $counter++;
+                    }
+                }
+                    if($counter > 0) {
+                        $this->Flash->success(__('Items CSV has been uploaded. {0} items saved.', $counter));
+                        return $this->redirect(['controller' => 'Items','action' => 'index']);//redirect to company main
+                    } else{
+                        $this->Flash->error(__('Company CSV data could not be saved. Please, try again.'));
+                    }
+
+                fclose($file);
+            }
+                  
+        }
 
 		$this->set('title','List of Items');
 		$this->set(compact('items', 'qrCode'));

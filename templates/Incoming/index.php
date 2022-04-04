@@ -45,7 +45,7 @@
                     <td><?= $this->Number->format($incoming->quantity) ?></td>
                     <td><?= $this->Number->format($incoming->item->quantity) ?></td>
                     <td><?= h($incoming->date_added) ?></td>
-                    <td><?= ucfirst($incoming->user->firstname) .' '. ucfirst($incoming->user->lastname) ?></td> 
+                    <td><?= ucfirst($incoming->Users['firstname']) .' '. ucfirst($incoming->Users['lastname']) ?></td> 
                 </tr>
                 <?php endforeach; ?>  
 

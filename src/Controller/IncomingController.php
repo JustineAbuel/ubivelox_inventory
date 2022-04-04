@@ -25,12 +25,25 @@ class IncomingController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Items', 'Users'],
-            'order' => ['date_added' => 'DESC']
-        ];
-        $incoming = $this->paginate($this->Incoming); 
+        // $this->paginate = [
+        //     'contain' => ['Items', 'Users'],
+        //     'order' => ['date_added' => 'DESC']
+        // ];
 
+        // $incoming = $this->paginate($this->Incoming); 
+        $incoming = $this->Incoming->find('all', [
+            'join' => [
+                'alias' => 'Users',  
+                'table' => 'users',
+                'type' => 'LEFT',
+                'conditions' => [
+                    'Users.id = Incoming.added_by',
+                ], 
+            ]
+        ])  
+        ->select(['Incoming.quantity', 'Incoming.date_added', 'Users.firstname', 'Users.lastname', 'Items.quantity', 'Items.item_name'])
+        ->contain(['Items'])->order(['Incoming.id' => 'DESC'])->all();
+        // dd($incoming);
         $this->set(compact('incoming'));
     }
 

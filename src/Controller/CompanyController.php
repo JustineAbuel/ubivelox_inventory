@@ -27,6 +27,15 @@ class CompanyController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    public function downloadcompanyform(){
+        $this->Authorization->skipAuthorization();  
+        $file_path = WWW_ROOT.'forms'.DS.'UBP_MASS_COMPANY_FORM.csv'; 
+        $response = $this->response->withFile(
+              $file_path,
+            ['download' => true, 'name' =>'UBP_MASS_COMPANY_FORM.csv']
+        );
+        return $response;
+    }
     public function index()
     {
         
@@ -90,6 +99,11 @@ class CompanyController extends AppController
                         company_name = '$company_name' 
                         )
                         ");
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload[Company] - Successfully added category with id = '. $company_name ,
+                            'request' => $this->request, 
+                        ]);
                     }
                 }
                         if($insertquery) {

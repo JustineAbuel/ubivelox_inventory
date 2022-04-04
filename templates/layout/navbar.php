@@ -9,9 +9,11 @@
       <li class="nav-item dropdown">
         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Forms</a>
         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-          <li><?= $this->Html->link('Items form', ['controller' => 'Items', 'action' => 'downloaditemform'])?></li>
-
-          <li><a href="#" class="dropdown-item">Some other action</a></li> 
+          <li><?= $this->Html->link('Items form', ['controller' => 'Items', 'action' => 'downloaditemform'], ['class' => 'dropdown-item'])?></li>
+          <li><?= $this->Html->link('Categories form', ['controller' => 'Categories', 'action' => 'downloadcategoriesform'], ['class' => 'dropdown-item'])?></li>
+          <li><?= $this->Html->link('Subcategories form', ['controller' => 'Subcategories', 'action' => 'downloadsubcategoriesform'], ['class' => 'dropdown-item'])?></li>
+          <li><?= $this->Html->link('Company form', ['controller' => 'Company', 'action' => 'downloadcompanyform'], ['class' => 'dropdown-item'])?></li>
+ 
        
         </ul>
       </li>
