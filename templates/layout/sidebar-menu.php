@@ -7,6 +7,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
+           
           <li class="nav-item ">
             <a href="<?php echo $this->Url->build(('/dashboard')); ?>" class="nav-link <?= $dashb == 'dashboard' ? 'active': '' ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -30,6 +32,9 @@
             </a>
           </li>   
           
+          <?php $authUsers = [1, 3];
+          if(in_array($user->role_id, $authUsers)){
+          ?>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/categories'), ['controller' => 'CategoriesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'categories' ? 'active': '' ?>">
               <i class="nav-icon fas fa-table"></i>
@@ -37,8 +42,8 @@
                 Categories 
               </p>
             </a>
-          </li>   
-          
+          </li>    
+           
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/subcategories'), ['controller' => 'SubcategoriesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'subcategories' ? 'active': '' ?>">
               <i class="nav-icon fas fa-table"></i>
@@ -47,6 +52,7 @@
               </p>
             </a>
           </li>   
+          <?php } ?>
 
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/transactions'), ['controller' => 'TransactionsController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'transactions' ? 'active': '' ?>">
@@ -66,6 +72,7 @@
             </a>
           </li>
 
+          
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/outgoing'), ['controller' => 'Outgoing','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'outgoing' ? 'active': '' ?>">
               <!-- <i class="nav-icon fas fa-shopping-cart"></i> -->
@@ -75,6 +82,11 @@
               </p>
             </a>
           </li>
+   
+
+          <?php $authUsers = [1, 3, 5];
+          if(in_array($user->role_id, $authUsers)){
+          ?>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/incoming'), ['controller' => 'IncomingController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'incoming' ? 'active': '' ?>">
               <!-- <i class="nav-icon fas fa-users"></i> -->
@@ -84,7 +96,12 @@
               </p>
             </a>
           </li> 
+          <?php } ?>
 
+          
+          <?php $authUsers = [1, 3];
+          if(in_array($user->role_id, $authUsers)){
+          ?>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/company'), ['controller' => 'CompanyController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'company' ? 'active': '' ?>">
               <i class="nav-icon fas fa-building"></i>
@@ -93,6 +110,7 @@
               </p>
             </a>
           </li>
+          <?php } ?>
 
           <!-- <li class="nav-item">
             <a href="<?php //echo $this->Url->build(('/transactionType'), ['controller' => 'TransactionTypeController','action' => 'index']); ?>" class="nav-link  <?= $currentPath == 'transactionType' ? 'active': '' ?>">
@@ -111,7 +129,9 @@
               </p>
             </a>
           </li> -->
-
+          <?php $authUsers = [1, 2, 3];
+          if(in_array($user->role_id, $authUsers)){
+          ?>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/users'), ['controller' => 'UsersController','action' => 'index']); ?>" class="nav-link 
              
@@ -131,6 +151,7 @@
               </p>
             </a>
           </li>  
+          <?php } ?>
           <!-- <li class="nav-item">
             <a href="<?php// echo $this->Url->build(('/user-roles'), ['controller' => 'UserRolesController','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'userRoles' ? 'active': '' ?>">
               <i class="nav-icon fas fa-user-tag"></i>
@@ -139,6 +160,9 @@
               </p>
             </a>
           </li>   -->
+          <?php $authUsers = [1, 3];
+          if(in_array($user->role_id, $authUsers)){
+          ?>
           <li class="nav-item">
             <a href="<?php echo $this->Url->build(('/auditTrails'), ['controller' => 'AuditTrails','action' => 'index']); ?>" class="nav-link <?= $currentPath == 'auditTrails' ? 'active': '' ?>">
   
@@ -148,6 +172,7 @@
               </p>
             </a>
           </li>  
+          <?php } ?>
 
         </ul>
       </nav>
