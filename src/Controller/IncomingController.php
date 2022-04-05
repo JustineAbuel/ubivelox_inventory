@@ -41,7 +41,7 @@ class IncomingController extends AppController
                 ], 
             ]
         ])  
-        ->select(['Incoming.quantity', 'Incoming.date_added', 'Users.firstname', 'Users.lastname', 'Items.quantity', 'Items.item_name'])
+        ->select(['Incoming.quantity', 'Incoming.date_added', 'Users.firstname', 'Users.lastname', 'Items.quantity', 'Items.item_name', 'Items.id'])
         ->contain(['Items'])->order(['Incoming.id' => 'DESC'])->all();
         // dd($incoming);
         $this->set(compact('incoming'));

@@ -31,7 +31,7 @@
                   <thead>
                   <tr>  
                      
-                    <th><?= ucfirst('item id') ?></th>
+                    <th><?= ucfirst('item name') ?></th>
                     <th><?= ucfirst('quantity') ?></th>
                     <th><?= ucfirst('total stocks') ?></th>
                     <th><?= ucfirst('date added') ?></th>
