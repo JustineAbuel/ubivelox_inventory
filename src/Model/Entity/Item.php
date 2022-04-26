@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -57,6 +58,7 @@ class Item extends Entity
         'item_description' => true,
         'issued_date' => true,
         'manufacturer_warranty' => true,
+        'base_quantity' => true,
         'quantity' => true,
         'supplier_id' => true,
         'item_type_id' => true,

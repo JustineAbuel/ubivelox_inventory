@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller\Component;
@@ -19,16 +20,16 @@ class CommonComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [];
-    
+
     public $components = [
         'Authentication.Authentication',
         'RequestHandler'
     ];
     public function initialize(array $_defaultConfig): void
-    { 
-          
-    } 
-    public function generateQr($param){
+    {
+    }
+    public function generateQr($param)
+    {
         $qrCode = new QrCode();
         $qrCode
             ->setText($param)
@@ -47,7 +48,7 @@ class CommonComponent extends Component
         $client = isset($_SERVER["HTTP_CLIENT_IP"]) ? $_SERVER["HTTP_CLIENT_IP"] : '';
         $forward = isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : '';
         $remote = $_SERVER["REMOTE_ADDR"];
-    
+
         if (filter_var($client, FILTER_VALIDATE_IP)) {
             $ip = $client;
         } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
@@ -55,21 +56,25 @@ class CommonComponent extends Component
         } else {
             $ip = $remote;
         }
-    
-        return $ip;
-    } 
-    public function dblogger($param){
- 
-        $loggedinuser = $this->Authentication->getIdentity()->getOriginalData();
 
+        return $ip;
+    }
+    public function dblogger($param)
+    {
+
+        $loggedinuser = $this->Authentication->getIdentity()->getOriginalData();
+        $status = 'success';
+        if (isset($param['status'])) {
+            $status = 'error';
+        }
         $this->log($param['message'], 'info', [
             'channel' => 1,
             'ip_address' =>  $this->getUserIP(),
-            'username' => $loggedinuser->firstname .' '.$loggedinuser->lastname,
+            'username' => $loggedinuser->firstname . ' ' . $loggedinuser->lastname,
             'role' => $loggedinuser->role_id,
-            'directory' => '>'. $param['request']->getParam('controller') . '>'.$param['request']->getParam('action'), 
+            'directory' => '>' . $param['request']->getParam('controller') . '>' . $param['request']->getParam('action'),
             'action' => $param['request']->getParam('action'),
-            'status' => 'success', 
-        ]); 
+            'status' => $status,
+        ]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -49,8 +50,8 @@ class ItemsTable extends Table
         $this->addBehavior('Timestamp', [
             'events' => [
                 'Model.beforeSave' => [
-                    'date_added' => 'new', 
-                ] ,
+                    'date_added' => 'new',
+                ],
                 'Items.updated' => [
                     'date_updated' => 'always'
                 ]
@@ -60,7 +61,7 @@ class ItemsTable extends Table
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',
             'joinType' => 'INNER',
-        ]); 
+        ]);
         $this->belongsTo('Subcategories', [
             'foreignKey' => 'subcategory_id',
             'joinType' => 'INNER',
@@ -72,7 +73,7 @@ class ItemsTable extends Table
         $this->belongsTo('ItemType', [
             'foreignKey' => 'item_type_id',
             'joinType' => 'INNER',
-        ]); 
+        ]);
         $this->hasMany('Incoming', [
             'foreignKey' => 'item_id',
         ]);
@@ -82,7 +83,6 @@ class ItemsTable extends Table
         $this->hasMany('Transactions', [
             'foreignKey' => 'item_id',
         ]);
-
     }
 
     /**
@@ -101,7 +101,7 @@ class ItemsTable extends Table
             ->scalar('item_name')
             ->maxLength('item_name', 255)
             ->requirePresence('item_name', 'create')
-            ->notEmptyString('item_name')  ;
+            ->notEmptyString('item_name');
 
         $validator
             ->scalar('serial_no')
@@ -120,6 +120,11 @@ class ItemsTable extends Table
             ->date('manufacturer_warranty')
             ->requirePresence('manufacturer_warranty', 'create')
             ->notEmptyDate('manufacturer_warranty');
+
+        $validator
+            ->integer('base_quantity')
+            ->requirePresence('base_quantity', 'create')
+            ->notEmptyString('base_quantity');
 
         $validator
             ->integer('quantity')
@@ -168,7 +173,7 @@ class ItemsTable extends Table
         $validator
             ->dateTime('date_added')
             ->allowEmptyDateTime('date_added');
-            
+
 
         $validator
             ->integer('added_by')
@@ -185,19 +190,21 @@ class ItemsTable extends Table
         $validator
             ->dateTime('trashed')
             ->allowEmptyDateTime('trashed');
-            
+
         $validator
-            ->allowEmptyFile('image') 
+            ->allowEmptyFile('image')
             ->add('image', [
-                    'mimeType' => [
-                        'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
-                        'message' => '.PNG, .JPG, .JPEG file extensions only'] 
-                    ], 
-                    'fileSize' => [
-                        'rule' => ['fileSize', '<=', '1MB' ],
-                        'message' => 'Image size must be less than 1'
+                'mimeType' => [
+                    'rule' => [
+                        'mimeType', ['image/png', 'image/jpg', 'image/jpeg'],
+                        'message' => '.PNG, .JPG, .JPEG file extensions only'
                     ]
-                ]);
+                ],
+                'fileSize' => [
+                    'rule' => ['fileSize', '<=', '1MB'],
+                    'message' => 'Image size must be less than 1'
+                ]
+            ]);
         return $validator;
     }
 
@@ -210,7 +217,7 @@ class ItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']); 
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
         $rules->add($rules->existsIn('subcategory_id', 'Subcategories'), ['errorField' => 'subcategory_id']);
         $rules->add($rules->existsIn('supplier_id', 'Company'), ['errorField' => 'supplier_id']);
         $rules->add($rules->existsIn('item_type_id', 'ItemType'), ['errorField' => 'item_type_id']);
@@ -219,7 +226,8 @@ class ItemsTable extends Table
         return $rules;
     }
 
-    public function findTrashed(Query $query, array $options){
+    public function findTrashed(Query $query, array $options)
+    {
         return $query->where(['trashed ==' => null]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -11,13 +12,13 @@ namespace App\Controller;
  */
 class SubcategoriesController extends AppController
 {
-    
+
     public function initialize(): void
     {
         parent::initialize();
-  
+
         // $this->Authorization->skipAuthorization();
-        
+
     }
     /**
      * Index method
@@ -25,13 +26,14 @@ class SubcategoriesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      */
 
-    
-    public function downloadsubcategoriesform(){
-        $this->Authorization->skipAuthorization();  
-        $file_path = WWW_ROOT.'forms'.DS.'UBP_MASS_SUBCATEGORY_FORM.csv'; 
+
+    public function downloadsubcategoriesform()
+    {
+        $this->Authorization->skipAuthorization();
+        $file_path = WWW_ROOT . 'forms' . DS . 'UBP_MASS_SUBCATEGORY_FORM.csv';
         $response = $this->response->withFile(
-              $file_path,
-            ['download' => true, 'name' =>'UBP_MASS_SUBCATEGORY_FORM.csv']
+            $file_path,
+            ['download' => true, 'name' => 'UBP_MASS_SUBCATEGORY_FORM.csv']
         );
         return $response;
     }
@@ -48,50 +50,49 @@ class SubcategoriesController extends AppController
 
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
-        $identity = $this->request->getAttribute('identity')->getIdentifier(); 
-        if(isset($_POST["submit"])){
-        
-            $filename=$_FILES["file"]["tmp_name"];
+        $identity = $this->request->getAttribute('identity')->getIdentifier();
+        if (isset($_POST["submit"])) {
 
-            if($_FILES["file"]["size"] > 0){
-    
+            $filename = $_FILES["file"]["tmp_name"];
+
+            if ($_FILES["file"]["size"] > 0) {
+
                 $file = fopen($filename, "r");
                 $num = 0;
                 $counter = 0;
-                while ($data = fgetcsv($file)){
-                    if($num == 0){ //skip header names in CSV file
+                while ($data = fgetcsv($file)) {
+                    if ($num == 0) { //skip header names in CSV file
                         $num++;
-                    } 
-                    else{  
-                        $subcategory = $this->Subcategories->newEmptyEntity();  
-                        $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData()); 
+                    } else {
+                        $subcategory = $this->Subcategories->newEmptyEntity();
+                        $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
 
                         $subcategory->category_id = $data[0];
                         $subcategory->subcategory_name = $data[1];
-                        $subcategory->subcategory_description = $data[2]; 
-                        $subcategory->date_added = date('Y-m-d H:i:s'); 
-                        $subcategory->added_by = $identity; 
+                        $subcategory->subcategory_description = $data[2];
+                        $subcategory->date_added = date('Y-m-d H:i:s');
+                        $subcategory->added_by = $identity;
 
                         $subcategory = $this->Subcategories->save($subcategory);
 
                         $this->Common->dblogger([
                             //change depending on action
-                            'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = '. $subcategory->subcategory_name ,
-                            'request' => $this->request, 
+                            'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = ' . $subcategory->subcategory_name,
+                            'request' => $this->request,
                         ]);
 
                         $counter++;
                     }
                 }
-                    if($counter > 0) {
-                        $this->Flash->success(__('Subcategory CSV has been uploaded. {0} category saved.', $counter));
-                        return $this->redirect(['controller' => 'Subcategories','action' => 'index']);//redirect to company main
-                    } else{
-                        $this->Flash->error(__('Subcategory CSV data could not be saved. Please, try again.'));
-                    }
+                if ($counter > 0) {
+                    $this->Flash->success(__('Subcategory CSV has been uploaded. {0} category saved.', $counter));
+                    return $this->redirect(['controller' => 'Subcategories', 'action' => 'index']); //redirect to company main
+                } else {
+                    $this->Flash->error(__('Subcategory CSV data could not be saved. Please, try again.'));
+                }
 
                 fclose($file);
             }
@@ -116,8 +117,8 @@ class SubcategoriesController extends AppController
 
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
         $this->set(compact('subcategory'));
@@ -134,20 +135,20 @@ class SubcategoriesController extends AppController
         $this->Authorization->authorize($subcategory, 'add');
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
         if ($this->request->is('post')) {
             $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
             $subcategory->added_by = $this->request->getAttribute('identity')->getIdentifier();
-            
+
             if ($this->Subcategories->save($subcategory)) {
                 $this->Flash->success(__('The subcategory has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully added subcategory ='. $subcategory->subcategory_name ,
-                    'request' => $this->request, 
+                    'message' => 'Successfully added subcategory =' . $subcategory->subcategory_name,
+                    'request' => $this->request,
                 ]);
 
                 return $this->redirect(['action' => 'index']);
@@ -155,9 +156,10 @@ class SubcategoriesController extends AppController
             $this->Flash->error(__('The subcategory could not be saved. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to add subcategory' ,
-                'request' => $this->request, 
-            ]); 
+                'message' => 'Unable to add subcategory',
+                'request' => $this->request,
+                'status' => 'error',
+            ]);
         }
         $categories = $this->Subcategories->Categories->find('list', ['limit' => 200])->all();
         $this->set(compact('subcategory', 'categories'));
@@ -178,8 +180,8 @@ class SubcategoriesController extends AppController
         $this->Authorization->authorize($subcategory, 'edit');
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -190,8 +192,8 @@ class SubcategoriesController extends AppController
                 $this->Flash->success(__('The subcategory has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully updated subcategory with id = '. $subcategory->id ,
-                    'request' => $this->request, 
+                    'message' => 'Successfully updated subcategory with id = ' . $subcategory->id,
+                    'request' => $this->request,
                 ]);
 
                 return $this->redirect(['action' => 'index']);
@@ -199,8 +201,9 @@ class SubcategoriesController extends AppController
             $this->Flash->error(__('The subcategory could not be saved. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to update subcategory' ,
-                'request' => $this->request, 
+                'message' => 'Unable to update subcategory',
+                'request' => $this->request,
+                'status' => 'error',
             ]);
         }
         $categories = $this->Subcategories->Categories->find('list', ['limit' => 200])->all();
@@ -223,15 +226,16 @@ class SubcategoriesController extends AppController
             $this->Flash->success(__('The subcategory has been deleted.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Successfully deleted subcategory with id = '. $id ,
-                'request' => $this->request, 
+                'message' => 'Successfully deleted subcategory with id = ' . $id,
+                'request' => $this->request,
             ]);
         } else {
             $this->Flash->error(__('The subcategory could not be deleted. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to delete subcategory' ,
-                'request' => $this->request, 
+                'message' => 'Unable to delete subcategory',
+                'request' => $this->request,
+                'status' => 'error',
             ]);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -86,7 +87,7 @@ class UsersTable extends Table
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
-            
+
         // $validator
         //     ->scalar('newpassword', 'password'); 
         // $validator
@@ -110,8 +111,9 @@ class UsersTable extends Table
             ->notEmptyString('lastname');
 
         $validator
-            ->integer('contactno')
-            ->allowEmptyString('contactno');
+            ->scalar('contactno')
+            ->requirePresence('contactno', 'create')
+            ->notEmptyString('contactno');
 
         $validator
             ->dateTime('date_added')
@@ -127,8 +129,8 @@ class UsersTable extends Table
 
         $validator
             ->integer('updated_by')
-            ->allowEmptyString('updated_by'); 
- 
+            ->allowEmptyString('updated_by');
+
         $validator
             ->integer('status')
             ->notEmptyString('status');
@@ -142,29 +144,29 @@ class UsersTable extends Table
             ->allowEmptyDateTime('trashed');
 
         $validator
-            ->allowEmptyFile('image') 
+            ->allowEmptyFile('image')
             // ->uploadedFile('image', [
             //     'types' => ['image/png'], // only PNG image files
             //     'minSize' => 1024, // Min 1 KB
             //     'maxSize' => 1024 * 1024 // Max 1 MB
             // ])
-            ->add('image','file', [
+            ->add('image', 'file', [
                 'rule' => ['uploadedFile', ['types' => ['image/png', 'image/jpeg', 'application/pdf']]], // It's what I expect to check
                 'message' => __(".PNG, .JPG, .JPEG file extensions only")
-                ]);
-            // ->add('image', 'file',[
-            //         [
-            //             'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
-            //             'message' => '.PNG, .JPG, .JPEG file extensions only'] 
-            //         ], 
-            //         [
-            //             'rule' => ['fileSize', '<=', '1KB' ],
-            //             'message' => 'Image size must be less than 1'
-            //         ]
-            //     ]);
+            ]);
+        // ->add('image', 'file',[
+        //         [
+        //             'rule' => ['mimeType', ['image/png','image/jpg','image/jpeg'],
+        //             'message' => '.PNG, .JPG, .JPEG file extensions only'] 
+        //         ], 
+        //         [
+        //             'rule' => ['fileSize', '<=', '1KB' ],
+        //             'message' => 'Image size must be less than 1'
+        //         ]
+        //     ]);
         return $validator;
     }
- 
+
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
