@@ -4,6 +4,19 @@
  * @var \App\Model\Entity\Company $company
  */
 ?> 
+<style type="text/css">
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
    <!-- Main content -->
    <section class="content">
       <div class="container-fluid">
@@ -23,7 +36,8 @@
                    <div class="col-sm-6">
                        <!-- text input -->
                        <div class="form-group"> 
-                           <?=  $this->Form->control('company_name', ['class' => 'form-control', 'placeholder' => 'Company name']); ?>
+                           <label>Company Name<strong><font color="red">*</font></strong></label>
+                           <?=  $this->Form->control('company_name', ['class' => 'form-control', 'placeholder' => 'Company name','label' => false]); ?>
                           
                        </div>
                    </div>
@@ -34,7 +48,7 @@
                        <?php 
                        $r_options = array('1' => 'Client', '2' => 'Supplier');
                        ?>
-                       <strong>Company Type</strong><br>
+                       <strong>Company Type<font color="red">*</font></strong><br>
                        <div class="form-group">
                        <?php 
                         $this->Form->setTemplates([
@@ -48,17 +62,26 @@
                 </div>
                 <div class="row custom-padding">
                    
-                   <div class="col-sm-6">
-                       <!-- text input -->
-                       <div class="form-group">
-                        <?=  $this->Form->control('contactno', ['class' => 'form-control', 'placeholder' => 'Contact No']); ?>
-                       
-                       </div>
+                   <div class="col-sm-4">
+                       <label>Mobile No.<font color="red">*</font></label>
+                       <input class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" name="contactno" placeholder="Mobile No." required="true" value="<?php echo $company->contactno; ?>" />
                    </div> 
-                    <div class="col-sm-6">
+
+                   <div class="col-sm-4">
+                    <label>Tel No.<font color="red">*</font></label>
+                       <input class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" name="tel_no" placeholder="Tel No." required="true" value="<?php echo $company->tel_no; ?>" />
+                   </div>
+
+                   <div class="col-sm-4">
+                    <label>Email<font color="red">*</font></label>
+                       <input class="form-control" type="email" name="email" placeholder="Email" required="true" value="<?php echo $company->email; ?>" />
+                   </div>
+
+                    <div class="col-sm-12">
                        <!-- text input -->
+                       <label>Address<font color="red">*</font></label>
                        <div class="form-group">
-                        <?=  $this->Form->control('address', ['class' => 'form-control', 'placeholder' => 'Address']); ?>
+                        <?=  $this->Form->control('address', ['class' => 'form-control', 'placeholder' => 'Address','label' => false]); ?>
                        
                        </div>
                     </div>

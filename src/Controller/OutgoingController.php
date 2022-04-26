@@ -148,6 +148,12 @@ class OutgoingController extends AppController
                     return $this->redirect(['action' => 'index']);
                 }
                 $this->Flash->error(__('The outgoing could not be saved. Please, try again.'));
+                $this->Common->dblogger([
+                //change depending on action
+                'message' => 'The outgoing could not be saved. Please, try again.' ,
+                'request' => $this->request, 
+                'status' => 'error',
+                ]);
             }
         }
         //$transactions = $this->Outgoing->Transactions->find('list', ['limit' => 200])->all();
@@ -213,10 +219,21 @@ class OutgoingController extends AppController
 
             if ($this->Outgoing->save($outgoing)) {
                 $this->Flash->success(__('The outgoing has been saved.'));
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'Successfully updated outgoing = '. $outgoing->id ,
+                    'request' => $this->request, 
+                ]);
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The outgoing could not be saved. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'The outgoing could not be saved. Please, try again.' ,
+                'request' => $this->request, 
+                'status' => 'error',
+            ]);
         }
         //$transactions = $this->Outgoing->Transactions->find('list', ['limit' => 200])->all();
         //$items = $this->Outgoing->Items->find('list', ['limit' => 200])->all();
@@ -253,6 +270,12 @@ class OutgoingController extends AppController
             $this->Flash->success(__('The outgoing has been deleted.'));
         } else {
             $this->Flash->error(__('The outgoing could not be deleted. Please, try again.'));
+            $this->Common->dblogger([
+                //change depending on action
+                'message' => 'The outgoing could not be deleted. Please, try again.' ,
+                'request' => $this->request, 
+                'status' => 'error',
+            ]);
         }
 
         return $this->redirect(['action' => 'index']);

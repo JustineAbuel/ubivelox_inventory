@@ -33,6 +33,8 @@ class Company extends Entity
         'company_name' => true,
         'address' => true,
         'contactno' => true,
+        'tel_no' => true,
+        'email' => true,
         'company_type' => true,
         'date_added' => true,
         'added_by' => true,

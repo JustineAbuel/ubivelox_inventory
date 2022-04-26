@@ -145,7 +145,7 @@ class TransactionsController extends AppController
                 $this->Flash->success(__('The transaction has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully added transaction = '. $transaction->transaction ,
+                    'message' => 'Successfully added transaction = '. $lastId->id ,
                     'request' => $this->request, 
                 ]);
 
@@ -157,6 +157,7 @@ class TransactionsController extends AppController
                 //change depending on action
                 'message' => 'Unable to add an transaction' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
         //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
@@ -229,6 +230,7 @@ class TransactionsController extends AppController
                 //change depending on action
                 'message' => 'Unable to update transaction' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
         //$users = $this->Transactions->Users->find('list', ['limit' => 200])->all();
@@ -281,6 +283,7 @@ class TransactionsController extends AppController
                 //change depending on action
                 'message' => 'Unable to delete transaction' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
 

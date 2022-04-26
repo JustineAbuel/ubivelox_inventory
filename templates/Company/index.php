@@ -59,9 +59,11 @@
                   <tr>
                     <th><?= ucfirst('id') ?></th>
                     <th><?= ucfirst('Company Name') ?></th>
-                    <th><?= ucfirst('Address') ?></th>  
-                    <th><?= ucfirst('Contact No') ?></th>   
                     <th><?= ucfirst('Type') ?></th>
+                    <th><?= ucfirst('Address') ?></th>  
+                    <th><?= ucfirst('Mobile No.') ?></th>
+                    <th><?= ucfirst('Tel No.') ?></th>
+                    <th><?= ucfirst('Email') ?></th>   
                     <th><?= ucfirst('Date Added') ?></th>   
                     <th class="actions"><?= __('Actions') ?></th>
                   </tr>
@@ -71,8 +73,6 @@
                     <tr>
                         <td><?= $this->Number->format($company->id) ?></td>
                         <td><?= h($company->company_name) ?></td> 
-                        <td><?= h($company->address) ?></td>  
-                        <td><?= h($company->contactno) ?></td>
                         <td><?php 
                         if($company->company_type == 1){
                             echo "Client"; //1
@@ -82,6 +82,10 @@
                         }   
                         ?>    
                         </td>
+                        <td><?= h($company->address) ?></td>  
+                        <td><?= h($company->contactno) ?></td>
+                        <td><?= h($company->tel_no) ?></td>
+                        <td><?= h($company->email) ?></td>
                         <td><?= h($company->date_added) ?></td>
                         <td class="actions"> 
                             <?php echo $this->Html->link(

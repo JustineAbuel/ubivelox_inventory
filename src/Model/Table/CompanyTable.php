@@ -66,13 +66,23 @@ class CompanyTable extends Table
             ->notEmptyString('address');
 
         $validator
-            ->integer('contactno')
+            ->scalar('contactno')
             ->requirePresence('contactno', 'create')
             ->notEmptyString('contactno');
 
         $validator
+            ->scalar('tel_no')
+            ->requirePresence('tel_no', 'create')
+            ->notEmptyString('tel_no');
+
+        $validator
+            ->scalar('email')
+            ->requirePresence('email', 'create')
+            ->notEmptyString('email');
+
+        $validator
             ->integer('company_type')
-            ->allowEmptyString('company_type');
+            ->notEmptyString('company_type');
 
         $validator
             ->dateTime('date_added')

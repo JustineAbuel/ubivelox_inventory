@@ -46,7 +46,8 @@ class CompanyController extends AppController
             'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
             'request' => $this->request, 
         ]);
-        $company = $this->paginate($this->Company);
+
+        $company = $this->Company->find()->all();
 
         if(isset($_POST["submit"])){
 
@@ -64,7 +65,9 @@ class CompanyController extends AppController
                     $company_name = $data[0];
                     $address = $data[1];
                     $contactno = $data[2];
-                    $company_type = $data[3];
+                    $tel_no = $data[3];
+                    $email = $data[4];
+                    $company_type = $data[5];
                     $date_added = date('Y-m-d H:i:s');
                     $added_by = $this->request->getAttribute('identity')->getIdentifier();
                     /*
@@ -82,14 +85,16 @@ class CompanyController extends AppController
                     */
                      $insertquery = $this->connection->execute("
                         INSERT INTO company(
-                       company_name,address,contactno,date_added,added_by,company_type) 
+                       company_name,address,contactno,tel_no,email,date_added,added_by,company_type) 
                         SELECT * FROM 
                         (SELECT '$company_name') AS tmp1,
                         (SELECT '$address') AS tmp2,
                         (SELECT '$contactno') AS tmp3,
-                        (SELECT '$date_added') AS tmp4,
-                        (SELECT '$added_by') AS tmp6,
-                        (SELECT '$company_type') AS tmp7 
+                        (SELECT '$tel_no') AS tmp4,
+                        (SELECT '$email') AS tmp5,
+                        (SELECT '$date_added') AS tmp6,
+                        (SELECT '$added_by') AS tmp7,
+                        (SELECT '$company_type') AS tmp8 
                         WHERE NOT EXISTS 
                         (SELECT 
                         company_name,address,contactno,date_added,added_by,company_type
@@ -162,8 +167,8 @@ class CompanyController extends AppController
         ]);
         if ($this->request->is('post')) {
             $company = $this->Company->patchEntity($company, $this->request->getData());
-            //$company->date_added = date('Y-m-d H:i:s');
-            //$company->added_by =  $this->request->getAttribute('identity')->getIdentifier();
+            $company->date_added = date('Y-m-d H:i:s');
+            $company->added_by =  $this->request->getAttribute('identity')->getIdentifier();
             /*
             if ($this->Company->save($company)) {
                 $this->Flash->success(__('The company has been saved.'));
@@ -171,17 +176,17 @@ class CompanyController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             */
-            $http = new Client();
-            $response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_COMPANY', [   //pointed at local
+            //$http = new Client();
+            //$response = $http->post(getEnv('INVENTORY_API_URI').'/INSERT_COMPANY', [   //pointed at local
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/INSERT_COMPANY', [  
-                'company_name' => $company->company_name, 
-                'address' => $company->address,
-                'contactno' => $company->contactno, 
-                'added_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
-                'company_type' => $company->company_type,
-            ]); 
-            if ($response->getJson()['Status'] == 0) {
-            // if ($this->Company->save($company)) {
+            //    'company_name' => $company->company_name, 
+            //    'address' => $company->address,
+            //    'contactno' => $company->contactno,
+            //    'added_by' =>  $this->request->getAttribute('identity')->getIdentifier(),
+            //    'company_type' => $company->company_type,
+            //]); 
+            //if ($response->getJson()['Status'] == 0) {
+             if ($this->Company->save($company)) {
                 $this->Flash->success(__('The company has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
@@ -191,12 +196,13 @@ class CompanyController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            //$this->Flash->error(__('The company could not be saved. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The company could not be saved. Please, try again.'));
+            //$this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to add company' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
         $this->set(compact('company'));
@@ -224,19 +230,22 @@ class CompanyController extends AppController
         $this->Authorization->authorize($company, 'edit' );
         if ($this->request->is(['patch', 'post', 'put'])) {
             $company = $this->Company->patchEntity($company, $this->request->getData()); 
+            $company->date_updated = date('Y-m-d H:i:s');
+            $company->updated_by =  $this->request->getAttribute('identity')->getIdentifier();
 
-            $http = new Client();
-            $response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_COMPANY/'.$id, [     
+            //$http = new Client();
+            //$response = $http->put(getEnv('INVENTORY_API_URI').'/UPDATE_COMPANY/'.$id, [     
             // $response = $http->post('https://ubpdev.myubplus.com.ph/api/UPDATE_COMPANY/'.$id, [  
-                'company_name' => $company->company_name ,
-                'address' => $company->address ,
-                'contactno' => $company->contactno,
-                'updated_by' => $this->request->getAttribute('identity')->getIdentifier() ,
-                'company_type' => $company->company_type,
+            //    'company_name' => $company->company_name ,
+            //    'address' => $company->address ,
+            //    'contactno' => $company->contactno,
+            //    'updated_by' => $this->request->getAttribute('identity')->getIdentifier() ,
+            //    'company_type' => $company->company_type,
                 
-            ]); 
+            //]); 
     
-            if ($response->getJson()['Status'] == 0) { 
+            //if ($response->getJson()['Status'] == 0) { 
+            if ($this->Company->save($company)) {
                 $this->Flash->success(__('The company has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
@@ -246,12 +255,13 @@ class CompanyController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            //$this->Flash->error(__('The company could not be saved. Please, try again.'));
-            $this->Flash->error(__($response->getJson()['Description'])); //get API error
+            $this->Flash->error(__('The company could not be saved. Please, try again.'));
+            //$this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
                 'message' => 'Unable to update company' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
         $this->set(compact('company'));
@@ -290,6 +300,7 @@ class CompanyController extends AppController
                 //change depending on action
                 'message' => 'Unable to delete company' ,
                 'request' => $this->request, 
+                'status' => 'error',
             ]);
         }
 

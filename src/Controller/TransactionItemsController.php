@@ -119,6 +119,12 @@ class TransactionItemsController extends AppController
 
                     if($transaction_type_id == 2 && $item_type != 2){ //transaction type must be purchased and item type must be external type
                         $this->Flash->error(__('Transaction Type is Purchased, Item Type must be external only, Please try again.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Transaction Type is Purchased, Item Type must be external only, Please try again.' ,
+                            'request' => $this->request, 
+                            'status' => 'error',
+                        ]);
                         return $this->redirect(['controller' => 'TransactionItems','action' => 'add?tid='.$this->request->getQuery('tid')]);//redirect to transaction items adding
                     }
                     else{
@@ -126,6 +132,12 @@ class TransactionItemsController extends AppController
                         if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
 
                             $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
+                            $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.' ,
+                            'request' => $this->request, 
+                            'status' => 'error',
+                            ]);
                             return $this->redirect(['controller' => 'TransactionItems','action' => 'add?tid='.$this->request->getQuery('tid')]);//redirect to transaction items adding
                         }
                         else{
@@ -280,8 +292,19 @@ class TransactionItemsController extends AppController
                         ->execute();
 
                     $this->Flash->success(__('The transaction item has been deleted.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'The transaction item has been deleted = '. $transactionItem->item_id ,
+                        'request' => $this->request, 
+                    ]);
                 } else {
                     $this->Flash->error(__('The transaction item could not be deleted. Please, try again.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'The transaction item could not be deleted. Please, try again.' ,
+                        'request' => $this->request, 
+                        'status' => 'error',
+                    ]);
                 }
         }
 
@@ -355,7 +378,12 @@ class TransactionItemsController extends AppController
                         ->execute();
             }
         }
-        $this->Flash->success(__('The transaction has been cancelled.'));
+                    $this->Flash->success(__('The transaction has been cancelled.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'The transaction has been cancelled.',
+                        'request' => $this->request, 
+                    ]);
 
         $this->set(compact('transactionItems'));
 
