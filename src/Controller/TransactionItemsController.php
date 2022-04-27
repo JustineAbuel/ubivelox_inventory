@@ -166,10 +166,21 @@ class TransactionItemsController extends AppController
                                 /* end - Insert logs to ougtoing */
 
                                 $this->Flash->success(__('The transaction item has been saved.'));
+                                $this->Common->dblogger([
+                                    //change depending on action
+                                    'message' => 'The transaction item has been saved.',
+                                    'request' => $this->request, 
+                                ]);
 
                                 return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
                             }
                             $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+                            $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'The transaction item could not be saved. Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+                            ]);
                         }
                         
                         }
@@ -225,16 +236,33 @@ class TransactionItemsController extends AppController
                 //dd($item_quantity);
                 if($transactionItem->quantity > $item_quantity){ //check if entered qty is greater than stocks
                             $this->Flash->error(__('Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.'));
+                            $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Entered Quantity is greater than Item Stocks or Insufficient Item Stocks. Please, try again.' ,
+                            'request' => $this->request, 
+                            'status' => 'error',
+                            ]);
                             return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
                 }
                 else{
                         if ($this->TransactionItems->save($transactionItem)) {
                             $this->Flash->success(__('The transaction item has been saved.'));
+                            $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'The transaction item has been saved.',
+                            'request' => $this->request, 
+                            ]);
 
                             //return $this->redirect(['action' => 'index']);
                             return $this->redirect(['controller' => 'transactions','action' => 'view?tid='.$this->request->getQuery('tid')]);//redirect to transaction main
                         }
                         $this->Flash->error(__('The transaction item could not be saved. Please, try again.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'The transaction item could not be saved. Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+                        ]);
                     }
 
                 }

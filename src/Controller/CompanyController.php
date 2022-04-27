@@ -106,17 +106,28 @@ class CompanyController extends AppController
                         ");
                         $this->Common->dblogger([
                             //change depending on action
-                            'message' => 'Mass upload[Company] - Successfully added category with id = '. $company_name ,
+                            'message' => 'Mass upload[Company] - Successfully added company name = '. $company_name ,
                             'request' => $this->request, 
                         ]);
                     }
                 }
                         if($insertquery) {
                         $this->Flash->success(__('Company CSV data has been saved.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Company CSV data has been saved/uploaded.',
+                            'request' => $this->request, 
+                        ]);
                         return $this->redirect(['controller' => 'Company','action' => 'index']);//redirect to company main
                         }
                         else{
-                        $this->Flash->error(__('Company CSV data could not be saved. Please, try again.'));
+                        $this->Flash->error(__('Company CSV data could not be saved/uploaded. Please, try again.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Company CSV data could not be saved/uploaded. Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+                        ]);
                         }
 
                 fclose($file);
@@ -190,7 +201,7 @@ class CompanyController extends AppController
                 $this->Flash->success(__('The company has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully added company ='. $company->company_name ,
+                    'message' => 'Successfully added company = '. $company->company_name ,
                     'request' => $this->request, 
                 ]);
 
@@ -200,7 +211,7 @@ class CompanyController extends AppController
             //$this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to add company' ,
+                'message' => 'The company could not be saved. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
@@ -259,7 +270,7 @@ class CompanyController extends AppController
             //$this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to update company' ,
+                'message' => 'The company could not be saved. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
@@ -298,7 +309,7 @@ class CompanyController extends AppController
             // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to delete company' ,
+                'message' => 'The company could not be deleted. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
@@ -375,11 +386,22 @@ class CompanyController extends AppController
                     }
                 }
                         if($insertquery) {
-                        $this->Flash->success(__('Company CSV data has been saved.'));
+                        $this->Flash->success(__('Company CSV data has been saved/uploaded.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Company CSV data has been saved/uploaded.',
+                            'request' => $this->request, 
+                        ]);
                         return $this->redirect(['controller' => 'Company','action' => 'index']);//redirect to company main
                         }
                         else{
-                        $this->Flash->error(__('Company CSV data could not be saved. Please, try again.'));
+                        $this->Flash->error(__('Company CSV data could not be saved/uploaded. Please, try again.'));
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Company CSV data could not be saved/uploaded. Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+                        ]);
                         }
 
                 fclose($file);

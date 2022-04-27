@@ -17,6 +17,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <label>Select Company CSV File:</label>
         <input type="file" name="file" accept=".csv" class="form-control" required="">
         <small><strong><font color="red">Only .csv file type is allowed</font></strong></small>
       </div>

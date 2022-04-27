@@ -155,7 +155,7 @@ class TransactionsController extends AppController
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to add an transaction' ,
+                'message' => 'The transaction could not be saved. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
@@ -228,7 +228,7 @@ class TransactionsController extends AppController
             $this->Flash->error(__('The transaction could not be saved. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to update transaction' ,
+                'message' => 'The transaction could not be saved. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
@@ -281,7 +281,7 @@ class TransactionsController extends AppController
             $this->Flash->error(__('The transaction could not be deleted. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Unable to delete transaction' ,
+                'message' => 'The transaction could not be deleted. Please, try again.' ,
                 'request' => $this->request, 
                 'status' => 'error',
             ]);
