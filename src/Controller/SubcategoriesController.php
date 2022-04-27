@@ -73,8 +73,8 @@ class SubcategoriesController extends AppController
                         $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
 
                         $subcategory->category_id = $subcategory->category_id;
-                        $subcategory->subcategory_name = $data[1];
-                        $subcategory->subcategory_description = $data[2];
+                        $subcategory->subcategory_name = $data[0];
+                        $subcategory->subcategory_description = $data[1];
                         $subcategory->date_added = date('Y-m-d H:i:s');
                         $subcategory->added_by = $identity;
 
@@ -100,7 +100,7 @@ class SubcategoriesController extends AppController
             }
         }
         $title = "Sub Categories";
-        $this->set(compact('title', 'subcategories','categories'));
+        $this->set(compact('title', 'subcategories', 'categories'));
     }
 
     /**

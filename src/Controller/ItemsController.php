@@ -193,25 +193,25 @@ class ItemsController extends AppController
                     } else {
                         $item = $this->Items->newEmptyEntity();
                         $item = $this->Items->patchEntity($item, $this->request->getData());
-
-                        $item->category_id = $data[0];
-                        $item->subcategory_id = $data[1];
-                        $item->item_name = $data[2];
-                        $item->serial_no = $data[3];
-                        $item->item_description = $data[4];
-                        $item->issued_date = date('Y-m-d H:i:s', strtotime($data[5]));
-                        $item->manufacturer_warranty = date('Y-m-d', strtotime($data[6]));
-                        $item->quantity = $data[7];
-                        $item->supplier_id = $data[8];
-                        $item->item_type_id = $data[9];
-                        $item->quality = $data[10];
-                        $item->remarks = $data[11];
-                        $item->part_no = $data[12];
-                        $item->operating_system = $data[13];
-                        $item->kernel = $data[14];
-                        $item->header_type = $data[15];
-                        $item->firmware = $data[16];
-                        $item->features = $data[17];
+                        // dd($data[3]);
+                        $item->category_id = $item->category_id;
+                        $item->subcategory_id = $item->subcategory_id;
+                        $item->supplier_id = $item->supplier_id;
+                        $item->item_name = $data[0];
+                        $item->serial_no = $data[1];
+                        $item->item_description = $data[2];
+                        $item->issued_date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s', $data[3])));
+                        $item->manufacturer_warranty = date('Y-m-d', strtotime($data[4]));
+                        $item->quantity = $data[5];
+                        $item->item_type_id = $data[6];
+                        $item->quality = $data[7];
+                        $item->remarks = $data[8];
+                        $item->part_no = $data[9];
+                        $item->operating_system = $data[10];
+                        $item->kernel = $data[11];
+                        $item->header_type = $data[12];
+                        $item->firmware = $data[13];
+                        $item->features = $data[14];
                         $item->date_added = date('Y-m-d H:i:s');
                         $item->added_by = $identity;
 
@@ -247,8 +247,11 @@ class ItemsController extends AppController
             }
         }
 
+        $categories = $this->Categories->find('list')->innerJoinWith('Subcategories')->all();
+        $subcategories = $this->Items->Subcategories->find('list')->all();
+        $supplier = $this->Company->find('list')->all();
         $this->set('title', 'List of Items');
-        $this->set(compact('items', 'qrCode'));
+        $this->set(compact('items', 'qrCode', 'categories', 'subcategories', 'supplier'));
     }
 
     /**
@@ -340,6 +343,8 @@ class ItemsController extends AppController
                 'request' => $this->request,
             ]);
         }
+
+
         $quality =  ['BRAND NEW', 'USED'];
         // $categories = $this->Categories->find('list', ['contain' => ['Subcategories']])->all();  
         $categories = $this->Categories->find('list')->innerJoinWith('Subcategories')->all();

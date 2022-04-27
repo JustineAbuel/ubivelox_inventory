@@ -26,6 +26,27 @@ use Cake\I18n\FrozenTime;
             <div class="modal-body">
 
                 <?= $this->Form->create($items, ['type' => 'file']) ?>
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <?= $this->Form->control('category_id', ['options' => $categories, 'class' => 'form-control', 'placeholder' => 'Category']); ?>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <?= $this->Form->control('subcategory_id', ['options' => $subcategories, 'class' => 'form-control', 'placeholder' => 'Subategory']); ?>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <?= $this->Form->control('supplier_id', ['options' => $supplier, 'class' => 'form-control', 'placeholder' => 'Supplier']); ?>
+
+                    </div>
+                </div>
+                <label>Select Item Subcategory CSV File:</label>
                 <input type="file" name="file" accept=".csv" class="form-control" required="">
                 <small><strong>
                         <font color="red">Only .csv file type is allowed</font>
@@ -229,6 +250,33 @@ use Cake\I18n\FrozenTime;
 
 <script>
     $(document).ready(function() {
+
+        $('#category-id').change(() => {
+
+            var categoryId = $('#category-id').val();
+            $.ajax({
+                method: "POST",
+                url: "<?= $this->Url->build(['controller' => 'Items', 'action' => 'getsubcategories']) ?>",
+                type: "JSON",
+                data: {
+                    category_id: categoryId
+                },
+                headers: {
+                    'X-CSRF-Token': $("[name='_csrfToken']").val()
+                },
+
+                beforeSend: function() {},
+                success: function(msg) {
+                    console.log(msg.subcategories)
+                    $("#subcategory-id").empty().append(msg.subcategories);
+                },
+                cache: false,
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            })
+        })
+
         $('#addQuantityModal').on('hidden.bs.modal', function() {
             $("input[name=item-id]").val('')
         })

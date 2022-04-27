@@ -1,1 +1,1 @@
-*item_name,serial_no,item_description,*issued_date,*manufacturer_warranty,*quantity,*supplier_id,*item_type_id,*quality,remarks,part_no,operating_system,kernel,header_type,firmware,features
+*Item Name,*Serial No.,*Item Description,*Issued Date (YYYY-MM-DD H:min:s),*Manufacturer Warranty (YYYY-MM-DD),*Quantity,"*Item Type ID, 1=Internal, 2=External","*Quality, 0=Brand New, 1=Used",Remarks,Part No.,Operating System,Kernel,Header Type,Firmware,Features
