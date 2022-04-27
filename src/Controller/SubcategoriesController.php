@@ -65,33 +65,53 @@ class SubcategoriesController extends AppController
                 $file = fopen($filename, "r");
                 $num = 0;
                 $counter = 0;
+                $errorCounter = 0;
                 while ($data = fgetcsv($file)) {
                     if ($num == 0) { //skip header names in CSV file
                         $num++;
                     } else {
-                        $subcategory = $this->Subcategories->newEmptyEntity();
-                        $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
+                        if ($data[0] == "") {
 
-                        $subcategory->category_id = $subcategory->category_id;
-                        $subcategory->subcategory_name = $data[0];
-                        $subcategory->subcategory_description = $data[1];
-                        $subcategory->date_added = date('Y-m-d H:i:s');
-                        $subcategory->added_by = $identity;
+                            $this->Common->dblogger([
+                                //change depending on action
+                                'message' => 'Mass upload[Subcategory] - Could not save row record',
+                                'request' => $this->request,
+                                'status' => 'error'
+                            ]);
 
-                        $subcategory = $this->Subcategories->save($subcategory);
+                            $errorCounter++;
+                        } else {
+                            $subcategory = $this->Subcategories->newEmptyEntity();
+                            $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
 
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = ' . $subcategory->subcategory_name,
-                            'request' => $this->request,
-                        ]);
+                            $subcategory->category_id = $subcategory->category_id;
+                            $subcategory->subcategory_name =  $data[0];
+                            $subcategory->subcategory_description = $data[1];
+                            $subcategory->date_added = date('Y-m-d H:i:s');
+                            $subcategory->added_by = $identity;
 
-                        $counter++;
+                            $subcategory = $this->Subcategories->save($subcategory);
+
+                            $this->Common->dblogger([
+                                //change depending on action
+                                'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = ' . $subcategory->subcategory_name,
+                                'request' => $this->request,
+                            ]);
+
+                            $counter++;
+                        }
                     }
                 }
                 if ($counter > 0) {
-                    $this->Flash->success(__('Subcategory CSV has been uploaded. {0} category saved.', $counter));
+                    $this->Flash->success(__('Subcategory CSV has been uploaded. {0} subcategory saved.', $counter));
+                    if ($errorCounter > 0) {
+                        $this->Flash->error(__('Subcategory CSV has been uploaded. {0} subcategory could not be saved.', $errorCounter));
+                    }
                     return $this->redirect(['controller' => 'Subcategories', 'action' => 'index']); //redirect to company main
+                } elseif ($errorCounter > 0) {
+
+
+                    $this->Flash->error(__('Subcategory CSV has been uploaded. {0} subcategory could not be saved.', $errorCounter));
                 } else {
                     $this->Flash->error(__('Subcategory CSV data could not be saved. Please, try again.'));
                 }

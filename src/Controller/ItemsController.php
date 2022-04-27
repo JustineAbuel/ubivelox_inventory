@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use DateTime;
 use Cake\I18n\Time;
 use Cake\Http\Client;
 use Cake\I18n\FrozenTime;
@@ -187,60 +188,82 @@ class ItemsController extends AppController
                 $file = fopen($filename, "r");
                 $num = 0;
                 $counter = 0;
+                $errorCounter = 0;
                 while ($data = fgetcsv($file)) {
                     if ($num == 0) { //skip header names in CSV file
                         $num++;
                     } else {
                         $item = $this->Items->newEmptyEntity();
                         $item = $this->Items->patchEntity($item, $this->request->getData());
-                        // dd($data[3]);
-                        $item->category_id = $item->category_id;
-                        $item->subcategory_id = $item->subcategory_id;
-                        $item->supplier_id = $item->supplier_id;
-                        $item->item_name = $data[0];
-                        $item->serial_no = $data[1];
-                        $item->item_description = $data[2];
-                        $item->issued_date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s', $data[3])));
-                        $item->manufacturer_warranty = date('Y-m-d', strtotime($data[4]));
-                        $item->quantity = $data[5];
-                        $item->item_type_id = $data[6];
-                        $item->quality = $data[7];
-                        $item->remarks = $data[8];
-                        $item->part_no = $data[9];
-                        $item->operating_system = $data[10];
-                        $item->kernel = $data[11];
-                        $item->header_type = $data[12];
-                        $item->firmware = $data[13];
-                        $item->features = $data[14];
-                        $item->date_added = date('Y-m-d H:i:s');
-                        $item->added_by = $identity;
+                        // $date = new DateTime($data[3]);  
+                        // dd(strtotime($data[3] ? $data[3] . ':00' : $data[3]));
+                        if ($data[0] == '' || $data[2] == '' || $data[3] == '' || $data[4] == '' || $data[5] == '' || $data[6] == '' || $data[7] == '') {
+
+                            $this->Common->dblogger([
+                                //change depending on action
+                                'message' => 'Mass upload[Subcategory] - Could not save row record',
+                                'request' => $this->request,
+                                'status' => 'error'
+                            ]);
+
+                            $errorCounter++;
+                        } else {
+                            $item->category_id = $item->category_id;
+                            $item->subcategory_id = $item->subcategory_id;
+                            $item->supplier_id = $item->supplier_id;
+                            $item->base_quantity = 100;
+                            $item->item_name = $data[0];
+                            $item->serial_no = $data[1];
+                            $item->item_description = $data[2];
+                            $item->issued_date =  DateTime::createFromFormat('d/m/Y H:i', $data[3])->format('Y-m-d H:i:s');
+                            // $ts = $dt->getTimestamp();
+                            $item->manufacturer_warranty = DateTime::createFromFormat('d/m/Y', $data[4])->format('Y-m-d');
+                            $item->quantity = $data[5];
+                            $item->item_type_id = $data[6];
+                            $item->quality = $data[7];
+                            $item->remarks = $data[8];
+                            $item->part_no = $data[9];
+                            $item->operating_system = $data[10];
+                            $item->kernel = $data[11];
+                            $item->header_type = $data[12];
+                            $item->firmware = $data[13];
+                            $item->features = $data[14];
+                            $item->date_added = date('Y-m-d H:i:s');
+                            $item->added_by = $identity;
+
+                            // dd($item);
+                            if ($item = $this->Items->save($item)) {
+
+                                $this->Common->dblogger([
+                                    //change depending on action
+                                    'message' => 'Mass upload - Successfully added item with id = ' . $item->item_name,
+                                    'request' => $this->request,
+                                ]);
+                                $incomingTable = $this->Items->Incoming;
+                                $incoming = $incomingTable->newEmptyEntity();
+
+                                $incoming->item_id = $item->id;
+                                $incoming->quantity = $data[5];
+                                $incoming->added_by = $identity;
+                                $incoming->date_added = date('Y-m-d H:i:s');
+                                $incomingTable->save($incoming);
+                            }
 
 
-                        if ($item = $this->Items->save($item)) {
-                            $incomingTable = $this->Items->Incoming;
-                            $incoming = $incomingTable->newEmptyEntity();
-
-                            $incoming->item_id = $item->id;
-                            $incoming->quantity = $data[10];
-                            $incoming->added_by = $identity;
-                            $incoming->date_added = date('Y-m-d H:i:s');
-                            $incomingTable->save($incoming);
+                            $counter++;
                         }
-
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Mass upload - Successfully added item with id = ' . $item->item_name,
-                            'request' => $this->request,
-                        ]);
-
-                        $counter++;
                     }
                 }
                 if ($counter > 0) {
                     $this->Flash->success(__('Items CSV has been uploaded. {0} items saved.', $counter));
+                    if ($errorCounter > 0) {
+                        $this->Flash->error(__('Items CSV has been uploaded. {0} items could not be saved.', $errorCounter));
+                    }
                     return $this->redirect(['controller' => 'Items', 'action' => 'index']); //redirect to company main
+                } elseif ($errorCounter > 0) {
+                    $this->Flash->error(__('Items CSV has been uploaded. {0} items could not be saved.', $errorCounter));
                 } else {
-                    $this->Flash->error(__('Company CSV data could not be saved. Please, try again.'));
+                    $this->Flash->error(__('Items CSV data could not be saved. Please, try again.'));
                 }
 
                 fclose($file);
