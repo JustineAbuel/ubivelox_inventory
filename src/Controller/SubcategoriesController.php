@@ -16,7 +16,7 @@ class SubcategoriesController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-
+        $this->loadModel('Categories');
         // $this->Authorization->skipAuthorization();
 
     }
@@ -48,6 +48,8 @@ class SubcategoriesController extends AppController
         ];
         $subcategories = $this->paginate($this->Subcategories);
 
+        $categories = $this->Categories->find()->all();
+
         $this->Common->dblogger([
             //change depending on action
             'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
@@ -70,7 +72,7 @@ class SubcategoriesController extends AppController
                         $subcategory = $this->Subcategories->newEmptyEntity();
                         $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
 
-                        $subcategory->category_id = $data[0];
+                        $subcategory->category_id = $subcategory->category_id;
                         $subcategory->subcategory_name = $data[1];
                         $subcategory->subcategory_description = $data[2];
                         $subcategory->date_added = date('Y-m-d H:i:s');
@@ -98,7 +100,7 @@ class SubcategoriesController extends AppController
             }
         }
         $title = "Sub Categories";
-        $this->set(compact('title', 'subcategories'));
+        $this->set(compact('title', 'subcategories','categories'));
     }
 
     /**

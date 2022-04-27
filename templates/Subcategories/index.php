@@ -12,7 +12,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload CSV Data ($subcategories)</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Upload CSV Data (Item Subcategory)</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -20,6 +20,19 @@
       <div class="modal-body">
         
       <?= $this->Form->create($subcategories, ['type' => 'file' ]) ?> 
+        <label>Select Item Category:</label>
+        <select name="category_id" class="form-control" required="">
+            <option value="">Select Item Category</option>
+            <?php 
+            foreach ($categories as $key => $category) {
+              ?>
+              <option value="<?php echo $category['id']; ?>"><?php echo $category['category_name']; ?></option>
+              <?php
+            }
+            ?>
+        </select>
+        
+        <label>Select Item Subcategory CSV File:</label>
         <input type="file" name="file" accept=".csv" class="form-control" required="">
         <small><strong><font color="red">Only .csv file type is allowed</font></strong></small>
         
