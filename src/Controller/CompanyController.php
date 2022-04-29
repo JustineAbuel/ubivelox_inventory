@@ -49,14 +49,47 @@ class CompanyController extends AppController
 
         $company = $this->Company->find()->all();
 
+        $csv_file_name = WWW_ROOT.'forms'.DS.'UBP_MASS_COMPANY_FORM.csv'; //company csv template path
+        $filename = basename($csv_file_name); //get file name of csv
+        //dd($filename);
+
         if(isset($_POST["submit"])){
+
+        //dd($_FILES['file']['name']);
+
+        if(trim($_FILES['file']['name']) != trim($filename) ){ //check input filename from webroot company csv
+            $this->Flash->error(__('Incorrect Company CSV Template! Please, try again.'));
+            $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Incorrect Company CSV Template! Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+            ]);
+            return $this->redirect(['controller' => 'Company', 'action' => 'index']);
+        }
+        else{
 
         $filename=$_FILES["file"]["tmp_name"];
 
         if($_FILES["file"]["size"] > 0){
 
+            $requiredHeaders = ['*Company', '*Address', '*Mobile No', 'Tel No.*', 'Email*','*Company Type - 1=Client,2=Supplier'];
+
                 $file = fopen($filename, "r");
+                $firstLine = fgets($file);
                 $num = 0;
+                $foundHeaders = str_getcsv(trim($firstLine), ',', '"');
+                if ($foundHeaders !== $requiredHeaders) {
+                    $this->Flash->error(__('Uploaded CSV is not the correct Company CSV template. Please, try again.'));
+                    $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Uploaded CSV is not the correct Company CSV template. Please, try again.',
+                            'request' => $this->request, 
+                            'status' => 'error',
+                    ]);
+                    return $this->redirect(['controller' => 'Company', 'action' => 'index']);
+                    die();
+                }
                 while ($data = fgetcsv($file)){
                     if($num == 0){ //skip header names in CSV file
                         $num++;
@@ -131,6 +164,7 @@ class CompanyController extends AppController
                         }
 
                 fclose($file);
+                }
             }
                 
         }
@@ -197,24 +231,42 @@ class CompanyController extends AppController
             //    'company_type' => $company->company_type,
             //]); 
             //if ($response->getJson()['Status'] == 0) {
-             if ($this->Company->save($company)) {
-                $this->Flash->success(__('The company has been saved.'));
+
+            $check_exist = $this->Company
+            ->find('all')
+            ->where(['company_name' => $company->company_name])
+            ->count();
+            
+            if($check_exist > 0){
+                $this->Flash->error(__('The company name '.$company->company_name.' already exist! Please, try again.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully added company = '. $company->company_name ,
+                    'message' => 'The company name '.$company->company_name.' already exist! Please, try again.' ,
                     'request' => $this->request, 
+                    'status' => 'error',
                 ]);
-
-                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The company could not be saved. Please, try again.'));
-            //$this->Flash->error(__($response->getJson()['Description'])); //get API error
-            $this->Common->dblogger([
-                //change depending on action
-                'message' => 'The company could not be saved. Please, try again.' ,
-                'request' => $this->request, 
-                'status' => 'error',
-            ]);
+            else{
+
+                 if ($this->Company->save($company)) {
+                    $this->Flash->success(__('The company has been saved.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Successfully added company = '. $company->company_name ,
+                        'request' => $this->request, 
+                    ]);
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The company could not be saved. Please, try again.'));
+                //$this->Flash->error(__($response->getJson()['Description'])); //get API error
+                $this->Common->dblogger([
+                    //change depending on action
+                    'message' => 'The company could not be saved. Please, try again.' ,
+                    'request' => $this->request, 
+                    'status' => 'error',
+                ]);
+            }
         }
         $this->set(compact('company'));
     }
