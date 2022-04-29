@@ -49,25 +49,25 @@ class CompanyController extends AppController
 
         $company = $this->Company->find()->all();
 
-        $csv_file_name = WWW_ROOT.'forms'.DS.'UBP_MASS_COMPANY_FORM.csv'; //company csv template path
-        $filename = basename($csv_file_name); //get file name of csv
+        //$csv_file_name = WWW_ROOT.'forms'.DS.'UBP_MASS_COMPANY_FORM.csv'; //company csv template path
+        //$filename = basename($csv_file_name); //get file name of csv
         //dd($filename);
 
         if(isset($_POST["submit"])){
 
         //dd($_FILES['file']['name']);
 
-        if(trim($_FILES['file']['name']) != trim($filename) ){ //check input filename from webroot company csv
-            $this->Flash->error(__('Incorrect Company CSV Template! Please, try again.'));
-            $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Incorrect Company CSV Template! Please, try again.',
-                            'request' => $this->request, 
-                            'status' => 'error',
-            ]);
-            return $this->redirect(['controller' => 'Company', 'action' => 'index']);
-        }
-        else{
+        //if(trim($_FILES['file']['name']) != trim($filename) ){ //check input filename from webroot company csv if valid
+        //    $this->Flash->error(__('Incorrect Company CSV Template! Please, try again.'));
+        //    $this->Common->dblogger([
+        //                    //change depending on action
+        //                    'message' => 'Incorrect Company CSV Template! Please, try again.',
+        //                    'request' => $this->request, 
+        //                    'status' => 'error',
+        //    ]);
+        //    return $this->redirect(['controller' => 'Company', 'action' => 'index']);
+        //}
+        //else{
 
         $filename=$_FILES["file"]["tmp_name"];
 
@@ -91,10 +91,10 @@ class CompanyController extends AppController
                     die();
                 }
                 while ($data = fgetcsv($file)){
-                    if($num == 0){ //skip header names in CSV file
-                        $num++;
-                    } 
-                    else{
+                    //if($num == 0){ //skip header names in CSV file
+                    //    $num++;
+                    //} 
+                    //else{
                     $company_name = $data[0];
                     $address = $data[1];
                     $contactno = $data[2];
@@ -142,7 +142,7 @@ class CompanyController extends AppController
                             'message' => 'Mass upload[Company] - Successfully added company name = '. $company_name ,
                             'request' => $this->request, 
                         ]);
-                    }
+                    //}
                 }
                         if($insertquery) {
                         $this->Flash->success(__('Company CSV data has been saved.'));
@@ -165,7 +165,7 @@ class CompanyController extends AppController
 
                 fclose($file);
                 }
-            }
+            //} //end else
                 
         }
 
@@ -370,99 +370,5 @@ class CompanyController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function uploadcsv(){
-
-        $company = $this->Company->newEmptyEntity();
-
-        $this->Authorization->skipAuthorization(); //skip authorization for user access
-
-        $this->Common->dblogger([
-            //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
-        ]);
-        
-        $company = $this->paginate($this->Company);
-
-        if(isset($_POST["submit"])){
-
-        $filename=$_FILES["file"]["tmp_name"];
-
-        if($_FILES["file"]["size"] > 0){
-
-                $file = fopen($filename, "r");
-                $num = 0;
-                while ($data = fgetcsv($file)){
-                    if($num == 0){ //skip header names in CSV file
-                        $num++;
-                    } 
-                    else{
-                    $company_name = $data[0];
-                    $address = $data[1];
-                    $contactno = $data[2];
-                    $company_type = $data[3];
-                    $date_added = date('Y-m-d H:i:s');
-                    $added_by = $this->request->getAttribute('identity')->getIdentifier();
-                    /*
-                    $data = array(
-                        'company_name' => $company_name,
-                        'address' => $address,
-                        'contactno' => $contactno,
-                        'company_type' => $company_type,
-                        'date_added' => date('Y-m-d H:i:s'),
-                        'added_by' => $this->request->getAttribute('identity')->getIdentifier()
-                    );
-
-                    $Company = $this->Company->newEntity($data);
-                    $this->Company->save($Company);
-                    */
-                     $insertquery = $this->connection->execute("
-                        INSERT INTO company(
-                       company_name,address,contactno,date_added,added_by,company_type) 
-                        SELECT * FROM 
-                        (SELECT '$company_name') AS tmp1,
-                        (SELECT '$address') AS tmp2,
-                        (SELECT '$contactno') AS tmp3,
-                        (SELECT '$date_added') AS tmp4,
-                        (SELECT '$added_by') AS tmp6,
-                        (SELECT '$company_type') AS tmp7 
-                        WHERE NOT EXISTS 
-                        (SELECT 
-                        company_name,address,contactno,date_added,added_by,company_type
-                        FROM 
-                        company 
-                        WHERE 
-                        company_name = '$company_name' 
-                        )
-                        ");
-                    }
-                }
-                        if($insertquery) {
-                        $this->Flash->success(__('Company CSV data has been saved/uploaded.'));
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Company CSV data has been saved/uploaded.',
-                            'request' => $this->request, 
-                        ]);
-                        return $this->redirect(['controller' => 'Company','action' => 'index']);//redirect to company main
-                        }
-                        else{
-                        $this->Flash->error(__('Company CSV data could not be saved/uploaded. Please, try again.'));
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Company CSV data could not be saved/uploaded. Please, try again.',
-                            'request' => $this->request, 
-                            'status' => 'error',
-                        ]);
-                        }
-
-                fclose($file);
-            }
-                
-        }
-
-    $this->set(compact('company'));
-
-    }
 
 }

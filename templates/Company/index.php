@@ -47,7 +47,7 @@
                     <?= $this->Html->link(__('Add New Company'), ['action' => 'add'], ['class' => 'button float-right btn btn-primary float-right  ']) ?>
                     <?= $this->Html->link(
                       "<font color='white' size='3px'><i class='fa fa-file-excel'></i></font> Upload CSV Data (Company)", 
-                      ['action' => 'uploadcsv'], 
+                      ['action' => ''], 
                       ['class' => 'float-right btn btn-success float-right mr-2 ',
                       'data-toggle' => 'modal','data-target' => '#uploadModal', 'escape' => false ]) 
                     ?>
