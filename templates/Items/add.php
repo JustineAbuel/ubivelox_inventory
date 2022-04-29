@@ -51,7 +51,7 @@
                             <div class="col-sm-6">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <?= $this->Form->control('category_id', ['options' => $categories, 'class' => 'form-control', 'placeholder' => 'Category']); ?>
+                                    <?= $this->Form->control('category_id', ['options' => $categories, 'class' => 'form-control', 'placeholder' => 'Category', 'label' => ['text' => 'Category <span class="text-danger">*</span>', 'escape' => false]]); ?>
 
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('subcategory_id', ['options' => $subcategories, 'class' => 'form-control', 'placeholder' => 'Subategory']); ?>
+                                    <?= $this->Form->control('subcategory_id', ['options' => $subcategories, 'class' => 'form-control', 'placeholder' => 'Subategory', 'label' => ['text' => 'Subategory <span class="text-danger">*</span>', 'escape' => false]]); ?>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('item_name', ['class' => 'form-control', 'placeholder' => 'Item name']); ?>
+                                    <?= $this->Form->control('item_name', ['class' => 'form-control', 'placeholder' => 'Item name', 'label' => ['text' => 'Item name <span class="text-danger">*</span>', 'escape' => false]]); ?>
 
                                 </div>
                             </div>
@@ -78,12 +78,12 @@
 
                                 <div class="form-group col-md-6">
 
-                                    <?= $this->Form->control('base_quantity', ['class' => 'form-control', 'placeholder' => 'Base Quantity', 'label' => ['text' => 'Base Quantity <small style="color:red">Default value: 100</small>', 'escape' => false]]); ?>
+                                    <?= $this->Form->control('base_quantity', ['class' => 'form-control', 'placeholder' => 'Base Quantity', 'label' => ['text' => 'Base Quantity <span style="color:red">* <small>Default value: 100</small></span>', 'escape' => false]]); ?>
 
                                 </div>
                                 <div class="form-group col-md-6">
 
-                                    <?= $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity']); ?>
+                                    <?= $this->Form->control('quantity', ['class' => 'form-control', 'placeholder' => 'Quantity', 'label' => ['text' => 'Quantity <span class="text-danger">*</span>', 'escape' => false]]); ?>
 
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('supplier_id', ['options' => $company, 'class' => 'form-control']); ?>
+                                    <?= $this->Form->control('supplier_id', ['options' => $company, 'class' => 'form-control', 'label' => ['text' => 'Supplier <span class="text-danger">*</span>', 'escape' => false]]); ?>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('issued_date', ['class' => 'form-control', 'empty' => true]); ?>
+                                    <?= $this->Form->control('issued_date', ['class' => 'form-control', 'empty' => true, 'label' => ['text' => 'Issued Date <span class="text-danger">*</span>', 'escape' => false]]); ?>
 
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('manufacturer_warranty', ['class' => 'form-control', 'empty' => true]); ?>
+                                    <?= $this->Form->control('manufacturer_warranty', ['class' => 'form-control', 'empty' => true, 'label' => ['text' => 'Manufacturer Warranty <span class="text-danger">*</span>', 'escape' => false]]); ?>
                                 </div>
                             </div>
                         </div>
@@ -129,13 +129,13 @@
                                 <!-- text input -->
                                 <div class="form-group">
 
-                                    <?= $this->Form->control('item_type_id', ['options' => $itemTypes, 'class' => 'form-control', 'placeholder' => 'Type ']); ?>
+                                    <?= $this->Form->control('item_type_id', ['options' => $itemTypes, 'class' => 'form-control', 'placeholder' => 'Type', 'label' => ['text' => 'Item Type <span class="text-danger">*</span>', 'escape' => false]]); ?>
 
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <!-- text input -->
-                                <label for="quality">Quality</label>
+                                <label for="quality">Quality <span class="text-danger">*</span></label>
                                 <div class="form-group">
                                     <?php
                                     $this->Form->setTemplates([

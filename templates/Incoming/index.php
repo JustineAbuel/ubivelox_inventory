@@ -131,13 +131,14 @@
             "lengthChange": false,
             "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-            "ordering": true,
-            "paging": true,
+            // "order": [3, 'desc'],
+            // "paging": true,
             "lengthChange": true,
             "lengthMenu": [
-                [11, 50, 100, -1],
-                [11, 50, 100, 500]
-            ]
+                [25, 50, 100, -1],
+                [25, 50, 100, 500]
+            ],
+            "aaSorting": [],
         });
         table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         // Refilter the table
