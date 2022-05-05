@@ -38,7 +38,7 @@
                           </div>
                           <?= $this->Html->link(
                                 ' More info  <i class="fas fa-arrow-circle-right"></i>',
-                                ['controller' => 'Incoming',   'action' => 'index',],
+                                ['controller' => 'Incoming',   'action' => 'index', '?' => ['q' => 'newlyadded']],
                                 ['class' => 'small-box-footer', 'escape' => false],
                             ); ?>
                       </div>
@@ -76,7 +76,7 @@
                           </div>
                           <?= $this->Html->link(
                                 ' More info  <i class="fas fa-arrow-circle-right"></i>',
-                                ['controller' => 'Outgoing',   'action' => 'index',],
+                                ['controller' => 'Outgoing',   'action' => 'index', '?' => ['q' => 'returneditems']],
                                 ['class' => 'small-box-footer', 'escape' => false],
                             ); ?>
                       </div>
@@ -96,7 +96,7 @@
                           </div>
                           <?= $this->Html->link(
                                 ' More info  <i class="fas fa-arrow-circle-right"></i>',
-                                ['controller' => 'Outgoing',   'action' => 'index',],
+                                ['controller' => 'Outgoing',   'action' => 'index', '?' => ['q' => 'damageditems']],
                                 ['class' => 'small-box-footer', 'escape' => false],
                             ); ?>
                       </div>

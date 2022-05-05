@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -6,6 +7,7 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\Rule\IsUnique;
 use Cake\Validation\Validator;
 
 /**
@@ -42,11 +44,18 @@ class CategoriesTable extends Table
         $this->setTable('categories');
         $this->setDisplayField('category_name');
         $this->setPrimaryKey('id');
-
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'date_added' => 'new',
+                    'date_updated' => 'always',
+                ],
+            ]
+        ]);
         $this->hasMany('Items', [
             'foreignKey' => 'category_id',
         ]);
-        
+
         $this->hasMany('Subcategories', [
             'foreignKey' => 'category_id',
         ]);
@@ -91,5 +100,12 @@ class CategoriesTable extends Table
             ->allowEmptyString('updated_by');
 
         return $validator;
+    }
+
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['category_name'], 'Category name already exists'));
+
+        return $rules;
     }
 }

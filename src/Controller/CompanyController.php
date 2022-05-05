@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -15,10 +16,10 @@ class CompanyController extends AppController
 {
     public $connection;
 
-    public function initialize() : void
+    public function initialize(): void
     {
         parent::initialize();
- 
+
         // $this->Authorization->skipAuthorization(); //skip authorization for user access
 
     }
@@ -27,24 +28,25 @@ class CompanyController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function downloadcompanyform(){
-        $this->Authorization->skipAuthorization();  
-        $file_path = WWW_ROOT.'forms'.DS.'UBP_MASS_COMPANY_FORM.csv'; 
+    public function downloadcompanyform()
+    {
+        $this->Authorization->skipAuthorization();
+        $file_path = WWW_ROOT . 'forms' . DS . 'UBP_MASS_COMPANY_FORM.csv';
         $response = $this->response->withFile(
-              $file_path,
-            ['download' => true, 'name' =>'UBP_MASS_COMPANY_FORM.csv']
+            $file_path,
+            ['download' => true, 'name' => 'UBP_MASS_COMPANY_FORM.csv']
         );
         return $response;
     }
     public function index()
     {
-        
+
         $company = $this->Company->newEmptyEntity();
-        $this->Authorization->authorize($company, 'index' );
+        $this->Authorization->authorize($company, 'index');
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
         $company = $this->Company->find()->all();
@@ -53,27 +55,27 @@ class CompanyController extends AppController
         //$filename = basename($csv_file_name); //get file name of csv
         //dd($filename);
 
-        if(isset($_POST["submit"])){
+        if (isset($_POST["submit"])) {
 
-        //dd($_FILES['file']['name']);
+            //dd($_FILES['file']['name']);
 
-        //if(trim($_FILES['file']['name']) != trim($filename) ){ //check input filename from webroot company csv if valid
-        //    $this->Flash->error(__('Incorrect Company CSV Template! Please, try again.'));
-        //    $this->Common->dblogger([
-        //                    //change depending on action
-        //                    'message' => 'Incorrect Company CSV Template! Please, try again.',
-        //                    'request' => $this->request, 
-        //                    'status' => 'error',
-        //    ]);
-        //    return $this->redirect(['controller' => 'Company', 'action' => 'index']);
-        //}
-        //else{
+            //if(trim($_FILES['file']['name']) != trim($filename) ){ //check input filename from webroot company csv if valid
+            //    $this->Flash->error(__('Incorrect Company CSV Template! Please, try again.'));
+            //    $this->Common->dblogger([
+            //                    //change depending on action
+            //                    'message' => 'Incorrect Company CSV Template! Please, try again.',
+            //                    'request' => $this->request, 
+            //                    'status' => 'error',
+            //    ]);
+            //    return $this->redirect(['controller' => 'Company', 'action' => 'index']);
+            //}
+            //else{
 
-        $filename=$_FILES["file"]["tmp_name"];
+            $filename = $_FILES["file"]["tmp_name"];
 
-        if($_FILES["file"]["size"] > 0){
+            if ($_FILES["file"]["size"] > 0) {
 
-            $requiredHeaders = ['*Company', '*Address', '*Mobile No', 'Tel No.*', 'Email*','*Company Type - 1=Client,2=Supplier'];
+                $requiredHeaders = ['*Company', '*Address', '*Mobile No', 'Tel No.*', 'Email*', '*Company Type - 1=Client,2=Supplier'];
 
                 $file = fopen($filename, "r");
                 $firstLine = fgets($file);
@@ -82,15 +84,15 @@ class CompanyController extends AppController
                 if ($foundHeaders !== $requiredHeaders) {
                     $this->Flash->error(__('Uploaded CSV is not the correct Company CSV template. Please, try again.'));
                     $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Uploaded CSV is not the correct Company CSV template. Please, try again.',
-                            'request' => $this->request, 
-                            'status' => 'error',
+                        //change depending on action
+                        'message' => 'Uploaded CSV is not the correct Company CSV template. Please, try again.',
+                        'request' => $this->request,
+                        'status' => 'error',
                     ]);
                     return $this->redirect(['controller' => 'Company', 'action' => 'index']);
                     die();
                 }
-                while ($data = fgetcsv($file)){
+                while ($data = fgetcsv($file)) {
                     //if($num == 0){ //skip header names in CSV file
                     //    $num++;
                     //} 
@@ -116,7 +118,7 @@ class CompanyController extends AppController
                     $Company = $this->Company->newEntity($data);
                     $this->Company->save($Company);
                     */
-                     $insertquery = $this->connection->execute("
+                    $insertquery = $this->connection->execute("
                         INSERT INTO company(
                        company_name,address,contactno,tel_no,email,date_added,added_by,company_type) 
                         SELECT * FROM 
@@ -137,36 +139,35 @@ class CompanyController extends AppController
                         company_name = '$company_name' 
                         )
                         ");
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Mass upload[Company] - Successfully added company name = '. $company_name ,
-                            'request' => $this->request, 
-                        ]);
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Mass upload[Company] - Successfully added company name = ' . $company_name,
+                        'request' => $this->request,
+                    ]);
                     //}
                 }
-                        if($insertquery) {
-                        $this->Flash->success(__('Company CSV data has been saved.'));
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Company CSV data has been saved/uploaded.',
-                            'request' => $this->request, 
-                        ]);
-                        return $this->redirect(['controller' => 'Company','action' => 'index']);//redirect to company main
-                        }
-                        else{
-                        $this->Flash->error(__('Company CSV data could not be saved/uploaded. Please, try again.'));
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Company CSV data could not be saved/uploaded. Please, try again.',
-                            'request' => $this->request, 
-                            'status' => 'error',
-                        ]);
-                        }
+                if ($insertquery) {
+                    $this->Flash->success(__('Company CSV data has been saved.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Company CSV data has been saved/uploaded.',
+                        'request' => $this->request,
+                    ]);
+                    return $this->redirect(['controller' => 'Company', 'action' => 'index']); //redirect to company main
+                } else {
+                    $this->Flash->error(__('Company CSV data could not be saved/uploaded. Please, try again.'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Company CSV data could not be saved/uploaded. Please, try again.',
+                        'request' => $this->request,
+                        'status' => 'error',
+                    ]);
+                }
 
                 fclose($file);
-                }
+            }
             //} //end else
-                
+
         }
 
         $this->set(compact('company'));
@@ -184,12 +185,12 @@ class CompanyController extends AppController
         $company = $this->Company->get($id, [
             'contain' => [],
         ]);
-        $this->Authorization->authorize($company, 'view' );
-        
+        $this->Authorization->authorize($company, 'view');
+
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
         $this->set(compact('company'));
@@ -203,12 +204,12 @@ class CompanyController extends AppController
     public function add()
     {
         $company = $this->Company->newEmptyEntity();
-        $this->Authorization->authorize($company, 'add' );
+        $this->Authorization->authorize($company, 'add');
 
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
         if ($this->request->is('post')) {
             $company = $this->Company->patchEntity($company, $this->request->getData());
@@ -233,27 +234,26 @@ class CompanyController extends AppController
             //if ($response->getJson()['Status'] == 0) {
 
             $check_exist = $this->Company
-            ->find('all')
-            ->where(['company_name' => $company->company_name])
-            ->count();
-            
-            if($check_exist > 0){
-                $this->Flash->error(__('The company name '.$company->company_name.' already exist! Please, try again.'));
+                ->find('all')
+                ->where(['company_name' => $company->company_name])
+                ->count();
+
+            if ($check_exist > 0) {
+                $this->Flash->error(__('The company name ' . $company->company_name . ' already exist! Please, try again.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'The company name '.$company->company_name.' already exist! Please, try again.' ,
-                    'request' => $this->request, 
+                    'message' => 'The company name ' . $company->company_name . ' already exist! Please, try again.',
+                    'request' => $this->request,
                     'status' => 'error',
                 ]);
-            }
-            else{
+            } else {
 
-                 if ($this->Company->save($company)) {
+                if ($this->Company->save($company)) {
                     $this->Flash->success(__('The company has been saved.'));
                     $this->Common->dblogger([
                         //change depending on action
-                        'message' => 'Successfully added company = '. $company->company_name ,
-                        'request' => $this->request, 
+                        'message' => 'Successfully added company = ' . $company->company_name,
+                        'request' => $this->request,
                     ]);
 
                     return $this->redirect(['action' => 'index']);
@@ -262,8 +262,8 @@ class CompanyController extends AppController
                 //$this->Flash->error(__($response->getJson()['Description'])); //get API error
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'The company could not be saved. Please, try again.' ,
-                    'request' => $this->request, 
+                    'message' => 'The company could not be saved. Please, try again.',
+                    'request' => $this->request,
                     'status' => 'error',
                 ]);
             }
@@ -283,16 +283,16 @@ class CompanyController extends AppController
         $company = $this->Company->get($id, [
             'contain' => [],
         ]);
-        
+
         $this->Common->dblogger([
             //change depending on action
-            'message' => 'Accessed ' . $this->request->getParam('controller') . '>'.$this->request->getParam('action') . ' page',
-            'request' => $this->request, 
+            'message' => 'Accessed ' . $this->request->getParam('controller') . '>' . $this->request->getParam('action') . ' page',
+            'request' => $this->request,
         ]);
 
-        $this->Authorization->authorize($company, 'edit' );
+        $this->Authorization->authorize($company, 'edit');
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $company = $this->Company->patchEntity($company, $this->request->getData()); 
+            $company = $this->Company->patchEntity($company, $this->request->getData());
             $company->date_updated = date('Y-m-d H:i:s');
             $company->updated_by =  $this->request->getAttribute('identity')->getIdentifier();
 
@@ -304,16 +304,16 @@ class CompanyController extends AppController
             //    'contactno' => $company->contactno,
             //    'updated_by' => $this->request->getAttribute('identity')->getIdentifier() ,
             //    'company_type' => $company->company_type,
-                
+
             //]); 
-    
+
             //if ($response->getJson()['Status'] == 0) { 
             if ($this->Company->save($company)) {
                 $this->Flash->success(__('The company has been saved.'));
                 $this->Common->dblogger([
                     //change depending on action
-                    'message' => 'Successfully updated company with id = '. $company->id ,
-                    'request' => $this->request, 
+                    'message' => 'Successfully updated company with id = ' . $company->id,
+                    'request' => $this->request,
                 ]);
 
                 return $this->redirect(['action' => 'index']);
@@ -322,8 +322,8 @@ class CompanyController extends AppController
             //$this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'The company could not be saved. Please, try again.' ,
-                'request' => $this->request, 
+                'message' => 'The company could not be saved. Please, try again.',
+                'request' => $this->request,
                 'status' => 'error',
             ]);
         }
@@ -341,34 +341,31 @@ class CompanyController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $company = $this->Company->get($id);
-        $this->Authorization->authorize($company, 'delete' );
+        $this->Authorization->authorize($company, 'delete');
 
         // $http = new Client();
         // $response = $http->delete(getEnv('INVENTORY_API_URI').'/DELETE_COMPANY/'.$id);  
         // $response = $http->post('https://ubpdev.myubplus.com.ph/api/DELETE_COMPANY/'.$id);  
         // if ($response->getJson()['Status'] == 0) {
- 
+
         if ($this->Company->delete($company)) {
             $this->Flash->success(__('The company has been deleted.'));
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'Successfully deleted company with id = '. $id ,
-                'request' => $this->request, 
+                'message' => 'Successfully deleted company with id = ' . $id,
+                'request' => $this->request,
             ]);
-        }
-        else {
+        } else {
             $this->Flash->error(__('The company could not be deleted. Please, try again.'));
             // $this->Flash->error(__($response->getJson()['Description'])); //get API error
             $this->Common->dblogger([
                 //change depending on action
-                'message' => 'The company could not be deleted. Please, try again.' ,
-                'request' => $this->request, 
+                'message' => 'The company could not be deleted. Please, try again.',
+                'request' => $this->request,
                 'status' => 'error',
             ]);
         }
 
         return $this->redirect(['action' => 'index']);
     }
-
-
 }

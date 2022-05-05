@@ -1,1 +1,1 @@
-*Item Name,Serial No.,Item Description,*Issued Date (YYYY-MM-DD H:min:s),*Manufacturer Warranty (YYYY-MM-DD),*Quantity,"*Item Type ID, 1=Internal, 2=External","*Quality, 0=Brand New, 1=Used",Remarks,Part No.,Operating System,Kernel,Header Type,Firmware,Features
+*Item Name,Serial No.,Item Description,*Issued Date (FORMAT SAMPLE:01/31/2022  1:00),*Manufacturer Warranty (FORMAT SAMPLE:01/31/2022),*Quantity,"*Item Type ID, 1=Internal, 2=External","*Quality, 0=Brand New, 1=Used",Remarks,Part No.,Operating System,Kernel,Header Type,Firmware,Features

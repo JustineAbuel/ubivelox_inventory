@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\I18n\FrozenTime;
+
 /**
  * Incoming Controller
  *
@@ -30,19 +32,27 @@ class IncomingController extends AppController
         //     'order' => ['date_added' => 'DESC']
         // ];
 
-        // $incoming = $this->paginate($this->Incoming); 
+        // $incoming = $this->paginate($this->Incoming);  
+        $condition = [
+            'Users.id = Incoming.added_by',
+
+
+        ];
+        if ($this->request->getQuery('q') == 'newlyadded') {
+            array_push($condition,  'Incoming.date_added BETWEEN "' . date('Y-m-d H:i:s', strtotime(date('Y-m-01'))) . '" AND "' . date('Y-m-d H:i:s', strtotime(date('Y-m-t 23:59:59'))) . '"');
+        }
+
+        // dd($condition);
         $incoming = $this->Incoming->find('all', [
             'join' => [
                 'alias' => 'Users',
                 'table' => 'users',
                 'type' => 'LEFT',
-                'conditions' => [
-                    'Users.id = Incoming.added_by',
-                ],
+                'conditions' => [],
             ]
         ])
             ->select(['Incoming.id', 'Incoming.quantity', 'Incoming.date_added', 'Users.firstname', 'Users.lastname', 'Items.quantity', 'Items.item_name', 'Items.id'])
-            ->contain(['Items'])->order(['Incoming.id' => 'DESC'])->all();
+            ->contain(['Items'])->where($condition)->order(['Incoming.id' => 'DESC'])->all();
         // dd($incoming);
         $this->set(compact('incoming'));
     }

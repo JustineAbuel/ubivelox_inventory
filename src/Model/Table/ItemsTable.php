@@ -8,6 +8,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Rule\IsUnique;
 
 /**
  * Items Model
@@ -222,6 +223,10 @@ class ItemsTable extends Table
         $rules->add($rules->existsIn('supplier_id', 'Company'), ['errorField' => 'supplier_id']);
         $rules->add($rules->existsIn('item_type_id', 'ItemType'), ['errorField' => 'item_type_id']);
         // $rules->add($rules->isUnique(['item_name'], 'Item name already exists'));
+        $rules->add($rules->isUnique(
+            ['item_name', 'subcategory_id', 'category_id'],
+            'Item name already exists in this category and subcategory combination. Please try again. '
+        ));
 
         return $rules;
     }

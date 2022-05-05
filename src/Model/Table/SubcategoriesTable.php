@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -43,12 +44,12 @@ class SubcategoriesTable extends Table
         $this->setTable('subcategories');
         $this->setDisplayField('subcategory_name');
         $this->setPrimaryKey('id');
-        
+
         $this->addBehavior('Timestamp', [
             'events' => [
                 'Model.beforeSave' => [
-                    'date_added' => 'new', 
-                ] ,
+                    'date_added' => 'new',
+                ],
                 'Subcategories.updated' => [
                     'date_updated' => 'always'
                 ]
@@ -116,6 +117,11 @@ class SubcategoriesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
+        // $rules->add($rules->isUnique(['subcategory_name'], 'Subcategory name already exists'));
+        $rules->add($rules->isUnique(
+            ['subcategory_name', 'category_id'],
+            'This category and subcategory combination has already been used. '
+        ));
 
         return $rules;
     }

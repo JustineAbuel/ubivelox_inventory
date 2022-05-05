@@ -181,78 +181,115 @@ class ItemsController extends AppController
         $identity = $this->request->getAttribute('identity')->getIdentifier();
         if (isset($_POST["submit"])) {
 
+            //check if uploaded file is csv
+            if ($_FILES['file']['type'] != 'text/csv') {
+                $this->Flash->error(__('Uploaded file is not CSV. Please download the correct form and try again..'));
+                return $this->redirect(['action' => 'index']);
+            }
+
             $filename = $_FILES["file"]["tmp_name"];
 
             if ($_FILES["file"]["size"] > 0) {
 
+                $requiredHeaders = [
+                    '*Item Name', 'Serial No.', 'Item Description', '*Issued Date (FORMAT SAMPLE:01/31/2022  1:00)', '*Manufacturer Warranty (FORMAT SAMPLE:01/31/2022)', '*Quantity', '*Item Type ID, 1=Internal, 2=External',
+                    '*Quality, 0=Brand New, 1=Used', 'Remarks', 'Part No.', 'Operating System', 'Kernel', 'Header Type', 'Firmware', 'Features'
+                ];
                 $file = fopen($filename, "r");
+                $firstLine = fgets($file);
                 $num = 0;
                 $counter = 0;
                 $errorCounter = 0;
+                $itemExists = 0;
+
+                $foundHeaders = str_getcsv(trim($firstLine), ',', '"');
+                if ($foundHeaders !== $requiredHeaders) {
+                    $this->Flash->error(__('Uploaded CSV is not the correct Items CSV template. Please, try again'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Uploaded CSV is not the correct Items CSV template. Please, try again.',
+                        'request' => $this->request,
+                        'status' => 'error',
+                    ]);
+                    return $this->redirect(['controller' => 'Items', 'action' => 'index']);
+                    die();
+                }
                 while ($data = fgetcsv($file)) {
-                    if ($num == 0) { //skip header names in CSV file
-                        $num++;
+                    // if ($num == 0) { //skip header names in CSV file
+                    //     $num++;
+                    // } else {
+                    $item = $this->Items->newEmptyEntity();
+                    $item = $this->Items->patchEntity($item, $this->request->getData());
+                    // $date = new DateTime($data[3]);  
+                    // dd(strtotime($data[3] ? $data[3] . ':00' : $data[3]));
+                    if ($data[0] == '' || $data[3] == '' || $data[4] == '' || $data[5] == '' || $data[6] == '' || $data[7] == '') {
+
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload[Items] - Could not save row record',
+                            'request' => $this->request,
+                            'status' => 'error'
+                        ]);
+
+                        $errorCounter++;
+                    } elseif ($this->Items->findByItemName($data[0])->count() > 0) {
+
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload[Items] - Item already exists',
+                            'request' => $this->request,
+                            'status' => 'error'
+                        ]);
+
+                        $itemExists++;
                     } else {
-                        $item = $this->Items->newEmptyEntity();
-                        $item = $this->Items->patchEntity($item, $this->request->getData());
-                        // $date = new DateTime($data[3]);  
-                        // dd(strtotime($data[3] ? $data[3] . ':00' : $data[3]));
-                        if ($data[0] == '' || $data[2] == '' || $data[3] == '' || $data[4] == '' || $data[5] == '' || $data[6] == '' || $data[7] == '') {
+
+
+
+                        $item->category_id = $item->category_id;
+                        $item->subcategory_id = $item->subcategory_id;
+                        $item->supplier_id = $item->supplier_id;
+                        $item->base_quantity = 100;
+                        $item->item_name = $data[0];
+                        $item->serial_no = $data[1];
+                        $item->item_description = $data[2];
+                        $item->issued_date =  DateTime::createFromFormat('d/m/Y H:i', $data[3])->format('Y-m-d H:i:s');
+                        // $ts = $dt->getTimestamp();
+                        $item->manufacturer_warranty = DateTime::createFromFormat('d/m/Y', $data[4])->format('Y-m-d');
+                        $item->quantity = $data[5];
+                        $item->item_type_id = $data[6];
+                        $item->quality = $data[7];
+                        $item->remarks = $data[8];
+                        $item->part_no = $data[9];
+                        $item->operating_system = $data[10];
+                        $item->kernel = $data[11];
+                        $item->header_type = $data[12];
+                        $item->firmware = $data[13];
+                        $item->features = $data[14];
+                        $item->date_added = date('Y-m-d H:i:s');
+                        $item->added_by = $identity;
+                        // dd($item);
+                        if ($item = $this->Items->save($item)) {
 
                             $this->Common->dblogger([
                                 //change depending on action
-                                'message' => 'Mass upload[Subcategory] - Could not save row record',
+                                'message' => 'Mass upload - Successfully added item with id = ' . $item->item_name,
                                 'request' => $this->request,
-                                'status' => 'error'
                             ]);
+                            $incomingTable = $this->Items->Incoming;
+                            $incoming = $incomingTable->newEmptyEntity();
 
-                            $errorCounter++;
-                        } else {
-                            $item->category_id = $item->category_id;
-                            $item->subcategory_id = $item->subcategory_id;
-                            $item->supplier_id = $item->supplier_id;
-                            $item->base_quantity = 100;
-                            $item->item_name = $data[0];
-                            $item->serial_no = $data[1];
-                            $item->item_description = $data[2];
-                            $item->issued_date =  DateTime::createFromFormat('d/m/Y H:i', $data[3])->format('Y-m-d H:i:s');
-                            // $ts = $dt->getTimestamp();
-                            $item->manufacturer_warranty = DateTime::createFromFormat('d/m/Y', $data[4])->format('Y-m-d');
-                            $item->quantity = $data[5];
-                            $item->item_type_id = $data[6];
-                            $item->quality = $data[7];
-                            $item->remarks = $data[8];
-                            $item->part_no = $data[9];
-                            $item->operating_system = $data[10];
-                            $item->kernel = $data[11];
-                            $item->header_type = $data[12];
-                            $item->firmware = $data[13];
-                            $item->features = $data[14];
-                            $item->date_added = date('Y-m-d H:i:s');
-                            $item->added_by = $identity;
-
-                            // dd($item);
-                            if ($item = $this->Items->save($item)) {
-
-                                $this->Common->dblogger([
-                                    //change depending on action
-                                    'message' => 'Mass upload - Successfully added item with id = ' . $item->item_name,
-                                    'request' => $this->request,
-                                ]);
-                                $incomingTable = $this->Items->Incoming;
-                                $incoming = $incomingTable->newEmptyEntity();
-
-                                $incoming->item_id = $item->id;
-                                $incoming->quantity = $data[5];
-                                $incoming->added_by = $identity;
-                                $incoming->date_added = date('Y-m-d H:i:s');
-                                $incomingTable->save($incoming);
-                            }
-
-
-                            $counter++;
+                            $incoming->item_id = $item->id;
+                            $incoming->quantity = $data[5];
+                            $incoming->added_by = $identity;
+                            $incoming->date_added = date('Y-m-d H:i:s');
+                            $incomingTable->save($incoming);
                         }
+
+
+                        $counter++;
                     }
+                    // }
                 }
                 if ($counter > 0) {
                     $this->Flash->success(__('Items CSV has been uploaded. {0} items saved.', $counter));
@@ -262,6 +299,8 @@ class ItemsController extends AppController
                     return $this->redirect(['controller' => 'Items', 'action' => 'index']); //redirect to company main
                 } elseif ($errorCounter > 0) {
                     $this->Flash->error(__('Items CSV has been uploaded. {0} items could not be saved.', $errorCounter));
+                } elseif ($itemExists > 0) {
+                    $this->Flash->error(__('Items CSV has been uploaded. {0} items already exists.', $itemExists));
                 } else {
                     $this->Flash->error(__('Items CSV data could not be saved. Please, try again.'));
                 }
@@ -322,6 +361,12 @@ class ItemsController extends AppController
 
         if ($this->request->is('post')) {
             $item = $this->Items->patchEntity($item, $this->request->getData());
+
+            // if ($this->Items->findByItemName($item->item_name)->count() > 0) {
+            //     $this->Flash->error(__('The item already exists. Please, try again.'));
+            //     return $this->redirect(['action' => 'index']);
+            // }
+            // dd($item);
             $identity = $this->request->getAttribute('identity')->getIdentifier();
             $item->added_by = $identity;
             // dd($item);
@@ -329,6 +374,7 @@ class ItemsController extends AppController
             $image = $this->request->getData('image_file');
             $fileName = $image->getClientFilename();
             $item->image = $fileName;
+            // dd($item);
 
             if ($item = $this->Items->save($item)) {
                 //upload image to webroot

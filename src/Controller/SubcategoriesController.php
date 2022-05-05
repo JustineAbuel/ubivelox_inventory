@@ -46,7 +46,9 @@ class SubcategoriesController extends AppController
         $this->paginate = [
             'contain' => ['Categories'],
         ];
-        $subcategories = $this->paginate($this->Subcategories);
+
+        $subcategories = $this->Subcategories->find('all')->contain(['Categories'])->all();
+        // $subcategories = $this->paginate($this->Subcategories);
 
         $categories = $this->Categories->find()->all();
 
@@ -67,10 +69,17 @@ class SubcategoriesController extends AppController
                 $num = 0;
                 $counter = 0;
                 $errorCounter = 0;
+                $itemExists = 0;
 
                 $foundHeaders = str_getcsv(trim($firstLine), ',', '"');
                 if ($foundHeaders !== $requiredHeaders) {
                     $this->Flash->error(__('Uploaded CSV is not the correct template. Please, try again'));
+                    $this->Common->dblogger([
+                        //change depending on action
+                        'message' => 'Uploaded CSV is not the correct Subcategories CSV template. Please, try again.',
+                        'request' => $this->request,
+                        'status' => 'error',
+                    ]);
                     return $this->redirect(['controller' => 'Subcategories', 'action' => 'index']);
                     die();
                 }
@@ -89,6 +98,16 @@ class SubcategoriesController extends AppController
                         ]);
 
                         $errorCounter++;
+                    } elseif ($this->checkifrecordexists($data[0])) {
+
+                        $this->Common->dblogger([
+                            //change depending on action
+                            'message' => 'Mass upload[Subcategory] - Subcategory already exists',
+                            'request' => $this->request,
+                            'status' => 'error'
+                        ]);
+
+                        $itemExists++;
                     } else {
                         $subcategory = $this->Subcategories->newEmptyEntity();
                         $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
@@ -99,15 +118,21 @@ class SubcategoriesController extends AppController
                         $subcategory->date_added = date('Y-m-d H:i:s');
                         $subcategory->added_by = $identity;
 
-                        $subcategory = $this->Subcategories->save($subcategory);
+                        if ($this->Subcategories->save($subcategory)) {
+                            $this->Common->dblogger([
+                                //change depending on action
+                                'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = ' . $subcategory->subcategory_name,
+                                'request' => $this->request,
+                            ]);
 
-                        $this->Common->dblogger([
-                            //change depending on action
-                            'message' => 'Mass upload[Subcategory] - Successfully added subcategory with id = ' . $subcategory->subcategory_name,
-                            'request' => $this->request,
-                        ]);
-
-                        $counter++;
+                            $counter++;
+                        } else {
+                            $this->Common->dblogger([
+                                //change depending on action
+                                'message' => 'Mass upload[Subcategory] - Could not save subcategory',
+                                'request' => $this->request,
+                            ]);
+                        }
                     }
                     // }
                 }
@@ -119,6 +144,8 @@ class SubcategoriesController extends AppController
                     return $this->redirect(['controller' => 'Subcategories', 'action' => 'index']); //redirect to company main
                 } elseif ($errorCounter > 0) {
                     $this->Flash->error(__('Subcategory CSV has been uploaded. {0} subcategory could not be saved.', $errorCounter));
+                } elseif ($itemExists > 0) {
+                    $this->Flash->error(__('Subcategory CSV has been uploaded. {0} subcategory already exists.', $itemExists));
                 } else {
                     $this->Flash->error(__('Subcategory CSV data could not be saved. Please, try again.'));
                 }
@@ -169,6 +196,13 @@ class SubcategoriesController extends AppController
 
         if ($this->request->is('post')) {
             $subcategory = $this->Subcategories->patchEntity($subcategory, $this->request->getData());
+
+            // if ($this->checkifrecordexists($subcategory->subcategory_name)) {
+
+            //     $this->Flash->error(__('The subcategory already exists. Please, try again.'));
+            //     return $this->redirect(['action' => 'index']);
+            // }
+
             $subcategory->added_by = $this->request->getAttribute('identity')->getIdentifier();
 
             if ($this->Subcategories->save($subcategory)) {
@@ -181,6 +215,7 @@ class SubcategoriesController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
+            // dd($subcategory->getErrors());
             $this->Flash->error(__('The subcategory could not be saved. Please, try again.'));
             $this->Common->dblogger([
                 //change depending on action
@@ -268,5 +303,14 @@ class SubcategoriesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function checkifrecordexists($subcategory_name)
+    {
+
+        if ($this->Subcategories->findBySubcategoryName($subcategory_name)->count() > 0) {
+            // $this->Flash->error(__('The category already exists. Please, try again.'));
+            return true;
+        }
     }
 }
